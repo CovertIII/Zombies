@@ -21,6 +21,7 @@
 #define MAX_TIME 5
 #define SAFE_ZONE_RAD 10
 #define PERSON_RAD 2
+#define PERSON_MASS 0.5
 
 
 typedef struct {
@@ -85,6 +86,7 @@ void gm_load_level(game gm, int lvl){
 			gm->safe_zone.p.x = rand()%(gm->w - SAFE_ZONE_RAD);
 			gm->safe_zone.p.y = rand()%(gm->h - SAFE_ZONE_RAD);
 			gm->safe_zone.r = SAFE_ZONE_RAD;
+			gm->safe_zone.m = 1000000;
 			
 			gm->person_num = 10;
 			for(i=0; i<gm->person_num; i++){
@@ -95,7 +97,7 @@ void gm_load_level(game gm, int lvl){
 					gm->person[i].state = PERSON;
 				}
 				gm->person[i].o.r = PERSON_RAD;
-				gm->person[i].o.m = PERSON_RAD;
+				gm->person[i].o.m = PERSON_MASS;
 				
 				float dist;
 				do{
@@ -111,7 +113,7 @@ void gm_load_level(game gm, int lvl){
 			gm->hero.o.v.x = 0;
 			gm->hero.o.v.y = 0;
 			gm->hero.o.r = PERSON_RAD;
-			gm->hero.o.m = PERSON_RAD;
+			gm->hero.o.m = PERSON_MASS;
 			gm->hero.state = PERSON;
 			gm->hero.spring_state = NOT_ATTACHED;
 	}
@@ -156,14 +158,24 @@ void gm_update_sound(game gm){
 }
 
 void gm_update(game gm, double dt){
-	int i = 0;
+	int i, k;
 	/*Wall Colisions*/
 	for(i = 0; i < gm->person_num; i++){
 		bounce(&gm->person[i].o, gm->w, gm->h);
 	}	
 	bounce(&gm->hero.o, gm->w, gm->h);
 
+	/*Circle Collisons*/
+	for(i = 0; i < gm->person_num; i++){
+		collision(&gm->person[i].o, &gm->hero.o);
 
+		vector2 p = gm->safe_zone.p;
+		collision(&gm->person[i].o, &gm->safe_zone);
+		gm->safe_zone.p = p;
+		for(k = 1+i; k < gm->person_num; k++){
+			collision(&gm->person[i].o, &gm->person[k].o);
+		}
+	}	
 
 	/*Zero forces on all objects*/
 	for(i=0; i < gm->person_num; i++){
@@ -174,16 +186,22 @@ void gm_update(game gm, double dt){
 	gm->hero.o.f.y=0;
 	
 	/*Add forces*/
-	gm->hero.o.f.x = gm->ak.x*100;
-	gm->hero.o.f.y = gm->ak.y*100;
+	gm->hero.o.f.x = gm->ak.x*100 - gm->hero.o.v.x;
+	gm->hero.o.f.y = gm->ak.y*100 - gm->hero.o.v.y;
 
 	/*Integrate*/
 	gm->hero.o.v.x += gm->hero.o.f.x/gm->hero.o.m*dt;
 	gm->hero.o.v.y += gm->hero.o.f.y/gm->hero.o.m*dt;
-	
 	gm->hero.o.p.x += gm->hero.o.v.x*dt;
 	gm->hero.o.p.y += gm->hero.o.v.y*dt;
 
+	for(i=0; i < gm->person_num; i++){
+		gm->person[i].o.v.x += gm->person[i].o.f.x/gm->person[i].o.m*dt;
+		gm->person[i].o.v.y += gm->person[i].o.f.y/gm->person[i].o.m*dt;
+
+		gm->person[i].o.p.x += gm->person[i].o.v.x*dt;
+		gm->person[i].o.p.y += gm->person[i].o.v.y*dt;
+	}
 }
 
 void gm_render(game gm){
