@@ -7,7 +7,7 @@
 #include "load_sound.h"
 #include "vector2.h"
 #include "sound_list.h"
-#include "test.h"
+#include "game.h"
 #include "load_png.h"
 
 #define ZOMBIE 0
@@ -49,19 +49,12 @@ typedef struct {
 	int person_id;
 } _hero;
 
-typedef struct {
-	object o;
-	float timer;
-	int state; 
-} _zombie;
-
-
-
 typedef struct gametype {
 	int h,w;
+	vector2 ak;  /*arrow key presses*/
 	
 	ppl person[100];
-	person_num;
+	int person_num;
 	_hero hero;
 	object safe_zone;
 	
@@ -82,6 +75,8 @@ game gm_init(void){
 
 void gm_load_level(game gm, int lvl){
 	int i;
+	gm->ak.x =0;
+	gm->ak.y = 0;
 	switch(lvl){
 		case 1:
 			gm->h = 100;
@@ -91,8 +86,8 @@ void gm_load_level(game gm, int lvl){
 			gm->safe_zone.p.y = rand()%(gm->h - SAFE_ZONE_RAD);
 			gm->safe_zone.r = SAFE_ZONE_RAD;
 			
-			person_num = 10;
-			for(i=0; i<person_num; i++){
+			gm->person_num = 10;
+			for(i=0; i<gm->person_num; i++){
 				if(i < 3){
 					gm->person[i].state = ZOMBIE;
 				}
@@ -100,22 +95,31 @@ void gm_load_level(game gm, int lvl){
 					gm->person[i].state = PERSON;
 				}
 				gm->person[i].o.r = PERSON_RAD;
+				gm->person[i].o.m = PERSON_RAD;
 				
 				float dist;
 				do{
 					gm->person[i].o.p.x = rand()%gm->w;
-					gm->person[i].o.p.y = rand()%gm->y;
-				}while(v2Len(v2Sub(gm->person[i].o.p, gm->save_zone.p)) < SAFE_ZONE_RAD + PERSON_RAD);
+					gm->person[i].o.p.y = rand()%gm->h;
+				}while(v2Len(v2Sub(gm->person[i].o.p, gm->safe_zone.p)) < SAFE_ZONE_RAD + PERSON_RAD);
 				
 				gm->person[i].o.v.x = rand()%50 - 25;
 				gm->person[i].o.v.y = rand()%50 - 25;
 			}
-		
+
+			gm->hero.o.p = gm->safe_zone.p;
+			gm->hero.o.v.x = 0;
+			gm->hero.o.v.y = 0;
+			gm->hero.o.r = PERSON_RAD;
+			gm->hero.o.m = PERSON_RAD;
+			gm->hero.state = PERSON;
+			gm->hero.spring_state = NOT_ATTACHED;
 	}
 	
 }
 
 void gm_add_sound(game gm){
+	/*
 	int i = gm->src_num - 1;
 	alGenSources(1, &gm->src_z[i]);
 	alSourcei(gm->src_z[i], AL_BUFFER, gm->buf_z);
@@ -129,9 +133,11 @@ void gm_add_sound(game gm){
 	alSource3f(gm->src_z[i], AL_VELOCITY, gm->src[i].v.x, gm->src[i].v.y, 0);
 	
 	alSourcePlay(gm->src_z[i]);
+	*/
 }
 
 void gm_update_sound(game gm){
+	/*
 	s_update(gm->clicks);
 
 	int i;
@@ -146,193 +152,84 @@ void gm_update_sound(game gm){
 	
 	alListener3f(AL_POSITION, gm->lst.p.x, gm->lst.p.y, 0);
 	alListener3f(AL_VELOCITY, gm->lst.v.x, gm->lst.v.y, 0);
+	*/
 }
 
 void gm_update(game gm, double dt){
-	int i;
+	int i = 0;
+	/*Wall Colisions*/
+	for(i = 0; i < gm->person_num; i++){
+		bounce(&gm->person[i].o, gm->w, gm->h);
+	}	
+	bounce(&gm->hero.o, gm->w, gm->h);
 
-	for(i=0; i<gm->src_num; i++){
-		gm->src[i].v.x += 0;
-		gm->src[i].v.y += 0;
-		gm->src[i].p.x += gm->src[i].v.x*dt;
-		gm->src[i].p.y += gm->src[i].v.y*dt;
+
+
+	/*Zero forces on all objects*/
+	for(i=0; i < gm->person_num; i++){
+		gm->person[i].o.f.x = 0;
+		gm->person[i].o.f.y = 0;
 	}
+	gm->hero.o.f.x=0;
+	gm->hero.o.f.y=0;
 	
-	gm->food.v.x += (-gm->food.v.x*4/gm->food.m + 2*gm->food.f.x)*dt;
-	gm->food.v.y += (-gm->food.v.y*4/gm->food.m + 2*gm->food.f.y)*dt;
-	gm->food.p.x += gm->food.v.x*dt;
-	gm->food.p.y += gm->food.v.y*dt;
+	/*Add forces*/
+	gm->hero.o.f.x = gm->ak.x*100;
+	gm->hero.o.f.y = gm->ak.y*100;
 
+	/*Integrate*/
+	gm->hero.o.v.x += gm->hero.o.f.x/gm->hero.o.m*dt;
+	gm->hero.o.v.y += gm->hero.o.f.y/gm->hero.o.m*dt;
+	
+	gm->hero.o.p.x += gm->hero.o.v.x*dt;
+	gm->hero.o.p.y += gm->hero.o.v.y*dt;
 
-	gm->lst.v.x += (-gm->lst.v.x*4/gm->lst.m + 2*gm->lst.f.x)*dt;
-	gm->lst.v.y += (-gm->lst.v.y*4/gm->lst.m + 2*gm->lst.f.y)*dt;
-	gm->lst.p.x += gm->lst.v.x*dt;
-	gm->lst.p.y += gm->lst.v.y*dt;
-}
-
-void gm_collision(game gm){
-	int i;
-	for(i = 0; i < gm->src_num; i++){
-		if(bounce(&gm->src[i], gm->w, gm->h)){
-			s_add_snd(gm->clicks, gm->src[i].p);
-		}
-		int j;
-		for(j = i+1; j<gm->src_num; j++){
-			if(collision(&gm->src[i], &gm->src[j])){
-				s_add_snd(gm->clicks, gm->src[i].p);
-			}
-		}
-		if(collision(&gm->src[i], &gm->food)){
-			s_add_snd(gm->clicks, gm->food.p);
-		}
-	}
-
-	bounce(&gm->food, gm->w, gm->h);
-
-	if(bounce(&gm->lst, gm->w, gm->h)){
-		s_add_snd(gm->clicks, gm->lst.p);
-	}
-}
-
-int gm_logic_update(game gm){
-	int w = gm->w;
-	int h = gm->h;
-	int i;
-	for(i=0; i<gm->src_num; i++){
-		if(collision(&gm->src[i], &gm->lst)){
-			alSourcePlay(gm->die_src);
-			return 1;
-		}
-	}
-
-	if(collision_test(gm->food, gm->lst)){
-		alSourcePlay(gm->eat_src);
-		alSource3f(gm->eat_src, AL_POSITION, gm->food.p.x, gm->food.p.y, 0);
-		gm->src_num++;
-		gm_add_sound(gm);
-		float dist;
-		do{
-			gm->src[i].p.x = rand()%w;
-			gm->src[i].p.y = rand()%h;
-			dist = v2Len(v2Sub(gm->src[i].p, gm->lst.p));
-		}while(dist < 20);
-		gm->src[i].v.x = rand()%50 - 25;
-		gm->src[i].v.y = rand()%50 - 25;
-		gm->src[i].m = 2;
-		gm->src[i].r = 1.5;
-
-		gm->food.p.x = rand()%(int)(w-2*gm->food.r)+gm->food.r;
-		gm->food.p.y = rand()%(int)(h-2*gm->food.r)+gm->food.r;
-		gm->food.v.x = 0;
-		gm->food.v.y = 0;
-	}
-	return 0;
-}
-
-int gm_score(game gm){
-	return gm->src_num;
 }
 
 void gm_render(game gm){
+	glColor3f(0,0,1);
+	circle(gm->safe_zone.p.x, gm->safe_zone.p.y, gm->safe_zone.r);
+
+	glColor3f(1,0,0);
+	circle(gm->hero.o.p.x, gm->hero.o.p.y, gm->hero.o.r);
+
 	int i;
+	for(i=0; i<gm->person_num; i++){
+		if(gm->person[i].state == PERSON){
+			glColor3f(1,1,1);
+		}
+		else{
+			glColor3f(0,1,0);
+		}
+		circle(gm->person[i].o.p.x, gm->person[i].o.p.y, gm->person[i].o.r);
+	}
 
-	glBindTexture( GL_TEXTURE_2D, gm->bk_p);
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0); glVertex2f(0,0);
-	glTexCoord2f(0.0, 1.0); glVertex2f(0, gm->h);
-	glTexCoord2f(1.0, 1.0); glVertex2f(gm->w, gm->h);
-	glTexCoord2f(1.0, 0.0); glVertex2f(gm->w, 0);
-	glEnd();
-	glPopMatrix();
-	glBindTexture( GL_TEXTURE_2D, gm->src_p);
-	 
-	for(i = 0; i<gm->src_num; i++){
-		glPushMatrix();
-		glTranslatef(gm->src[i].p.x, gm->src[i].p.y, 0);
-		glScalef(gm->src[i].r,gm->src[i].r,0);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0);
-		glVertex3f(-1.0, -1.0, 0.0);
-		glTexCoord2f(0.0, 1.0);
-		glVertex3f(-1.0, 1.0, 0.0);
-		glTexCoord2f(1.0, 1.0);
-		glVertex3f(1.0, 1.0, 0.0);
-		glTexCoord2f(1.0, 0.0);
-		glVertex3f(1.0, -1.0, 0.0);
-		glEnd();
-		glPopMatrix();
-	}		
-
-
-	glBindTexture( GL_TEXTURE_2D, gm->lst_p);
-	glPushMatrix();
-	glTranslatef(gm->lst.p.x, gm->lst.p.y, 0);
-	glScalef(gm->lst.r,gm->lst.r,0);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glEnd();
-	glPopMatrix();
-
-
-	glBindTexture( GL_TEXTURE_2D, gm->food_p);
-	glPushMatrix();
-	glTranslatef(gm->food.p.x, gm->food.p.y, 0);
-	glScalef(gm->food.r,gm->food.r,0);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glEnd();
-	glPopMatrix();
-	
 	
 }
 
-void gm_free(game gm){
-	s_free(gm->clicks);
-	alDeleteSources(gm->src_num, gm->src_z);
-	alDeleteSources( 1, &gm->die_src);
-	alDeleteSources( 1, &gm->eat_src);
-	alDeleteBuffers( 1, &gm->die_buf);
-	alDeleteBuffers( 1, &gm->buf_z);
-	alDeleteBuffers( 1, &gm->eat_buf);
-	alDeleteBuffers( 1, &gm->buf_clk);
+int gm_progress(game gm){
+	return 0;
+}
 
-	glDeleteTextures(1, &gm->food_p);
-	glDeleteTextures(1, &gm->lst_p);;
-	glDeleteTextures(1, &gm->bk_p);
-	glDeleteTextures(1, &gm->src_p);
+void gm_free(game gm){
+
 	free(gm);
 }
 
 
 void gm_skey_down(game gm, int key){
-	int force = 100;
 	switch(key) {
 		case GLUT_KEY_LEFT : 
-			gm->lst.f.x=-force;
+			gm->ak.x = -1;
 			break;
 		case GLUT_KEY_RIGHT : 
-			gm->lst.f.x= force;
+			gm->ak.x = 1;
 			break;
 		case GLUT_KEY_UP : 
-			gm->lst.f.y= force;
+			gm->ak.y = 1;
 			break;
 		case GLUT_KEY_DOWN : 
-			gm->lst.f.y=-force;
+			gm->ak.y = -1;
 			break;
 	}
 }
@@ -340,16 +237,16 @@ void gm_skey_down(game gm, int key){
 void gm_skey_up(game gm, int key){
 	switch (key) {
 		case GLUT_KEY_LEFT : 
-			if(gm->lst.f.x < 0) {gm->lst.f.x = 0;}
+			if(gm->ak.x < 0) {gm->ak.x = 0;}
 			break;
 		case GLUT_KEY_RIGHT: 
-			if(gm->lst.f.x > 0) {gm->lst.f.x = 0;}
+			if(gm->ak.x > 0) {gm->ak.x = 0;}
 			break;
 		case GLUT_KEY_UP : 
-			if(gm->lst.f.y > 0) {gm->lst.f.y = 0;}
+			if(gm->ak.y > 0) {gm->ak.y = 0;}
 			break;
 		case GLUT_KEY_DOWN : 
-			if(gm->lst.f.y < 0) {gm->lst.f.y = 0;}
+			if(gm->ak.y < 0) {gm->ak.y = 0;}
 			break;
 	}
 }

@@ -17,7 +17,7 @@ int lastFrameTime = 0;
 
 int game_mode = PREGAME;
 double gm_timer = 0.0f;
-gm_lvl = 1;
+int gm_lvl = 1;
 game gm;
 
 ALCdevice * device;
@@ -118,7 +118,7 @@ void numbers(int value)
 		case POSTGAME:
 			if (gm_timer > 1){
 				game_mode = PREGAME;
-				gm_free_level(gm);
+				//gm_free_level(gm);
 				gm_load_level(gm, gm_lvl);
 			}
 			break;
