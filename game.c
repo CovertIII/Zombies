@@ -167,13 +167,27 @@ void gm_update(game gm, double dt){
 
 	/*Circle Collisons*/
 	for(i = 0; i < gm->person_num; i++){
-		collision(&gm->person[i].o, &gm->hero.o);
+		if(collision(&gm->person[i].o, &gm->hero.o) &&
+					 gm->hero.spring_state == NOT_ATTACHED &&
+					 gm->person[i].state == PERSON)
+		{
+			gm->hero.spring_state = ATTACHED;
+			gm->hero.person_id = i;
+		}
 
 		vector2 p = gm->safe_zone.p;
 		collision(&gm->person[i].o, &gm->safe_zone);
 		gm->safe_zone.p = p;
+		
 		for(k = 1+i; k < gm->person_num; k++){
-			collision(&gm->person[i].o, &gm->person[k].o);
+			if(collision(&gm->person[i].o, &gm->person[k].o)){
+				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){
+					gm->person[i].state = ZOMBIE;
+				}
+				if(gm->person[i].state == ZOMBIE && gm->person[k].state == PERSON){
+					gm->person[k].state = ZOMBIE;
+				}
+			}
 		}
 	}	
 
@@ -186,8 +200,26 @@ void gm_update(game gm, double dt){
 	gm->hero.o.f.y=0;
 	
 	/*Add forces*/
-	gm->hero.o.f.x = gm->ak.x*100 - gm->hero.o.v.x;
-	gm->hero.o.f.y = gm->ak.y*100 - gm->hero.o.v.y;
+	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
+	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
+	
+	/*Spring force between hero and person*/
+	if(gm->hero.spring_state == ATTACHED){
+		float ks = 50, r = 5, kd=1;
+		i = gm->hero.person_id;
+		vector2 l = v2Sub(gm->hero.o.p, gm->person[i].o.p);
+		vector2 dl = v2Sub(gm->hero.o.v, gm->person[i].o.v);
+		
+		vector2 fa, fb;
+		fa = v2sMul(-ks*(v2Len(l)-r) - kd * v2Dot(dl, l)/v2Len(l) , v2Unit(l));
+		fb = v2sMul(-1,fa);
+    	
+		gm->hero.o.f = v2Add(gm->hero.o.f, fa);
+		gm->person[i].o.f = v2Add(gm->person[i].o.f, fb);
+		
+		gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
+		gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+	}
 
 	/*Integrate*/
 	gm->hero.o.v.x += gm->hero.o.f.x/gm->hero.o.m*dt;
