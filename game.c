@@ -14,11 +14,12 @@
 #define Z_P 1
 #define PERSON 2
 #define P_Z 3
+#define SAFE 4
 
 #define ATTACHED 0
 #define NOT_ATTACHED 1
 
-#define MAX_TIME 5
+#define MAX_TIME 5.0f
 #define SAFE_ZONE_RAD 10
 #define PERSON_RAD 2
 #define PERSON_MASS 0.5
@@ -65,6 +66,8 @@ static void circle(float pos_x, float pos_y, float size);
 static int bounce(object * obj, int x, int y);
 static int collision(object *ta, object *tb);
 static int collision_test(object ta, object tb);
+int safe_zone_test(object ta, object tb);
+int r_collision(object *ta, object *tb);
 
 game gm_init(void){
 	gametype * gm;
@@ -86,11 +89,11 @@ void gm_load_level(game gm, int lvl){
 			gm->safe_zone.p.x = rand()%(gm->w - SAFE_ZONE_RAD);
 			gm->safe_zone.p.y = rand()%(gm->h - SAFE_ZONE_RAD);
 			gm->safe_zone.r = SAFE_ZONE_RAD;
-			gm->safe_zone.m = 1000000;
+			gm->safe_zone.m = 100000;
 			
-			gm->person_num = 10;
+			gm->person_num = 15;
 			for(i=0; i<gm->person_num; i++){
-				if(i < 3){
+				if(i < 1){
 					gm->person[i].state = ZOMBIE;
 				}
 				else{
@@ -159,6 +162,15 @@ void gm_update_sound(game gm){
 
 void gm_update(game gm, double dt){
 	int i, k;
+	/*Timers */
+	for(i = 0; i < gm->person_num; i++){
+		gm->person[i].timer -= dt;
+		if(gm->person[i].state == P_Z && gm->person[i].timer <= 0.0f){
+			gm->person[i].state = ZOMBIE;
+		}
+	}
+	
+	
 	/*Wall Colisions*/
 	for(i = 0; i < gm->person_num; i++){
 		bounce(&gm->person[i].o, gm->w, gm->h);
@@ -166,6 +178,12 @@ void gm_update(game gm, double dt){
 	bounce(&gm->hero.o, gm->w, gm->h);
 
 	/*Circle Collisons*/
+	
+	vector2 p = gm->safe_zone.p;
+	//r_collision(&gm->safe_zone, &gm->hero.o);
+	gm->safe_zone.p = p;
+	
+	
 	for(i = 0; i < gm->person_num; i++){
 		if(collision(&gm->person[i].o, &gm->hero.o) &&
 					 gm->hero.spring_state == NOT_ATTACHED &&
@@ -174,19 +192,42 @@ void gm_update(game gm, double dt){
 			gm->hero.spring_state = ATTACHED;
 			gm->hero.person_id = i;
 		}
-
+		
+		
+		/*This bit of magic lets the hero take a person info a circle and save them.*/
 		vector2 p = gm->safe_zone.p;
-		collision(&gm->person[i].o, &gm->safe_zone);
+		int hpid = gm->hero.person_id;
+		if((i != hpid || gm->hero.spring_state == NOT_ATTACHED) && gm->person[i].state != SAFE){
+			collision(&gm->person[i].o, &gm->safe_zone); 	
+		}
+		else if(gm->person[i].state == SAFE){
+			r_collision(&gm->safe_zone, &gm->person[i].o);
+		}
+		else if (safe_zone_test(gm->safe_zone, gm->person[i].o)){
+			gm->hero.spring_state = NOT_ATTACHED;
+			gm->person[i].state = SAFE;
+		}
 		gm->safe_zone.p = p;
 		
+	
 		for(k = 1+i; k < gm->person_num; k++){
 			if(collision(&gm->person[i].o, &gm->person[k].o)){
-				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){
-					gm->person[i].state = ZOMBIE;
+				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){					
+					gm->person[i].timer = MAX_TIME;
+					gm->person[i].state = P_Z;
 				}
 				if(gm->person[i].state == ZOMBIE && gm->person[k].state == PERSON){
-					gm->person[k].state = ZOMBIE;
+					gm->person[k].timer = MAX_TIME;
+					gm->person[k].state = P_Z;
 				}
+				if((i == gm->hero.person_id &&
+					gm->person[i].state == P_Z &&
+					gm->hero.spring_state == ATTACHED) ||
+					(k == gm->hero.person_id &&
+					gm->person[k].state == P_Z &&
+					gm->hero.spring_state == ATTACHED)){
+						gm->hero.spring_state = NOT_ATTACHED;
+					}
 			}
 		}
 	}	
@@ -202,6 +243,14 @@ void gm_update(game gm, double dt){
 	/*Add forces*/
 	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
 	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
+	
+	/*Slows a person down when they are in the safe zone*/
+	for(i = 0; i < gm->person_num; i++){
+		if(gm->person[i].state == SAFE){
+			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
+			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+		}
+	}
 	
 	/*Spring force between hero and person*/
 	if(gm->hero.spring_state == ATTACHED){
@@ -237,23 +286,35 @@ void gm_update(game gm, double dt){
 }
 
 void gm_render(game gm){
+	int i;
+	glColor3f(0.8,0.8,0.8);
+	if(gm->hero.spring_state == ATTACHED){
+		i = gm->hero.person_id;
+		glBegin(GL_LINE_STRIP);
+			glVertex2f (gm->person[i].o.p.x, gm->person[i].o.p.y);
+			glVertex2f (gm->hero.o.p.x, gm->hero.o.p.y);
+	  	glEnd();
+		glPopMatrix();
+	}
+	
 	glColor3f(0,0,1);
 	circle(gm->safe_zone.p.x, gm->safe_zone.p.y, gm->safe_zone.r);
 
 	glColor3f(1,0,0);
 	circle(gm->hero.o.p.x, gm->hero.o.p.y, gm->hero.o.r);
 
-	int i;
 	for(i=0; i<gm->person_num; i++){
-		if(gm->person[i].state == PERSON){
+		if(gm->person[i].state == PERSON || gm->person[i].state == SAFE){
 			glColor3f(1,1,1);
 		}
-		else{
+		else if(gm->person[i].state == P_Z){
+			glColor3f(0,1,1);
+		}
+		else if(gm->person[i].state == ZOMBIE){
 			glColor3f(0,1,0);
 		}
 		circle(gm->person[i].o.p.x, gm->person[i].o.p.y, gm->person[i].o.r);
 	}
-
 	
 }
 
@@ -335,6 +396,7 @@ int collision(object *ta, object *tb){
 	}
 	else{return 0;}
 }
+
 int collision_test(object ta, object tb){
 	object a=ta, b=tb;
 	
@@ -343,6 +405,45 @@ int collision_test(object ta, object tb){
 	}
 	return 0;
 }
+
+int safe_zone_test(object ta, object tb){
+	object a=ta, b=tb;
+	
+	if(v2SPow(v2Sub(a.p, b.p)) < (a.r-b.r)*(a.r-b.r)) {
+		return 1;
+	}
+	return 0;
+}
+
+int r_collision(object *ta, object *tb){
+	object a=*ta, b=*tb;
+	a.r -= 2*b.r;
+	
+	if(v2SPow(v2Sub(a.p, b.p)) > (a.r + b.r)*(a.r + b.r)) {
+		vector2 n, vn1, vn1f, vn2, vn2f, vt1, vt2;
+		float m1 = a.m, m2 = b.m;
+		
+		n = v2Unit(v2Sub(a.p, b.p)); //n = (r1-r2)/|r1-r2|
+		
+		ta->p = v2Add(a.p, v2sMul( (a.r+b.r-v2Len(v2Sub(a.p, b.p)))*b.m/(a.m+b.m) , n) );
+		tb->p = v2Sub(b.p, v2sMul( (a.r+b.r-v2Len(v2Sub(a.p, b.p)))*a.m/(a.m+b.m) , n) );
+		
+		vn1 = v2sMul(v2Dot(a.v, v2Neg(n)), v2Neg(n)); // vn1 = [v1⋄(-n)](-n)
+		vn2 = v2sMul(v2Dot(b.v, n), n); // vn2 = [v2⋄n]n
+		
+		vt1 = v2Sub(vn1, a.v); // vt1 = vn1 - v1
+		vt2 = v2Sub(vn2, b.v); // vt2 = vn2 - v2
+		
+		vn1f = v2sMul(1/(m1+m2), v2Add(v2sMul(m1-m2, vn1), v2sMul(2*m2, vn2))); //v1f = (v1i*(m1-m2)+2*m2*v2i)/(m1+m2)
+		vn2f = v2sMul(1/(m1+m2), v2Add(v2sMul(m2-m1, vn2), v2sMul(2*m1, vn1))); //v1f = (v2i*(m2-m1)+2*m1*v1i)/(m1+m2)
+		
+		ta->v = v2Sub(vn1f, vt1);  
+		tb->v = v2Sub(vn2f, vt2);
+		return 1;
+	}
+	else{return 0;}
+}
+
 void circle(float pos_x, float pos_y, float size) {
 	glPushMatrix();
 	glTranslatef(pos_x,pos_y,0);
