@@ -49,7 +49,7 @@ void cleanup (void) {
 void init(void){
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glClearColor (0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor (0.2f, 0.2f, 0.2f, 1.0f);
 	
 	device = alcOpenDevice(NULL);
 	if(device) {
@@ -59,7 +59,7 @@ void init(void){
 	
 	gm = gm_init();	
 	//gm_init_sounds(gm);
-	//gm_init_textures(gm);
+	gm_init_textures(gm);
 	gm_load_level(gm, gm_lvl);
 
 	atexit(cleanup);

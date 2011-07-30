@@ -60,6 +60,15 @@ typedef struct gametype {
 	_hero hero;
 	object safe_zone;
 	
+	GLuint zombie_tex;
+	GLuint person_tex;
+	GLuint safe_tex;
+	GLuint safezone_tex;
+	GLuint hero_tex;
+	GLuint p_z_tex;
+	GLuint h_z_tex;
+	GLuint hzombie_tex;
+	
 } gametype;
 
 static void circle(float pos_x, float pos_y, float size);
@@ -75,6 +84,169 @@ game gm_init(void){
 	if(!gm) {return NULL;}
 
 	return gm;
+}
+
+int gm_init_textures(game gm){
+	GLubyte *textureImage;
+	int width, height;
+    int hasAlpha;
+    int success;
+   	success = load_png("imgs/zombie.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures( 1, &gm->zombie_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->zombie_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	success = load_png("imgs/person.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures( 1, &gm->person_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->person_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/safe.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures( 1, &gm->safe_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	success = load_png("imgs/safezone.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures( 1, &gm->safezone_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->safezone_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	success = load_png("imgs/hero.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures( 1, &gm->hero_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->hero_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/p_z.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures( 1, &gm->p_z_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->p_z_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/h_z.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures(1, &gm->h_z_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->h_z_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/hzombie.png", &width, &height, &hasAlpha, &textureImage);
+    if (!success) {
+        printf("Unable to load png file");
+        return;
+    }
+	else{
+		printf("Image Loaded\n");
+		glGenTextures(1, &gm->hzombie_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
 }
 
 void gm_load_level(game gm, int lvl){
@@ -167,7 +339,13 @@ void gm_update(game gm, double dt){
 		gm->person[i].timer -= dt;
 		if(gm->person[i].state == P_Z && gm->person[i].timer <= 0.0f){
 			gm->person[i].state = ZOMBIE;
+			gm->person[i].o.v.x = rand()%50 - 25;
+			gm->person[i].o.v.y = rand()%50 - 25;
 		}
+	}
+	gm->hero.timer -= dt;
+	if(gm->hero.state == P_Z && gm->hero.timer <= 0.0f){
+		gm->hero.state = ZOMBIE;
 	}
 	
 	
@@ -179,20 +357,31 @@ void gm_update(game gm, double dt){
 
 	/*Circle Collisons*/
 	
-	vector2 p = gm->safe_zone.p;
-	//r_collision(&gm->safe_zone, &gm->hero.o);
-	gm->safe_zone.p = p;
+	if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
+		vector2 p = gm->safe_zone.p;
+		collision(&gm->hero.o, &gm->safe_zone); 
+		gm->safe_zone.p = p;	
+	}
+	
 	
 	
 	for(i = 0; i < gm->person_num; i++){
-		if(collision(&gm->person[i].o, &gm->hero.o) &&
-					 gm->hero.spring_state == NOT_ATTACHED &&
-					 gm->person[i].state == PERSON)
-		{
+		if(collision(&gm->person[i].o, &gm->hero.o)){
+			if(gm->hero.state == PERSON && gm->hero.spring_state == NOT_ATTACHED && gm->person[i].state == PERSON)
+			{
 			gm->hero.spring_state = ATTACHED;
 			gm->hero.person_id = i;
+			}
+			else if(gm->person[i].state == ZOMBIE && gm->hero.state == PERSON){
+				gm->hero.spring_state = NOT_ATTACHED;
+				gm->hero.timer = MAX_TIME;
+				gm->hero.state = P_Z;
+			}
+			else if(gm->person[i].state == PERSON && gm->hero.state == ZOMBIE){
+				gm->person[i].timer = MAX_TIME;
+				gm->person[i].state = P_Z;
+			}
 		}
-		
 		
 		/*This bit of magic lets the hero take a person info a circle and save them.*/
 		vector2 p = gm->safe_zone.p;
@@ -209,7 +398,7 @@ void gm_update(game gm, double dt){
 		}
 		gm->safe_zone.p = p;
 		
-	
+		/*This deals with collisions between people*/	
 		for(k = 1+i; k < gm->person_num; k++){
 			if(collision(&gm->person[i].o, &gm->person[k].o)){
 				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){					
@@ -244,9 +433,9 @@ void gm_update(game gm, double dt){
 	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
 	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
 	
-	/*Slows a person down when they are in the safe zone*/
+	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
 	for(i = 0; i < gm->person_num; i++){
-		if(gm->person[i].state == SAFE){
+		if(gm->person[i].state == SAFE ||gm->person[i].state == P_Z){
 			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
 			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
 		}
@@ -288,6 +477,7 @@ void gm_update(game gm, double dt){
 void gm_render(game gm){
 	int i;
 	glColor3f(0.8,0.8,0.8);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	if(gm->hero.spring_state == ATTACHED){
 		i = gm->hero.person_id;
 		glBegin(GL_LINE_STRIP);
@@ -297,23 +487,78 @@ void gm_render(game gm){
 		glPopMatrix();
 	}
 	
-	glColor3f(0,0,1);
-	circle(gm->safe_zone.p.x, gm->safe_zone.p.y, gm->safe_zone.r);
-
-	glColor3f(1,0,0);
-	circle(gm->hero.o.p.x, gm->hero.o.p.y, gm->hero.o.r);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture( GL_TEXTURE_2D, gm->safezone_tex);
+	glPushMatrix();
+	glTranslatef(gm->safe_zone.p.x, gm->safe_zone.p.y, 0);
+	glScalef(gm->safe_zone.r, gm->safe_zone.r,0);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(-1.0, -1.0, 0.0);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(-1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(1.0, -1.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	
+	switch(gm->hero.state){
+		case PERSON:
+			glBindTexture( GL_TEXTURE_2D, gm->hero_tex);
+			break;
+		case P_Z:
+			glBindTexture( GL_TEXTURE_2D, gm->h_z_tex);
+			break;
+		case ZOMBIE:
+			glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
+			break;
+	}
+	
+	glPushMatrix();
+	glTranslatef(gm->hero.o.p.x, gm->hero.o.p.y, 0);
+	glScalef(gm->hero.o.r, gm->hero.o.r,0);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(-1.0, -1.0, 0.0);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(-1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(1.0, -1.0, 0.0);
+	glEnd();
+	glPopMatrix();
 
 	for(i=0; i<gm->person_num; i++){
-		if(gm->person[i].state == PERSON || gm->person[i].state == SAFE){
-			glColor3f(1,1,1);
+		if(gm->person[i].state == PERSON){
+			glBindTexture( GL_TEXTURE_2D, gm->person_tex);
 		}
 		else if(gm->person[i].state == P_Z){
-			glColor3f(0,1,1);
+			glBindTexture( GL_TEXTURE_2D, gm->p_z_tex);
 		}
 		else if(gm->person[i].state == ZOMBIE){
-			glColor3f(0,1,0);
+			glBindTexture( GL_TEXTURE_2D, gm->zombie_tex);
 		}
-		circle(gm->person[i].o.p.x, gm->person[i].o.p.y, gm->person[i].o.r);
+		
+		else if(gm->person[i].state == SAFE){
+			glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
+		}
+		glPushMatrix();
+		glTranslatef(gm->person[i].o.p.x, gm->person[i].o.p.y, 0);
+		glScalef(gm->person[i].o.r, gm->person[i].o.r,0);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0, 0.0);
+		glVertex3f(-1.0, -1.0, 0.0);
+		glTexCoord2f(0.0, 1.0);
+		glVertex3f(-1.0, 1.0, 0.0);
+		glTexCoord2f(1.0, 1.0);
+		glVertex3f(1.0, 1.0, 0.0);
+		glTexCoord2f(1.0, 0.0);
+		glVertex3f(1.0, -1.0, 0.0);
+		glEnd();
+		glPopMatrix();
 	}
 	
 }
