@@ -116,7 +116,8 @@ void numbers(int value)
 			}
 			break;
 		case POSTGAME:
-			if (gm_timer > 1){
+			if (gm_timer > 3){
+				gm_timer = 0;
 				game_mode = PREGAME;
 				//gm_free_level(gm);
 				gm_load_level(gm, gm_lvl);
@@ -134,6 +135,7 @@ void display(void) {
 //	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	gm_render(gm);
+	gm_update_view(gm);
 
     glutSwapBuffers();
 	
@@ -141,15 +143,7 @@ void display(void) {
 
 void reshape(int width, int height)
 {
-    glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	
-	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = gm_dim(gm);
-	double wx = ratio * w.y;
-    glLoadIdentity();
-    gluOrtho2D(0, wx, 0, w.y);
-    glMatrixMode(GL_MODELVIEW);
+	gm_reshape(gm, width, height);
 }
 
 void idle(void)

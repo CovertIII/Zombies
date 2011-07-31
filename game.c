@@ -52,13 +52,17 @@ typedef struct {
 } _hero;
 
 typedef struct gametype {
-	int h,w;
 	vector2 ak;  /*arrow key presses*/
+	vector2 vmin;
+	vector2 vmax;
 	
-	ppl person[100];
-	int person_num;
+	int h,w; //Height and width of the level
+	ppl person[100]; //Zombies and people array
+	int person_num; //How many there are
 	_hero hero;
 	object safe_zone;
+	int save_count;  //How many people you have to save to win the level
+	
 	
 	GLuint zombie_tex;
 	GLuint person_tex;
@@ -68,6 +72,7 @@ typedef struct gametype {
 	GLuint p_z_tex;
 	GLuint h_z_tex;
 	GLuint hzombie_tex;
+	GLuint bk;
 	
 } gametype;
 
@@ -92,12 +97,7 @@ int gm_init_textures(game gm){
     int hasAlpha;
     int success;
    	success = load_png("imgs/zombie.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures( 1, &gm->zombie_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->zombie_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -110,13 +110,9 @@ int gm_init_textures(game gm){
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	
 	success = load_png("imgs/person.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures( 1, &gm->person_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->person_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -131,12 +127,7 @@ int gm_init_textures(game gm){
 	}
 	
 	success = load_png("imgs/safe.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures( 1, &gm->safe_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -149,13 +140,9 @@ int gm_init_textures(game gm){
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	
 	success = load_png("imgs/safezone.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures( 1, &gm->safezone_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->safezone_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -168,13 +155,9 @@ int gm_init_textures(game gm){
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	
 	success = load_png("imgs/hero.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures( 1, &gm->hero_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->hero_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -189,12 +172,7 @@ int gm_init_textures(game gm){
 	}
 	
 	success = load_png("imgs/p_z.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures( 1, &gm->p_z_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->p_z_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -209,12 +187,7 @@ int gm_init_textures(game gm){
 	}
 	
 	success = load_png("imgs/h_z.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures(1, &gm->h_z_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->h_z_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -229,12 +202,7 @@ int gm_init_textures(game gm){
 	}
 	
 	success = load_png("imgs/hzombie.png", &width, &height, &hasAlpha, &textureImage);
-    if (!success) {
-        printf("Unable to load png file");
-        return;
-    }
-	else{
-		printf("Image Loaded\n");
+    if (success) {
 		glGenTextures(1, &gm->hzombie_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -247,6 +215,62 @@ int gm_init_textures(game gm){
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	
+	success = load_png("imgs/bk.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures(1, &gm->bk);
+		glBindTexture( GL_TEXTURE_2D, gm->bk);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+}
+
+void gm_set_view(game gm){
+	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
+	vector2 w = {75, 75};
+	w.x = ratio * w.y;
+	gm->vmin.x = gm->hero.o.p.x - w.x/2.0f;
+	gm->vmin.y = gm->hero.o.p.y - w.y/2.0f;
+	gm->vmax.x = gm->hero.o.p.x + w.x/2.0f;
+	gm->vmax.y = gm->hero.o.p.y + w.y/2.0f;
+}
+
+void gm_update_view(game gm){
+	double minx = 1.0f/6.0*(gm->vmax.x - gm->vmin.x) + gm->vmin.x;
+	double maxx = gm->vmax.x - 1.0f/6.0*(gm->vmax.x - gm->vmin.x);
+	if(gm->hero.o.p.x < minx){
+		gm->vmin.x -= minx - gm->hero.o.p.x;
+		gm->vmax.x -= minx - gm->hero.o.p.x;
+	}
+	
+	else if (gm->hero.o.p.x > maxx){
+		gm->vmin.x += gm->hero.o.p.x - maxx;
+		gm->vmax.x += gm->hero.o.p.x - maxx;
+	}
+	
+	double miny = 1.0f/6.0*(gm->vmax.y - gm->vmin.y) + gm->vmin.y;
+	double maxy = gm->vmax.y - 1.0f/6.0*(gm->vmax.y - gm->vmin.y);
+	if(gm->hero.o.p.y < miny){
+		gm->vmin.y -= miny - gm->hero.o.p.y;
+		gm->vmax.y -= miny - gm->hero.o.p.y;
+	}
+	
+	else if (gm->hero.o.p.y > maxy){
+		gm->vmin.y += gm->hero.o.p.y - maxy;
+		gm->vmax.y += gm->hero.o.p.y - maxy;
+	}
+	
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(gm->vmin.x, gm->vmax.x, gm->vmin.y, gm->vmax.y);
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void gm_load_level(game gm, int lvl){
@@ -264,7 +288,8 @@ void gm_load_level(game gm, int lvl){
 			gm->safe_zone.m = 100000;
 			
 			gm->person_num = 15;
-			for(i=0; i<gm->person_num; i++){
+			gm->save_count = 6;
+			for(i = 0; i < gm->person_num; i++){
 				if(i < 1){
 					gm->person[i].state = ZOMBIE;
 				}
@@ -291,45 +316,60 @@ void gm_load_level(game gm, int lvl){
 			gm->hero.o.m = PERSON_MASS;
 			gm->hero.state = PERSON;
 			gm->hero.spring_state = NOT_ATTACHED;
+			gm_set_view(gm);
+			break;
+			
+		case 2:
+			gm->h = 200;
+			gm->w = 200;
+        
+			gm->safe_zone.r = SAFE_ZONE_RAD + 10;
+			gm->safe_zone.p.x = rand()%(gm->w - (int)gm->safe_zone.r);
+			gm->safe_zone.p.y = rand()%(gm->h - (int)gm->safe_zone.r);
+			gm->safe_zone.m = 100000;
+        
+			gm->person_num = 25;
+			gm->save_count = 10;
+			for(i = 0; i < gm->person_num; i++){
+				if(i < 3){
+					gm->person[i].state = ZOMBIE;
+				}
+				else{
+					gm->person[i].state = PERSON;
+				}
+				gm->person[i].o.r = PERSON_RAD;
+				gm->person[i].o.m = PERSON_MASS;
+        
+				float dist;
+				do{
+					gm->person[i].o.p.x = rand()%gm->w;
+					gm->person[i].o.p.y = rand()%gm->h;
+				}while(v2Len(v2Sub(gm->person[i].o.p, gm->safe_zone.p)) < SAFE_ZONE_RAD + PERSON_RAD);
+        
+				gm->person[i].o.v.x = rand()%50 - 25;
+				gm->person[i].o.v.y = rand()%50 - 25;
+			}
+        
+			gm->hero.o.p = gm->safe_zone.p;
+			gm->hero.o.v.x = 0;
+			gm->hero.o.v.y = 0;
+			gm->hero.o.r = PERSON_RAD;
+			gm->hero.o.m = PERSON_MASS;
+			gm->hero.state = PERSON;
+			gm->hero.spring_state = NOT_ATTACHED;
+			gm_set_view(gm);
+			break;
+		
 	}
 	
 }
 
-void gm_add_sound(game gm){
-	/*
-	int i = gm->src_num - 1;
-	alGenSources(1, &gm->src_z[i]);
-	alSourcei(gm->src_z[i], AL_BUFFER, gm->buf_z);
-		
-	alSourcef(gm->src_z[i], AL_PITCH, 1.0f);
-	alSourcef(gm->src_z[i], AL_GAIN, 1.0f);
+void gm_init_sound(game gm){
 	
-	alSourcei(gm->src_z[i],AL_LOOPING,AL_TRUE);
-	
-	alSource3f(gm->src_z[i], AL_POSITION, gm->src[i].p.x, gm->src[i].p.y, 0);
-	alSource3f(gm->src_z[i], AL_VELOCITY, gm->src[i].v.x, gm->src[i].v.y, 0);
-	
-	alSourcePlay(gm->src_z[i]);
-	*/
 }
 
 void gm_update_sound(game gm){
-	/*
-	s_update(gm->clicks);
-
-	int i;
-	for(i = 0; i < gm->src_num; i++){
-		alSource3f(gm->src_z[i], AL_POSITION, gm->src[i].p.x, gm->src[i].p.y, 0);
-		alSource3f(gm->src_z[i], AL_VELOCITY, gm->src[i].v.x, gm->src[i].v.y, 0);
-		
-	}
 	
-	alSource3f(gm->eat_src, AL_POSITION, gm->lst.p.x, gm->lst.p.y, 0);
-	alSource3f(gm->eat_src, AL_VELOCITY, gm->lst.v.x, gm->lst.v.y, 0);
-	
-	alListener3f(AL_POSITION, gm->lst.p.x, gm->lst.p.y, 0);
-	alListener3f(AL_VELOCITY, gm->lst.v.x, gm->lst.v.y, 0);
-	*/
 }
 
 void gm_update(game gm, double dt){
@@ -477,6 +517,18 @@ void gm_update(game gm, double dt){
 void gm_render(game gm){
 	int i;
 	glColor3f(0.8,0.8,0.8);
+	
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture( GL_TEXTURE_2D, gm->bk);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0); glVertex2f(0,0);
+	glTexCoord2f(0.0, 1.0); glVertex2f(0, gm->h);
+	glTexCoord2f(1.0, 1.0); glVertex2f(gm->w, gm->h);
+	glTexCoord2f(1.0, 0.0); glVertex2f(gm->w, 0);
+	glEnd();
+	glPopMatrix();
+	
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	if(gm->hero.spring_state == ATTACHED){
 		i = gm->hero.person_id;
@@ -564,6 +616,19 @@ void gm_render(game gm){
 }
 
 int gm_progress(game gm){
+	int i, add = 0;
+	if(gm->hero.state == ZOMBIE){
+		return -1;
+	}
+	for(i = 0; i < gm->person_num; i++){
+		if(gm->person[i].state == SAFE){
+			add++;
+		}
+	}
+	if(add >= gm->save_count){
+		return 1;
+	}
+	
 	return 0;
 }
 
@@ -572,6 +637,18 @@ void gm_free(game gm){
 	free(gm);
 }
 
+void gm_reshape(game gm, int width, int height){
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
+	vector2 w = {75, 75};
+	w.x = ratio * w.y;
+	double diff = w.x - (gm->vmax.x - gm->vmin.x);
+	gm->vmax.x += diff;
+    glLoadIdentity();
+    gluOrtho2D(gm->vmin.x, gm->vmax.x, gm->vmin.y, gm->vmax.y);
+    glMatrixMode(GL_MODELVIEW);
+}
 
 void gm_skey_down(game gm, int key){
 	switch(key) {

@@ -30,6 +30,7 @@ int load_png(char *name, int *outWidth, int *outHeight, int *outHasAlpha, GLubyt
 
     if (png_ptr == NULL) {
         fclose(fp);
+		printf("Failed to open %s\n", name);
         return 0;
     }
 
@@ -38,6 +39,7 @@ int load_png(char *name, int *outWidth, int *outHeight, int *outHasAlpha, GLubyt
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL) {
         fclose(fp);
+		printf("Failed to open %s\n", name);
         png_destroy_read_struct(&png_ptr, NULL, NULL);
         return 0;
     }
@@ -101,11 +103,9 @@ int load_png(char *name, int *outWidth, int *outHeight, int *outHasAlpha, GLubyt
     switch (color_type) {
         case PNG_COLOR_TYPE_RGBA:
             *outHasAlpha = 1;
-			printf("Has Alpha.\n");
             break;
         case PNG_COLOR_TYPE_RGB:
             *outHasAlpha = 0;
-			printf("No Alpha.\n");
             break;
         default:
            // std::cout << "Color type " << color_type << " not supported" << std::endl;
@@ -132,7 +132,8 @@ int load_png(char *name, int *outWidth, int *outHeight, int *outHasAlpha, GLubyt
 
     /* Close the file */
     fclose(fp);
-
+	printf("Loaded %s and", name);
+	*outHasAlpha ? printf(" has alpha.\n") : printf(" has no alpha.\n");
     /* That's it */
     return 1;
 }
