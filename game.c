@@ -295,6 +295,10 @@ void gm_load_level(game gm, int lvl){
 	int i;
 	gm->ak.x =0;
 	gm->ak.y = 0;
+	gm->safe_zone.m = 100000;
+	char level[30];
+	sprintf(level, "./levels/lvl%d.txt", lvl);
+
 	switch(lvl){
 		case 1:
 			gm->h = 100;
@@ -807,3 +811,39 @@ int bounce(object * obj, int x, int y){
 	}
 	return state;
 }
+/*
+int load_level_file(game gm, char * file){
+		int i,j;
+		FILE *loadFile;
+
+		loadFile = fopen(file, "r");
+
+		if(loadFile != NULL){
+			fscanf(loadFile, "%s", lvl_author);
+			fscanf(loadFile, "%d %d", &bound.x, &bound.y);
+			fscanf(loadFile, "%d %d", &start.x, &start.y);
+			fscanf(loadFile, "%d %d", &end.x, &end.y);
+			cursor.x = start.x;
+			cursor.y = start.y;
+			cursor.grasp=0;
+
+			fscanf(loadFile, "%d", &pivot_num);
+			for(i=0; i<pivot_num; i++)
+			{
+				fscanf(loadFile,"%d %d %d", &pivot[i].x, &pivot[i].y, &pivot[i].dir);
+			}
+
+			fscanf(loadFile, "%d", &line_num);
+			for(i=0; i<line_num; i++)
+			{
+				fscanf(loadFile,"%d %d", &line[i].pt1.x, &line[i].pt1.y);
+				fscanf(loadFile,"%d %d", &line[i].pt2.x, &line[i].pt2.y);
+				line[i].pivot = 0;
+			}
+			return true;
+		}
+		else
+			{printf("File %s unable to load.\n", location); return false;}
+		fclose(loadFile);
+	
+}*/
