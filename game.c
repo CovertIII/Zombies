@@ -87,6 +87,8 @@ game gm_init(void){
 	gametype * gm;
 	gm = (game)malloc(sizeof(gametype));
 	if(!gm) {return NULL;}
+	
+	glLineWidth(4);
 
 	return gm;
 }
@@ -234,40 +236,56 @@ int gm_init_textures(game gm){
 
 void gm_set_view(game gm){
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = {75, 75};
+	vector2 w = {100, 100};
 	w.x = ratio * w.y;
 	gm->vmin.x = gm->hero.o.p.x - w.x/2.0f;
 	gm->vmin.y = gm->hero.o.p.y - w.y/2.0f;
 	gm->vmax.x = gm->hero.o.p.x + w.x/2.0f;
 	gm->vmax.y = gm->hero.o.p.y + w.y/2.0f;
+	
 }
 
 void gm_update_view(game gm){
-	double minx = 1.0f/6.0*(gm->vmax.x - gm->vmin.x) + gm->vmin.x;
-	double maxx = gm->vmax.x - 1.0f/6.0*(gm->vmax.x - gm->vmin.x);
-	if(gm->hero.o.p.x < minx){
+	double minx = 1.0f/4.0*(gm->vmax.x - gm->vmin.x) + gm->vmin.x;
+	double maxx = gm->vmax.x - 1.0f/4.0*(gm->vmax.x - gm->vmin.x);
+	
+	if(gm->hero.o.p.x < minx && gm->vmin.x > 0){
 		gm->vmin.x -= minx - gm->hero.o.p.x;
 		gm->vmax.x -= minx - gm->hero.o.p.x;
 	}
 	
-	else if (gm->hero.o.p.x > maxx){
+	else if (gm->hero.o.p.x > maxx && gm->vmax.x < gm->w){
 		gm->vmin.x += gm->hero.o.p.x - maxx;
 		gm->vmax.x += gm->hero.o.p.x - maxx;
 	}
 	
-	double miny = 1.0f/6.0*(gm->vmax.y - gm->vmin.y) + gm->vmin.y;
-	double maxy = gm->vmax.y - 1.0f/6.0*(gm->vmax.y - gm->vmin.y);
-	if(gm->hero.o.p.y < miny){
+	double miny = 1.0f/4.0*(gm->vmax.y - gm->vmin.y) + gm->vmin.y;
+	double maxy = gm->vmax.y - 1.0f/4.0*(gm->vmax.y - gm->vmin.y);
+	if(gm->hero.o.p.y < miny  && gm->vmin.y > 0){
 		gm->vmin.y -= miny - gm->hero.o.p.y;
 		gm->vmax.y -= miny - gm->hero.o.p.y;
 	}
 	
-	else if (gm->hero.o.p.y > maxy){
+	else if (gm->hero.o.p.y > maxy  && gm->vmax.y < gm->h){
 		gm->vmin.y += gm->hero.o.p.y - maxy;
 		gm->vmax.y += gm->hero.o.p.y - maxy;
 	}
 	
 	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(gm->vmin.x, gm->vmax.x, gm->vmin.y, gm->vmax.y);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+
+void gm_reshape(game gm, int width, int height){
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
+	vector2 w = {100, 100};
+	w.x = ratio * w.y;
+	double diff = w.x - (gm->vmax.x - gm->vmin.x);
+	gm->vmax.x += diff;
     glLoadIdentity();
     gluOrtho2D(gm->vmin.x, gm->vmax.x, gm->vmin.y, gm->vmax.y);
     glMatrixMode(GL_MODELVIEW);
@@ -288,7 +306,7 @@ void gm_load_level(game gm, int lvl){
 			gm->safe_zone.m = 100000;
 			
 			gm->person_num = 15;
-			gm->save_count = 6;
+			gm->save_count = 7;
 			for(i = 0; i < gm->person_num; i++){
 				if(i < 1){
 					gm->person[i].state = ZOMBIE;
@@ -635,19 +653,6 @@ int gm_progress(game gm){
 void gm_free(game gm){
 
 	free(gm);
-}
-
-void gm_reshape(game gm, int width, int height){
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = {75, 75};
-	w.x = ratio * w.y;
-	double diff = w.x - (gm->vmax.x - gm->vmin.x);
-	gm->vmax.x += diff;
-    glLoadIdentity();
-    gluOrtho2D(gm->vmin.x, gm->vmax.x, gm->vmin.y, gm->vmax.y);
-    glMatrixMode(GL_MODELVIEW);
 }
 
 void gm_skey_down(game gm, int key){

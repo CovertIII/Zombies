@@ -1,0 +1,11 @@
+LMB    - Left Mouse Button
+LMB     - drag circle
+c + LMB - circle
+s + LMB - connect circles
+s + LMB - un-connect circles
+d + LMB - delete circle
+n + LMB - insert or convert to a nail
+p       - pause
+r       - reset screen
+1       - save
+l       - load
