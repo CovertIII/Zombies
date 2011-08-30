@@ -69,10 +69,13 @@ typedef struct gametype {
 	GLuint safe_tex;
 	GLuint safezone_tex;
 	GLuint hero_tex;
+	GLuint heroattached_tex;
+	GLuint herosafe_tex;
 	GLuint p_z_tex;
 	GLuint h_z_tex;
 	GLuint hzombie_tex;
 	GLuint bk;
+	GLuint rope_tex;
 	
 } gametype;
 
@@ -82,6 +85,7 @@ static int collision(object *ta, object *tb);
 static int collision_test(object ta, object tb);
 int safe_zone_test(object ta, object tb);
 int r_collision(object *ta, object *tb);
+int load_level_file(game gm, char * file);
 
 game gm_init(void){
 	gametype * gm;
@@ -218,6 +222,51 @@ int gm_init_textures(game gm){
     	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
 	
+	success = load_png("imgs/heroattached.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures(1, &gm->heroattached_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->heroattached_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/herosafe.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures(1, &gm->herosafe_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->herosafe_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/rope.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures(1, &gm->rope_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
 	success = load_png("imgs/bk.png", &width, &height, &hasAlpha, &textureImage);
     if (success) {
 		glGenTextures(1, &gm->bk);
@@ -295,95 +344,10 @@ void gm_load_level(game gm, int lvl){
 	int i;
 	gm->ak.x =0;
 	gm->ak.y = 0;
-	gm->safe_zone.m = 100000;
 	char level[30];
-	sprintf(level, "./levels/lvl%d.txt", lvl);
+	sprintf(level, "./lvl/lvl%d.txt", lvl);
 
-	switch(lvl){
-		case 1:
-			gm->h = 100;
-			gm->w = 100;
-			
-			gm->safe_zone.p.x = rand()%(gm->w - SAFE_ZONE_RAD);
-			gm->safe_zone.p.y = rand()%(gm->h - SAFE_ZONE_RAD);
-			gm->safe_zone.r = SAFE_ZONE_RAD;
-			gm->safe_zone.m = 100000;
-			
-			gm->person_num = 15;
-			gm->save_count = 7;
-			for(i = 0; i < gm->person_num; i++){
-				if(i < 1){
-					gm->person[i].state = ZOMBIE;
-				}
-				else{
-					gm->person[i].state = PERSON;
-				}
-				gm->person[i].o.r = PERSON_RAD;
-				gm->person[i].o.m = PERSON_MASS;
-				
-				float dist;
-				do{
-					gm->person[i].o.p.x = rand()%gm->w;
-					gm->person[i].o.p.y = rand()%gm->h;
-				}while(v2Len(v2Sub(gm->person[i].o.p, gm->safe_zone.p)) < SAFE_ZONE_RAD + PERSON_RAD);
-				
-				gm->person[i].o.v.x = rand()%50 - 25;
-				gm->person[i].o.v.y = rand()%50 - 25;
-			}
-
-			gm->hero.o.p = gm->safe_zone.p;
-			gm->hero.o.v.x = 0;
-			gm->hero.o.v.y = 0;
-			gm->hero.o.r = PERSON_RAD;
-			gm->hero.o.m = PERSON_MASS;
-			gm->hero.state = PERSON;
-			gm->hero.spring_state = NOT_ATTACHED;
-			gm_set_view(gm);
-			break;
-			
-		case 2:
-			gm->h = 200;
-			gm->w = 200;
-        
-			gm->safe_zone.r = SAFE_ZONE_RAD + 10;
-			gm->safe_zone.p.x = rand()%(gm->w - (int)gm->safe_zone.r);
-			gm->safe_zone.p.y = rand()%(gm->h - (int)gm->safe_zone.r);
-			gm->safe_zone.m = 100000;
-        
-			gm->person_num = 25;
-			gm->save_count = 10;
-			for(i = 0; i < gm->person_num; i++){
-				if(i < 3){
-					gm->person[i].state = ZOMBIE;
-				}
-				else{
-					gm->person[i].state = PERSON;
-				}
-				gm->person[i].o.r = PERSON_RAD;
-				gm->person[i].o.m = PERSON_MASS;
-        
-				float dist;
-				do{
-					gm->person[i].o.p.x = rand()%gm->w;
-					gm->person[i].o.p.y = rand()%gm->h;
-				}while(v2Len(v2Sub(gm->person[i].o.p, gm->safe_zone.p)) < SAFE_ZONE_RAD + PERSON_RAD);
-        
-				gm->person[i].o.v.x = rand()%50 - 25;
-				gm->person[i].o.v.y = rand()%50 - 25;
-			}
-        
-			gm->hero.o.p = gm->safe_zone.p;
-			gm->hero.o.v.x = 0;
-			gm->hero.o.v.y = 0;
-			gm->hero.o.r = PERSON_RAD;
-			gm->hero.o.m = PERSON_MASS;
-			gm->hero.state = PERSON;
-			gm->hero.spring_state = NOT_ATTACHED;
-			gm_set_view(gm);
-			break;
-		
-	}
-	
+	load_level_file(gm, level);
 }
 
 void gm_init_sound(game gm){
@@ -423,6 +387,13 @@ void gm_update(game gm, double dt){
 		vector2 p = gm->safe_zone.p;
 		collision(&gm->hero.o, &gm->safe_zone); 
 		gm->safe_zone.p = p;	
+	}
+	
+	if(safe_zone_test(gm->safe_zone, gm->hero.o) && gm->hero.state == PERSON){
+		gm->hero.state = SAFE;	
+	} 
+	else if(!safe_zone_test(gm->safe_zone, gm->hero.o) && gm->hero.state == SAFE){
+		gm->hero.state = PERSON;	
 	}
 	
 	
@@ -550,18 +521,7 @@ void gm_render(game gm){
 	glTexCoord2f(1.0, 0.0); glVertex2f(gm->w, 0);
 	glEnd();
 	glPopMatrix();
-	
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	if(gm->hero.spring_state == ATTACHED){
-		i = gm->hero.person_id;
-		glBegin(GL_LINE_STRIP);
-			glVertex2f (gm->person[i].o.p.x, gm->person[i].o.p.y);
-			glVertex2f (gm->hero.o.p.x, gm->hero.o.p.y);
-	  	glEnd();
-		glPopMatrix();
-	}
-	
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		
 	glBindTexture( GL_TEXTURE_2D, gm->safezone_tex);
 	glPushMatrix();
 	glTranslatef(gm->safe_zone.p.x, gm->safe_zone.p.y, 0);
@@ -578,6 +538,32 @@ void gm_render(game gm){
 	glEnd();
 	glPopMatrix();
 	
+	if(gm->hero.spring_state == ATTACHED){
+		i = gm->hero.person_id;
+		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
+		glPushMatrix();
+		glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0, 0.0);
+		vector2 temp = v2Add(gm->person[i].o.p, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glTexCoord2f(0.0, 0.0);
+		temp = v2Add(gm->person[i].o.p, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glTexCoord2f(0.0, 1.0);
+		temp = v2Add(gm->hero.o.p, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glTexCoord2f(1.0, 1.0);
+		temp = v2Add(gm->hero.o.p, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glEnd();
+		glPopMatrix();
+	}
+	
 	switch(gm->hero.state){
 		case PERSON:
 			glBindTexture( GL_TEXTURE_2D, gm->hero_tex);
@@ -588,7 +574,14 @@ void gm_render(game gm){
 		case ZOMBIE:
 			glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
 			break;
+		case SAFE:
+			glBindTexture( GL_TEXTURE_2D, gm->herosafe_tex);
+			break;
 	}
+	if(gm->hero.spring_state == ATTACHED){
+		glBindTexture( GL_TEXTURE_2D, gm->heroattached_tex);
+	}
+	
 	
 	glPushMatrix();
 	glTranslatef(gm->hero.o.p.x, gm->hero.o.p.y, 0);
@@ -647,7 +640,7 @@ int gm_progress(game gm){
 			add++;
 		}
 	}
-	if(add >= gm->save_count){
+	if(add >= gm->save_count && gm->hero.state == SAFE){
 		return 1;
 	}
 	
@@ -811,39 +804,104 @@ int bounce(object * obj, int x, int y){
 	}
 	return state;
 }
-/*
+
 int load_level_file(game gm, char * file){
 		int i,j;
 		FILE *loadFile;
 
 		loadFile = fopen(file, "r");
 
-		if(loadFile != NULL){
-			fscanf(loadFile, "%s", lvl_author);
-			fscanf(loadFile, "%d %d", &bound.x, &bound.y);
-			fscanf(loadFile, "%d %d", &start.x, &start.y);
-			fscanf(loadFile, "%d %d", &end.x, &end.y);
-			cursor.x = start.x;
-			cursor.y = start.y;
-			cursor.grasp=0;
-
-			fscanf(loadFile, "%d", &pivot_num);
-			for(i=0; i<pivot_num; i++)
-			{
-				fscanf(loadFile,"%d %d %d", &pivot[i].x, &pivot[i].y, &pivot[i].dir);
-			}
-
-			fscanf(loadFile, "%d", &line_num);
-			for(i=0; i<line_num; i++)
-			{
-				fscanf(loadFile,"%d %d", &line[i].pt1.x, &line[i].pt1.y);
-				fscanf(loadFile,"%d %d", &line[i].pt2.x, &line[i].pt2.y);
-				line[i].pivot = 0;
-			}
-			return true;
+		if(loadFile == NULL)
+		{
+			printf("File %s unable to load.\n", file); 
+			return 0;
 		}
-		else
-			{printf("File %s unable to load.\n", location); return false;}
+		
+		char type[5];
+		int result;
+		
+		gm->safe_zone.m = 100000;
+		gm->person_num = 0;
+		i = 1;
+		while( (result = fscanf(loadFile, "%s", type)) != EOF){
+			if(!strncmp(type, "hw", 2)){
+				result = fscanf(loadFile, "%d %d", &gm->h, &gm->w);
+				if(result != 2){
+					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error: Height and width.\n");
+				}
+			}
+			else if(!strncmp(type, "sz", 2)){
+				result = fscanf(loadFile, "%lf %lf %lf", 
+					&gm->safe_zone.p.x,
+					&gm->safe_zone.p.y,
+					&gm->safe_zone.r);
+				if(result != 3){
+					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error: Safe Zone not loaded.\n");
+				}
+			}
+			else if(!strncmp(type, "sc", 2)){
+				result = fscanf(loadFile, "%d", &gm->save_count);
+				if(result != 1){
+					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error: Save count not loaded.\n");
+				}
+			}
+			else if(!strncmp(type, "p", 1)){
+				int num = gm->person_num;
+				gm->person[num].state = PERSON;
+				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
+					&gm->person[num].o.p.x,
+					&gm->person[num].o.p.y,
+					&gm->person[num].o.v.x,
+					&gm->person[num].o.v.y,
+					&gm->person[num].o.r,
+					&gm->person[num].o.m);
+				if(result != 6){
+					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error: A person was not loaded.\n");
+				}
+				else{
+					gm->person_num++;
+				}
+			}
+			else if(!strncmp(type, "z", 1)){
+				int num = gm->person_num;
+				gm->person[num].state = ZOMBIE;
+				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
+					&gm->person[num].o.p.x,
+					&gm->person[num].o.p.y,
+					&gm->person[num].o.v.x,
+					&gm->person[num].o.v.y,
+					&gm->person[num].o.r,
+					&gm->person[num].o.m);
+				if(result != 6){
+					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error: A zombie was not loaded.\n");
+				}
+				else{
+					gm->person_num++;
+				}
+			}
+			else if(!strncmp(type, "h", 1)){
+				gm->hero.state = PERSON;
+				gm->hero.spring_state = NOT_ATTACHED;
+				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
+					&gm->hero.o.p.x,
+					&gm->hero.o.p.y,
+					&gm->hero.o.v.x,
+					&gm->hero.o.v.y,
+					&gm->hero.o.r,
+					&gm->hero.o.m);
+				if(result != 6){
+					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error: The hero was not loaded!\n");
+				}
+			}
+			i++;
+		}
+		gm_set_view(gm);
 		fclose(loadFile);
-	
-}*/
+		return 1;
+}
