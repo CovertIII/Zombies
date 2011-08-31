@@ -24,6 +24,8 @@ ALCdevice * device;
 ALCcontext * context;
 ALenum error;
 
+GLuint count[4];
+
 static void renderBitmapString(
 						float x, 
 						float y, 
@@ -61,6 +63,56 @@ void init(void){
 	//gm_init_sounds(gm);
 	gm_init_textures(gm);
 	gm_load_level(gm, gm_lvl);
+	gm_update(gm,0.0001);
+	
+	GLubyte *textureImage;
+	int width, height;
+    int hasAlpha;
+    int success;
+   	success = load_png("imgs/1one.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures( 1, &count[1]);
+		glBindTexture( GL_TEXTURE_2D, count[1]);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/2two.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures( 1, &count[2]);
+		glBindTexture( GL_TEXTURE_2D, count[2]);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	success = load_png("imgs/3three.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures( 1, &count[3]);
+		glBindTexture( GL_TEXTURE_2D, count[3]);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
 
 	atexit(cleanup);
 	
@@ -74,11 +126,13 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 }
 
 void pressKey(int key, int xx, int yy) {
-	gm_skey_down(gm, key);	
+	if(game_mode == GAME){
+		gm_skey_down(gm, key);	
+	}
 }
 
 void releaseKey(int key, int xx, int yy) {
-	gm_skey_up(gm, key);
+		gm_skey_up(gm, key);
 }
 
 void numbers(int value)
@@ -116,11 +170,13 @@ void numbers(int value)
 			}
 			break;
 		case POSTGAME:
+			gm_update(gm,h);
 			if (gm_timer > 3){
 				gm_timer = 0;
 				game_mode = PREGAME;
 				//gm_free_level(gm);
 				gm_load_level(gm, gm_lvl);
+				gm_update(gm,h);
 			}
 			break;
 	}
@@ -136,6 +192,35 @@ void display(void) {
 
 	gm_render(gm);
 	gm_update_view(gm);
+	
+	if(game_mode == PREGAME){
+		if(gm_timer < 1){
+			glBindTexture( GL_TEXTURE_2D, count[3]);
+		}
+		else if(gm_timer > 1 && gm_timer < 2){
+			glBindTexture( GL_TEXTURE_2D, count[2]);
+		}
+		else if(gm_timer > 2 && gm_timer < 3){
+			glBindTexture( GL_TEXTURE_2D, count[1]);
+		}
+		
+		vector2 dm = gm_dim(gm);
+		
+		glPushMatrix();
+		glTranslatef(dm.x, dm.y, 0);
+		glScalef(10, 10,0);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0, 0.0);
+		glVertex3f(-1.0, -1.0, 0.0);
+		glTexCoord2f(0.0, 1.0);
+		glVertex3f(-1.0, 1.0, 0.0);
+		glTexCoord2f(1.0, 1.0);
+		glVertex3f(1.0, 1.0, 0.0);
+		glTexCoord2f(1.0, 0.0);
+		glVertex3f(1.0, -1.0, 0.0);
+		glEnd();
+		glPopMatrix();
+	}
 
     glutSwapBuffers();
 	

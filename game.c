@@ -15,6 +15,7 @@
 #define PERSON 2
 #define P_Z 3
 #define SAFE 4
+#define DONE 5
 
 #define ATTACHED 0
 #define NOT_ATTACHED 1
@@ -23,6 +24,8 @@
 #define SAFE_ZONE_RAD 10
 #define PERSON_RAD 2
 #define PERSON_MASS 0.5
+
+#define VIEWRATIO 50
 
 
 typedef struct {
@@ -285,7 +288,7 @@ int gm_init_textures(game gm){
 
 void gm_set_view(game gm){
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = {100, 100};
+	vector2 w = {VIEWRATIO, VIEWRATIO};
 	w.x = ratio * w.y;
 	gm->vmin.x = gm->hero.o.p.x - w.x/2.0f;
 	gm->vmin.y = gm->hero.o.p.y - w.y/2.0f;
@@ -331,7 +334,7 @@ void gm_reshape(game gm, int width, int height){
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = {100, 100};
+	vector2 w = {VIEWRATIO, VIEWRATIO};
 	w.x = ratio * w.y;
 	double diff = w.x - (gm->vmax.x - gm->vmin.x);
 	gm->vmax.x += diff;
@@ -394,6 +397,9 @@ void gm_update(game gm, double dt){
 	} 
 	else if(!safe_zone_test(gm->safe_zone, gm->hero.o) && gm->hero.state == SAFE){
 		gm->hero.state = PERSON;	
+	}
+	if(gm->hero.state == DONE){
+		r_collision(&gm->safe_zone, &gm->hero.o);
 	}
 	
 	
@@ -543,21 +549,25 @@ void gm_render(game gm){
 		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
 		glPushMatrix();
 		glBegin(GL_QUADS);
+		
+		vector2 p1,p2;
+		p1 = v2Add(gm->person[i].o.p, v2sMul(gm->person[i].o.r, v2Unit(v2Sub(gm->hero.o.p, gm->person[i].o.p))));
+		p2 = v2Add(gm->hero.o.p, v2sMul(gm->hero.o.r, v2Unit(v2Sub(gm->person[i].o.p, gm->hero.o.p))));
 
 		glTexCoord2f(1.0, 0.0);
-		vector2 temp = v2Add(gm->person[i].o.p, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		vector2 temp = v2Add(p1, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
 		glVertex3f(temp.x, temp.y, 0.0);
 
 		glTexCoord2f(0.0, 0.0);
-		temp = v2Add(gm->person[i].o.p, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		temp = v2Add(p1, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
 		glVertex3f(temp.x, temp.y, 0.0);
 
 		glTexCoord2f(0.0, 1.0);
-		temp = v2Add(gm->hero.o.p, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		temp = v2Add(p2, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
 		glVertex3f(temp.x, temp.y, 0.0);
 
 		glTexCoord2f(1.0, 1.0);
-		temp = v2Add(gm->hero.o.p, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
+		temp = v2Add(p2, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->hero.o.p)))));
 		glVertex3f(temp.x, temp.y, 0.0);
 
 		glEnd();
@@ -575,6 +585,7 @@ void gm_render(game gm){
 			glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
 			break;
 		case SAFE:
+		case DONE:
 			glBindTexture( GL_TEXTURE_2D, gm->herosafe_tex);
 			break;
 	}
@@ -641,6 +652,7 @@ int gm_progress(game gm){
 		}
 	}
 	if(add >= gm->save_count && gm->hero.state == SAFE){
+		gm->hero.state = DONE;
 		return 1;
 	}
 	
@@ -687,9 +699,7 @@ void gm_skey_up(game gm, int key){
 }
 
 vector2 gm_dim(game gm){
-	vector2 dim;
-	dim.x = gm->w;
-	dim.y = gm->h;
+	vector2 dim = gm->hero.o.p;
 	return dim;
 }
 
@@ -820,7 +830,7 @@ int load_level_file(game gm, char * file){
 		char type[5];
 		int result;
 		
-		gm->safe_zone.m = 100000;
+		gm->safe_zone.m = 5000;
 		gm->person_num = 0;
 		i = 1;
 		while( (result = fscanf(loadFile, "%s", type)) != EOF){
@@ -902,6 +912,7 @@ int load_level_file(game gm, char * file){
 			i++;
 		}
 		gm_set_view(gm);
+		gm_update_view(gm);
 		fclose(loadFile);
 		return 1;
 }
