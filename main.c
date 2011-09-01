@@ -62,7 +62,9 @@ void init(void){
 	gm = gm_init();	
 	//gm_init_sounds(gm);
 	gm_init_textures(gm);
-	gm_load_level(gm, gm_lvl);
+	char level[30];
+	sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
+	gm_load_level(gm, level);
 	gm_update(gm,0.0001);
 	
 	GLubyte *textureImage;
@@ -126,7 +128,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 }
 
 void pressKey(int key, int xx, int yy) {
-	if(game_mode == GAME){
+	if(game_mode == GAME || game_mode == POSTGAME){
 		gm_skey_down(gm, key);	
 	}
 }
@@ -175,7 +177,9 @@ void numbers(int value)
 				gm_timer = 0;
 				game_mode = PREGAME;
 				//gm_free_level(gm);
-				gm_load_level(gm, gm_lvl);
+				char level[30];
+				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
+				gm_load_level(gm, level);
 				gm_update(gm,h);
 			}
 			break;

@@ -5,7 +5,7 @@ game gm_init(void);
 int gm_init_textures(game gm);
 //void gm_init_sound(game gm);
 
-void gm_load_level(game gm, int lvl);
+void gm_load_level(game gm, char * lvl);
 
 //void gm_free_level(game gm);
 
