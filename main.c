@@ -48,7 +48,7 @@ void cleanup (void) {
 	alcCloseDevice(device);
 }
 
-void init(void){
+void init(int argc, char** argv){
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glClearColor (0.2f, 0.2f, 0.2f, 1.0f);
@@ -63,8 +63,15 @@ void init(void){
 	//gm_init_sounds(gm);
 	gm_init_textures(gm);
 	char level[30];
-	sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
-	gm_load_level(gm, level);
+	if(argc == 1){
+		sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
+		gm_load_level(gm, level);
+	}
+	if(argc == 2){
+		gm_load_level(gm, argv[1]);
+	}
+	
+	
 	gm_update(gm,0.0001);
 	
 	GLubyte *textureImage;
@@ -256,7 +263,7 @@ int main(int argc, char** argv)
     
     glutCreateWindow("Zombies!");
 	
-	init();
+	init(argc, argv);
    
 	glutIgnoreKeyRepeat(1);
 	glutSpecialFunc(pressKey);

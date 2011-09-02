@@ -875,7 +875,7 @@ int load_level_file(game gm, char * file){
 			if(!strncmp(type, "hw", 2)){
 				result = fscanf(loadFile, "%d %d", &gm->h, &gm->w);
 				if(result != 2){
-					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: Height and width.\n");
 				}
 			}
@@ -885,14 +885,14 @@ int load_level_file(game gm, char * file){
 					&gm->safe_zone.p.y,
 					&gm->safe_zone.r);
 				if(result != 3){
-					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: Safe Zone not loaded.\n");
 				}
 			}
 			else if(!strncmp(type, "sc", 2)){
 				result = fscanf(loadFile, "%d", &gm->save_count);
 				if(result != 1){
-					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: Save count not loaded.\n");
 				}
 			}
@@ -907,7 +907,7 @@ int load_level_file(game gm, char * file){
 					&gm->person[num].o.r,
 					&gm->person[num].o.m);
 				if(result != 6){
-					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: A person was not loaded.\n");
 				}
 				else{
@@ -925,7 +925,7 @@ int load_level_file(game gm, char * file){
 					&gm->person[num].o.r,
 					&gm->person[num].o.m);
 				if(result != 6){
-					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: A zombie was not loaded.\n");
 				}
 				else{
@@ -943,11 +943,10 @@ int load_level_file(game gm, char * file){
 					&gm->hero.o.r,
 					&gm->hero.o.m);
 				if(result != 6){
-					printf("Error loading level file %s on line %d.\n", file, i);
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: The hero was not loaded!\n");
 				}
 			}
-			i++;
 		}
 		gm_set_view(gm);
 		gm_update_view(gm);
