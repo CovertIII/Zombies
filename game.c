@@ -25,7 +25,7 @@
 #define PERSON_RAD 2
 #define PERSON_MASS 0.5
 
-#define VIEWRATIO 50
+#define VIEWRATIO 100
 
 
 typedef struct {
@@ -56,8 +56,10 @@ typedef struct {
 
 typedef struct gametype {
 	vector2 ak;  /*arrow key presses*/
-	vector2 vmin;
-	vector2 vmax;
+	vector2 vmin; /*sceen size */
+	vector2 vmax; /*sceen size */
+	float viewratio;
+	int zoom;
 	
 	int h,w; //Height and width of the level
 	ppl person[100]; //Zombies and people array
@@ -95,7 +97,8 @@ game gm_init(void){
 	gm = (game)malloc(sizeof(gametype));
 	if(!gm) {return NULL;}
 	
-	glLineWidth(4);
+	gm->viewratio = VIEWRATIO;
+	gm->zoom = 0;
 
 	return gm;
 }
@@ -288,7 +291,7 @@ int gm_init_textures(game gm){
 
 void gm_set_view(game gm){
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = {VIEWRATIO, VIEWRATIO};
+	vector2 w = {gm->viewratio, gm->viewratio};
 	w.x = ratio * w.y;
 	gm->vmin.x = gm->hero.o.p.x - w.x/2.0f;
 	gm->vmin.y = gm->hero.o.p.y - w.y/2.0f;
@@ -334,7 +337,7 @@ void gm_reshape(game gm, int width, int height){
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
-	vector2 w = {VIEWRATIO, VIEWRATIO};
+	vector2 w = {gm->viewratio, gm->viewratio};
 	w.x = ratio * w.y;
 	double diff = w.x - (gm->vmax.x - gm->vmin.x);
 	gm->vmax.x += diff;
@@ -509,6 +512,18 @@ void gm_update(game gm, double dt){
 		gm->person[i].o.p.x += gm->person[i].o.v.x*dt;
 		gm->person[i].o.p.y += gm->person[i].o.v.y*dt;
 	}
+	
+	/*Advances our view level */
+	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
+	vector2 w = {gm->viewratio, gm->viewratio};
+	w.x = ratio * w.y;
+	
+	gm->vmin.x -= gm->zoom*dt*1*w.x; 
+	gm->vmin.y -= gm->zoom*dt*1*w.y;
+	gm->vmax.x += gm->zoom*dt*1*w.x;
+	gm->vmax.y += gm->zoom*dt*1*w.y;
+	
+	
 }
 
 void gm_render(game gm){
@@ -658,9 +673,34 @@ int gm_progress(game gm){
 }
 
 void gm_free(game gm){
-
 	free(gm);
 }
+
+void gm_nkey_down(game gm, unsigned char key){
+	switch(key) {
+		case 'z':
+			gm->zoom = 1;
+			break;
+		
+		case 'x':
+			gm->zoom = -1;
+			break;
+	}
+}
+
+void gm_nkey_up(game gm, unsigned char key){
+	switch(key) {
+		case 'z':
+			gm->zoom = 0;
+			break;
+		
+		case 'x':
+			gm->zoom = 0;
+			break;
+	}
+	
+}
+
 
 void gm_skey_down(game gm, int key){
 	switch(key) {

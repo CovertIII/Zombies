@@ -125,7 +125,14 @@ void init(void){
 void processNormalKeys(unsigned char key, int xx, int yy) {
 	if (key == 27) 
 		exit(0);
+	
+	gm_nkey_down(gm, key);	
 }
+
+void releaseNormalKeys(unsigned char key, int xx, int yy) {
+	gm_nkey_up(gm, key);	
+}
+
 
 void pressKey(int key, int xx, int yy) {
 	if(game_mode == GAME || game_mode == POSTGAME){
@@ -255,6 +262,7 @@ int main(int argc, char** argv)
 	glutSpecialFunc(pressKey);
 	glutSpecialUpFunc(releaseKey); 
 	glutKeyboardFunc(processNormalKeys);
+	glutKeyboardUpFunc(releaseNormalKeys);
 	
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
