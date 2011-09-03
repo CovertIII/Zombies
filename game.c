@@ -523,6 +523,8 @@ void gm_update(game gm, double dt){
 	gm->vmax.x += gm->zoom*dt*1*w.x;
 	gm->vmax.y += gm->zoom*dt*1*w.y;
 	
+	gm->viewratio = gm->vmax.y - gm->vmin.y;
+	
 	
 }
 

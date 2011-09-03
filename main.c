@@ -20,6 +20,8 @@ double gm_timer = 0.0f;
 int gm_lvl = 1;
 game gm;
 
+char * argv1;
+
 ALCdevice * device;
 ALCcontext * context;
 ALenum error;
@@ -68,7 +70,8 @@ void init(int argc, char** argv){
 		gm_load_level(gm, level);
 	}
 	if(argc == 2){
-		gm_load_level(gm, argv[1]);
+		argv1 = argv[1];
+		gm_load_level(gm, argv1);
 	}
 	
 	
@@ -132,6 +135,11 @@ void init(int argc, char** argv){
 void processNormalKeys(unsigned char key, int xx, int yy) {
 	if (key == 27) 
 		exit(0);
+		
+	if(key == 'r'){
+		game_mode = GAME;
+		gm_load_level(gm, argv1);
+	}
 	
 	gm_nkey_down(gm, key);	
 }

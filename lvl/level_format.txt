@@ -1,6 +1,14 @@
-hw x y //height and width
+hw h w //height and width
 sc n   //save count -- how many people you have to save to win
 sz x y r //safe zone location and size
 p x y vx vy r m // people hero or zombie start stats
 z x y vx vy r m
 h x y vx vy r m
+
+//p - person
+//z - a zombie
+//h - hero
+//x - starting x position
+//y - starting y position
+//vx - starting x velocity
+//vy - starting y velocity
