@@ -6,6 +6,7 @@
 #include <GLUT/glut.h>
 #include "load_sound.h"
 #include "vector2.h"
+#include "physics.h"
 #include "sound_list.h"
 #include "game.h"
 #include "load_png.h"
@@ -27,21 +28,11 @@
 
 #define VIEWRATIO 100
 
-
-typedef struct {
-	vector2 p;
-	vector2 v;
-	vector2 f;
-	double m;
-	double r;
-	double th;
-	double w; 
-} object;
-
 typedef struct {
 	object o;
 	float timer;
 	int state; 
+	int ready;
 } ppl;
 
 typedef struct {
@@ -67,11 +58,14 @@ typedef struct gametype {
 	_hero hero;
 	object safe_zone;
 	int save_count;  //How many people you have to save to win the level
+	line walls[100];
+	int wall_num;
 	
 	
 	GLuint zombie_tex;
 	GLuint person_tex;
 	GLuint safe_tex;
+	GLuint eye_tex;
 	GLuint safezone_tex;
 	GLuint hero_tex;
 	GLuint heroattached_tex;
@@ -84,12 +78,6 @@ typedef struct gametype {
 	
 } gametype;
 
-static void circle(float pos_x, float pos_y, float size);
-static int bounce(object * obj, int x, int y);
-static int collision(object *ta, object *tb);
-static int collision_test(object ta, object tb);
-int safe_zone_test(object ta, object tb);
-int r_collision(object *ta, object *tb);
 int load_level_file(game gm, char * file);
 
 game gm_init(void){
@@ -142,6 +130,22 @@ int gm_init_textures(game gm){
     if (success) {
 		glGenTextures( 1, &gm->safe_tex);
 		glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	
+	
+	success = load_png("imgs/eye.png", &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures( 1, &gm->eye_tex);
+		glBindTexture( GL_TEXTURE_2D, gm->eye_tex);
     	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
     	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
@@ -381,10 +385,22 @@ void gm_update(game gm, double dt){
 	
 	/*Wall Colisions*/
 	for(i = 0; i < gm->person_num; i++){
-		bounce(&gm->person[i].o, gm->w, gm->h);
+		if(bounce(&gm->person[i].o, gm->w, gm->h)){
+			gm->person[i].ready = 0;
+		}
 	}	
 	bounce(&gm->hero.o, gm->w, gm->h);
 
+	/*Line collisions*/
+	for(i =0; i < gm->person_num; i++){
+		for(k=0; k < gm->wall_num; k++){
+			line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->person[i].o, 0.2, 0.3);
+		}
+	}
+
+	for(k=0; k < gm->wall_num; k++){
+		line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->hero.o, 0.2, 0.3);
+	}
 	/*Circle Collisons*/
 	
 	if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
@@ -411,6 +427,7 @@ void gm_update(game gm, double dt){
 			{
 			gm->hero.spring_state = ATTACHED;
 			gm->hero.person_id = i;
+			gm->person[i].ready = 1;
 			}
 			else if(gm->person[i].state == ZOMBIE && gm->hero.state == PERSON){
 				gm->hero.spring_state = NOT_ATTACHED;
@@ -426,7 +443,7 @@ void gm_update(game gm, double dt){
 		/*This bit of magic lets the hero take a person info a circle and save them.*/
 		vector2 p = gm->safe_zone.p;
 		int hpid = gm->hero.person_id;
-		if((i != hpid || gm->hero.spring_state == NOT_ATTACHED) && gm->person[i].state != SAFE){
+		if((i != hpid || gm->hero.spring_state == NOT_ATTACHED) && gm->person[i].state != SAFE && gm->person[i].ready == 0){
 			collision(&gm->person[i].o, &gm->safe_zone); 	
 		}
 		else if(gm->person[i].state == SAFE){
@@ -441,6 +458,12 @@ void gm_update(game gm, double dt){
 		/*This deals with collisions between people*/	
 		for(k = 1+i; k < gm->person_num; k++){
 			if(collision(&gm->person[i].o, &gm->person[k].o)){
+				if(gm->person[i].state != SAFE && gm->person[k].state == PERSON){
+					gm->person[k].ready = 0;
+				}
+				if(gm->person[k].state != SAFE && gm->person[i].state == PERSON){
+					gm->person[i].ready = 0;
+				}
 				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){					
 					gm->person[i].timer = MAX_TIME;
 					gm->person[i].state = P_Z;
@@ -558,6 +581,36 @@ void gm_render(game gm){
 	glVertex3f(1.0, -1.0, 0.0);
 	glEnd();
 	glPopMatrix();
+
+	for(i = 0; i<gm->wall_num; i++){
+		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
+		glPushMatrix();
+		glBegin(GL_QUADS);
+		
+		vector2 p1,p2;
+		p1 = gm->walls[i].p1;
+		p2 = gm->walls[i].p2;
+		vector2 temp;
+
+		glTexCoord2f(1.0, 0.0);
+		temp = v2Add(p1, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(p2,p1)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glTexCoord2f(0.0, 0.0);
+		temp = v2Add(p1, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(p2,p1)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glTexCoord2f(0.0, 1.0);
+		temp = v2Add(p2, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(p2,p1)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glTexCoord2f(1.0, 1.0);
+		temp = v2Add(p2, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(p2,p1)))));
+		glVertex3f(temp.x, temp.y, 0.0);
+
+		glEnd();
+		glPopMatrix();
+	}
 	
 	if(gm->hero.spring_state == ATTACHED){
 		i = gm->hero.person_id;
@@ -652,6 +705,51 @@ void gm_render(game gm){
 		glVertex3f(1.0, -1.0, 0.0);
 		glEnd();
 		glPopMatrix();
+		
+		if(gm->person[i].state == SAFE){
+			vector2 ep;
+			ep.x = gm->person[i].o.p.x + 20.0f/64.0f*gm->person[i].o.r;
+			ep.y = gm->person[i].o.p.y + 18.0f/64.0f*gm->person[i].o.r;
+			
+			ep = v2Add(ep, v2sMul(5.0f/64.0f*gm->person[i].o.r, v2Unit(v2Sub(gm->hero.o.p, ep))));
+			
+			glBindTexture( GL_TEXTURE_2D, gm->eye_tex);
+			glPushMatrix();
+			
+			glTranslatef(ep.x, ep.y, 0);
+			glScalef(gm->person[i].o.r, gm->person[i].o.r,0);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(-1.0, -1.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(-1.0, 1.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(1.0, 1.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(1.0, -1.0, 0.0);
+			glEnd();
+			glPopMatrix();
+			
+			ep.x = gm->person[i].o.p.x - 23.0f/64.0f*gm->person[i].o.r;
+			ep.y = gm->person[i].o.p.y + 19.0f/64.0f*gm->person[i].o.r;
+			
+			ep = v2Add(ep, v2sMul(5.0f/64.0f*gm->person[i].o.r, v2Unit(v2Sub(gm->hero.o.p, ep))));
+			
+			glPushMatrix();
+			glTranslatef(ep.x, ep.y, 0);
+			glScalef(gm->person[i].o.r, gm->person[i].o.r,0);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(-1.0, -1.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(-1.0, 1.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(1.0, 1.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(1.0, -1.0, 0.0);
+			glEnd();
+			glPopMatrix();
+		}
 	}
 	
 }
@@ -686,6 +784,10 @@ void gm_nkey_down(game gm, unsigned char key){
 		
 		case 'x':
 			gm->zoom = -1;
+			break;
+			
+		case ' ':
+			gm->hero.spring_state = NOT_ATTACHED;
 			break;
 	}
 }
@@ -743,118 +845,6 @@ vector2 gm_dim(game gm){
 	return dim;
 }
 
-int collision(object *ta, object *tb){
-	object a=*ta, b=*tb;
-	
-	if(v2SPow(v2Sub(a.p, b.p)) < (a.r+b.r)*(a.r+b.r)) {
-		vector2 n, vn1, vn1f, vn2, vn2f, vt1, vt2;
-		float m1 = a.m, m2 = b.m;
-		
-		n = v2Unit(v2Sub(a.p, b.p)); //n = (r1-r2)/|r1-r2|
-		
-		ta->p = v2Add(a.p, v2sMul( (a.r+b.r-v2Len(v2Sub(a.p, b.p)))*b.m/(a.m+b.m) , n) );
-		tb->p = v2Sub(b.p, v2sMul( (a.r+b.r-v2Len(v2Sub(a.p, b.p)))*a.m/(a.m+b.m) , n) );
-		
-		vn1 = v2sMul(v2Dot(a.v, v2Neg(n)), v2Neg(n)); // vn1 = [v1⋄(-n)](-n)
-		vn2 = v2sMul(v2Dot(b.v, n), n); // vn2 = [v2⋄n]n
-		
-		vt1 = v2Sub(vn1, a.v); // vt1 = vn1 - v1
-		vt2 = v2Sub(vn2, b.v); // vt2 = vn2 - v2
-		
-		vn1f = v2sMul(1/(m1+m2), v2Add(v2sMul(m1-m2, vn1), v2sMul(2*m2, vn2))); //v1f = (v1i*(m1-m2)+2*m2*v2i)/(m1+m2)
-		vn2f = v2sMul(1/(m1+m2), v2Add(v2sMul(m2-m1, vn2), v2sMul(2*m1, vn1))); //v1f = (v2i*(m2-m1)+2*m1*v1i)/(m1+m2)
-		
-		ta->v = v2Sub(vn1f, vt1);  
-		tb->v = v2Sub(vn2f, vt2);
-		return 1;
-	}
-	else{return 0;}
-}
-
-int collision_test(object ta, object tb){
-	object a=ta, b=tb;
-	
-	if(v2SPow(v2Sub(a.p, b.p)) < (a.r+b.r)*(a.r+b.r)) {
-		return 1;
-	}
-	return 0;
-}
-
-int safe_zone_test(object ta, object tb){
-	object a=ta, b=tb;
-	
-	if(v2SPow(v2Sub(a.p, b.p)) < (a.r-b.r)*(a.r-b.r)) {
-		return 1;
-	}
-	return 0;
-}
-
-int r_collision(object *ta, object *tb){
-	object a=*ta, b=*tb;
-	a.r -= 2*b.r;
-	
-	if(v2SPow(v2Sub(a.p, b.p)) > (a.r + b.r)*(a.r + b.r)) {
-		vector2 n, vn1, vn1f, vn2, vn2f, vt1, vt2;
-		float m1 = a.m, m2 = b.m;
-		
-		n = v2Unit(v2Sub(a.p, b.p)); //n = (r1-r2)/|r1-r2|
-		
-		ta->p = v2Add(a.p, v2sMul( (a.r+b.r-v2Len(v2Sub(a.p, b.p)))*b.m/(a.m+b.m) , n) );
-		tb->p = v2Sub(b.p, v2sMul( (a.r+b.r-v2Len(v2Sub(a.p, b.p)))*a.m/(a.m+b.m) , n) );
-		
-		vn1 = v2sMul(v2Dot(a.v, v2Neg(n)), v2Neg(n)); // vn1 = [v1⋄(-n)](-n)
-		vn2 = v2sMul(v2Dot(b.v, n), n); // vn2 = [v2⋄n]n
-		
-		vt1 = v2Sub(vn1, a.v); // vt1 = vn1 - v1
-		vt2 = v2Sub(vn2, b.v); // vt2 = vn2 - v2
-		
-		vn1f = v2sMul(1/(m1+m2), v2Add(v2sMul(m1-m2, vn1), v2sMul(2*m2, vn2))); //v1f = (v1i*(m1-m2)+2*m2*v2i)/(m1+m2)
-		vn2f = v2sMul(1/(m1+m2), v2Add(v2sMul(m2-m1, vn2), v2sMul(2*m1, vn1))); //v1f = (v2i*(m2-m1)+2*m1*v1i)/(m1+m2)
-		
-		ta->v = v2Sub(vn1f, vt1);  
-		tb->v = v2Sub(vn2f, vt2);
-		return 1;
-	}
-	else{return 0;}
-}
-
-void circle(float pos_x, float pos_y, float size) {
-	glPushMatrix();
-	glTranslatef(pos_x,pos_y,0);
-	float counter;
-	glBegin(GL_POLYGON);
-	for (counter = 0; counter <= 2*3.14159; counter = counter + 3.14159/8) {
-		glVertex3f ((size)*cos(counter), (size)*sin(counter), 0.0);
-	}
-  	glEnd();
-	glPopMatrix();
-}
-
-int bounce(object * obj, int x, int y){
-	int state = 0;
-	if(obj->p.x < obj->r){
-		obj->p.x = obj->r;
-		obj->v.x *= -1;
-		state = 1;
-	}
-	if(obj->p.x > x - obj->r){
-		obj->p.x = x - obj->r;
-		obj->v.x *= -1;
-		state = 1;
-	}
-	if(obj->p.y < obj->r){
-		obj->p.y = obj->r;
-		obj->v.y *= -1;
-		state = 1;
-	}
-	if(obj->p.y > y - obj->r){
-		obj->p.y = y - obj->r;
-		obj->v.y *= -1;
-		state = 1;
-	}
-	return state;
-}
-
 int load_level_file(game gm, char * file){
 		int i,j;
 		FILE *loadFile;
@@ -872,6 +862,7 @@ int load_level_file(game gm, char * file){
 		
 		gm->safe_zone.m = 5000;
 		gm->person_num = 0;
+		gm->wall_num = 0;
 		i = 1;
 		while( (result = fscanf(loadFile, "%s", type)) != EOF){
 			if(!strncmp(type, "hw", 2)){
@@ -901,6 +892,7 @@ int load_level_file(game gm, char * file){
 			else if(!strncmp(type, "p", 1)){
 				int num = gm->person_num;
 				gm->person[num].state = PERSON;
+				gm->person[num].ready = 0;
 				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
 					&gm->person[num].o.p.x,
 					&gm->person[num].o.p.y,
@@ -919,6 +911,7 @@ int load_level_file(game gm, char * file){
 			else if(!strncmp(type, "z", 1)){
 				int num = gm->person_num;
 				gm->person[num].state = ZOMBIE;
+				gm->person[num].ready = 0;
 				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
 					&gm->person[num].o.p.x,
 					&gm->person[num].o.p.y,
@@ -949,9 +942,25 @@ int load_level_file(game gm, char * file){
 					printf("Error: The hero was not loaded!\n");
 				}
 			}
+			else if(!strncmp(type, "w", 1)){
+				int n = gm->wall_num;
+				result = fscanf(loadFile, "%lf %lf %lf %lf", 
+					&gm->walls[n].p1.x,
+					&gm->walls[n].p1.y,
+					&gm->walls[n].p2.x,
+					&gm->walls[n].p2.y);
+				if(result != 4){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: Wall not loaded\n");
+				}
+				else{
+					gm->wall_num++;
+				}
+			}
 		}
 		gm_set_view(gm);
 		gm_update_view(gm);
 		fclose(loadFile);
+		printf("Level file %s loaded.\n", file);
 		return 1;
 }
