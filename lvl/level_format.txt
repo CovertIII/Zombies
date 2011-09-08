@@ -4,6 +4,7 @@ sz x y r //safe zone location and size
 p x y vx vy r m // people hero or zombie start stats
 z x y vx vy r m
 h x y vx vy r m
+w x1 y1 x2 y2
 
 //p - person
 //z - a zombie
