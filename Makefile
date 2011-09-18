@@ -1,7 +1,7 @@
 CFLAGS=-g
 MACFLAGS=-framework GLUT -framework OpenGL -framework Cocoa -framework OpenAL
 STATIC = /usr/local/lib/libvorbis.a /usr/local/lib/libogg.a /usr/local/lib/libvorbisfile.a -lpng 
-CC=clang
+CC=gcc
 
 all: Zombies
 

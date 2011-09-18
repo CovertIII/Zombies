@@ -27,6 +27,7 @@ ALCcontext * context;
 ALenum error;
 
 GLuint count[4];
+int message = 0;
 
 static void renderBitmapString(
 						float x, 
@@ -140,6 +141,11 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		game_mode = GAME;
 		gm_load_level(gm, argv1);
 	}
+
+	
+	if(key == 'm'){
+		message = message ? 0 : 1;
+	}
 	
 	gm_nkey_down(gm, key);	
 }
@@ -175,6 +181,7 @@ void numbers(int value)
 			if(gm_timer > 3){
 				gm_timer = 0;
 				game_mode = GAME;
+				gm_message_render(gm);
 			}
 			break;
 		case GAME:
@@ -220,6 +227,7 @@ void display(void) {
 	gm_update_view(gm);
 	
 	if(game_mode == PREGAME){
+		gm_message_render(gm);
 		if(gm_timer < 1){
 			glBindTexture( GL_TEXTURE_2D, count[3]);
 		}
@@ -246,7 +254,15 @@ void display(void) {
 		glVertex3f(1.0, -1.0, 0.0);
 		glEnd();
 		glPopMatrix();
+	} else if(game_mode == GAME){
+		if(message){
+			gm_message_render(gm);
+		}
 	}
+	else if(game_mode == POSTGAME){
+		gm_message_render(gm);
+	}
+	
 
     glutSwapBuffers();
 	

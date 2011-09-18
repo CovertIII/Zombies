@@ -2,6 +2,15 @@ make better levels.
 Load a different background for each level.  
 
 Add AI to the game to make it more interesting.  
-Add walls??  Some how make the game interesting and more playable.
+DONE Add walls??  Some how make the game interesting and more playable.
 
 Add sound!!
+
+Add scoring; time level took to complete over the number of Zombies saved.
+
+Display the number of people a person has to save in a level.
+
+Allow the hero to resue other people after he has completed the save count.
+
+Add difference accounts.  Look into sqlite3 to do this.
+

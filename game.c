@@ -21,12 +21,11 @@
 #define ATTACHED 0
 #define NOT_ATTACHED 1
 
-#define MAX_TIME 5.0f
-#define SAFE_ZONE_RAD 10
 #define PERSON_RAD 2
 #define PERSON_MASS 0.5
 
 #define VIEWRATIO 100
+#define MAX_TIME 3
 
 typedef struct {
 	object o;
@@ -52,7 +51,10 @@ typedef struct gametype {
 	float viewratio;
 	int zoom;
 	
-	int h,w; //Height and width of the level
+	double timer;
+	double total_time;
+	
+	float h,w; //Height and width of the level
 	ppl person[100]; //Zombies and people array
 	int person_num; //How many there are
 	_hero hero;
@@ -79,6 +81,11 @@ typedef struct gametype {
 } gametype;
 
 int load_level_file(game gm, char * file);
+static void renderBitmapString(
+						float x, 
+						float y, 
+						void *font,
+						char *string);
 
 game gm_init(void){
 	gametype * gm;
@@ -87,6 +94,7 @@ game gm_init(void){
 	
 	gm->viewratio = VIEWRATIO;
 	gm->zoom = 0;
+	gm->timer = 0;
 
 	return gm;
 }
@@ -369,6 +377,10 @@ void gm_update_sound(game gm){
 void gm_update(game gm, double dt){
 	int i, k;
 	/*Timers */
+	if(gm->hero.state != DONE){
+		gm->timer += dt;
+	}
+	
 	for(i = 0; i < gm->person_num; i++){
 		gm->person[i].timer -= dt;
 		if(gm->person[i].state == P_Z && gm->person[i].timer <= 0.0f){
@@ -751,7 +763,40 @@ void gm_render(game gm){
 			glPopMatrix();
 		}
 	}
+}
+
+void gm_message_render(game gm){
+	int i, add = 0;
+	for(i = 0; i < gm->person_num; i++){
+		if(gm->person[i].state == SAFE){
+			add++;
+		}
+	}
+
+	/*Messages*/
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glColor3f(0,0,0);
+	char buf[18];
+	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
+	glPushMatrix();
+	glLoadIdentity();
+	renderBitmapString((gm->vmax.x-gm->vmin.x)/2+gm->vmin.x ,gm->vmax.y-gm->viewratio/10, GLUT_BITMAP_HELVETICA_18, buf);
+	glPopMatrix();
 	
+	sprintf(buf, "Time: %.2lf", gm->timer);	
+	glPushMatrix();
+	glLoadIdentity();
+	renderBitmapString((gm->vmax.x-gm->vmin.x)/2+gm->vmin.x ,gm->vmax.y-1.4*gm->viewratio/10, GLUT_BITMAP_HELVETICA_18, buf);
+	glPopMatrix();
+	
+
+		sprintf(buf, "Score: %.2lf", ((float)add) / gm->timer * 1000 );	
+		glPushMatrix();
+		glLoadIdentity();
+		renderBitmapString((gm->vmax.x-gm->vmin.x)/2+gm->vmin.x ,gm->vmax.y-1.8*gm->viewratio/10, GLUT_BITMAP_HELVETICA_18, buf);
+		glPopMatrix();
+		
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 }
 
 int gm_progress(game gm){
@@ -863,10 +908,12 @@ int load_level_file(game gm, char * file){
 		gm->safe_zone.m = 5000;
 		gm->person_num = 0;
 		gm->wall_num = 0;
+        gm->save_count = 1;
+		gm->timer = 0;
 		i = 1;
 		while( (result = fscanf(loadFile, "%s", type)) != EOF){
 			if(!strncmp(type, "hw", 2)){
-				result = fscanf(loadFile, "%d %d", &gm->h, &gm->w);
+				result = fscanf(loadFile, "%f %f", &gm->h, &gm->w);
 				if(result != 2){
 					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: Height and width.\n");
@@ -963,4 +1010,17 @@ int load_level_file(game gm, char * file){
 		fclose(loadFile);
 		printf("Level file %s loaded.\n", file);
 		return 1;
+}
+
+
+static void renderBitmapString(
+						float x, 
+						float y, 
+						void *font,
+						char *string) {  
+	char *c;
+	glRasterPos2f(x, y);
+	for (c=string; *c != '\0'; c++) {
+		glutBitmapCharacter(font, *c);
+	}
 }
