@@ -1,0 +1,66 @@
+Mmain	main.c	/^int main(int argc, char** argv)$/
+_hero	game.c	/^} _hero;$/
+bounce	physics.c	/^int bounce(object * obj, int x, int y){$/
+cleanup	main.c	/^void cleanup (void) {$/
+collision	physics.c	/^int collision(object *ta, object *tb){$/
+collision_test	physics.c	/^int collision_test(object ta, object tb){$/
+display	main.c	/^void display(void) {$/
+game	game.h	/^typedef struct gametype *game;$/
+gametype	game.c	/^} gametype;$/
+gm_dim	game.c	/^vector2 gm_dim(game gm){$/
+gm_free	game.c	/^void gm_free(game gm){$/
+gm_init	game.c	/^game gm_init(void){$/
+gm_init_sound	game.c	/^void gm_init_sound(game gm){$/
+gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
+gm_load_level	game.c	/^void gm_load_level(game gm, char * lvl){$/
+gm_message_render	game.c	/^void gm_message_render(game gm){$/
+gm_nkey_down	game.c	/^void gm_nkey_down(game gm, unsigned char key){$/
+gm_nkey_up	game.c	/^void gm_nkey_up(game gm, unsigned char key){$/
+gm_progress	game.c	/^int gm_progress(game gm){$/
+gm_render	game.c	/^void gm_render(game gm){$/
+gm_reshape	game.c	/^void gm_reshape(game gm, int width, int height){$/
+gm_set_view	game.c	/^void gm_set_view(game gm){$/
+gm_skey_down	game.c	/^void gm_skey_down(game gm, int key){$/
+gm_skey_up	game.c	/^void gm_skey_up(game gm, int key){$/
+gm_update	game.c	/^void gm_update(game gm, double dt){$/
+gm_update_sound	game.c	/^void gm_update_sound(game gm){$/
+gm_update_view	game.c	/^void gm_update_view(game gm){$/
+idle	main.c	/^void idle(void)$/
+init	main.c	/^void init(int argc, char** argv){$/
+line	physics.h	/^} line;$/
+line_collision	physics.c	/^int line_collision(vector2 pt1, vector2 pt2, objec/
+load_level_file	game.c	/^int load_level_file(game gm, char * file){$/
+load_png	load_png.c	/^int load_png(char *name, int *outWidth, int *outHe/
+numbers	main.c	/^void numbers(int value)$/
+object	physics.h	/^} object;$/
+point_collision	physics.c	/^int point_collision(vector2 pt, object *c){$/
+ppl	game.c	/^} ppl;$/
+pressKey	main.c	/^void pressKey(int key, int xx, int yy) {$/
+processNormalKeys	main.c	/^void processNormalKeys(unsigned char key, int xx, /
+r_collision	physics.c	/^int r_collision(object *ta, object *tb){$/
+releaseKey	main.c	/^void releaseKey(int key, int xx, int yy) {$/
+releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key, int xx, /
+renderBitmapString	game.c	/^static void renderBitmapString($/
+reshape	main.c	/^void reshape(int width, int height)$/
+s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, vector2 p){$/
+s_free	sound_list.c	/^void s_free(s_list sl){$/
+s_init	sound_list.c	/^s_list s_init(ALuint buffer){$/
+s_list	sound_list.h	/^typedef struct s_type * s_list;$/
+s_node	sound_list.c	/^} s_node;$/
+s_type	sound_list.c	/^} s_type;$/
+s_update	sound_list.c	/^void s_update(s_list sl){$/
+safe_zone_test	physics.c	/^int safe_zone_test(object ta, object tb){$/
+snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
+v2Add	vector2.c	/^vector2 v2Add(vector2 a, vector2 b) {$/
+v2Arg	vector2.c	/^float v2Arg(vector2 v) {$/
+v2Cross	vector2.c	/^float v2Cross(vector2 a, vector2 b) {$/
+v2Dot	vector2.c	/^float v2Dot(vector2 a, vector2 b) {$/
+v2Len	vector2.c	/^float v2Len(vector2 v) {$/
+v2Neg	vector2.c	/^vector2 v2Neg(vector2 a) {$/
+v2Polar	vector2.c	/^vector2 v2Polar(float len, float angle) {$/
+v2Rotate	vector2.c	/^vector2 v2Rotate(float ang, vector2 a){$/
+v2SPow	vector2.c	/^float v2SPow(vector2 v) {$/
+v2Sub	vector2.c	/^vector2 v2Sub(vector2 a, vector2 b) {$/
+v2Unit	vector2.c	/^vector2 v2Unit(vector2 v) {$/
+v2sMul	vector2.c	/^vector2 v2sMul(float f, vector2 v) {$/
+vector2	vector2.h	/^} vector2;$/
