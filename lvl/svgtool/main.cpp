@@ -13,6 +13,7 @@
 int main(int argc, char ** argv){
     if (argc != 2){
         printf("Usage: svg2lvl file.svg\n it will convert an svg with with cirlce and lines to a Zombie level file and print to the STDOUT.\n");
+				printf("To save to a file just pipe the out put to a file.\n");
         return 1;
     }
 

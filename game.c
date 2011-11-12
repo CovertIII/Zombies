@@ -4,6 +4,12 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include <GLUT/glut.h>
+#include <ft2build.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
+#include <freetype/ftoutln.h>
+#include <freetype/fttrigon.h>
+#include "freetype_imp.h"
 #include "load_sound.h"
 #include "vector2.h"
 #include "physics.h"
@@ -77,6 +83,8 @@ typedef struct gametype {
 	GLuint hzombie_tex;
 	GLuint bk;
 	GLuint rope_tex;
+
+    rat_font * font;
 	
 } gametype;
 
@@ -91,6 +99,10 @@ game gm_init(void){
 	gametype * gm;
 	gm = (game)malloc(sizeof(gametype));
 	if(!gm) {return NULL;}
+
+
+    gm->font = rat_init();
+    rat_load_font(gm->font, "imgs/MarkerFelt.ttc", 20);
 	
 	gm->viewratio = VIEWRATIO;
 	gm->zoom = 0;
@@ -506,10 +518,12 @@ void gm_update(game gm, double dt){
 	
 	/*Add forces*/
 	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
+	//gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y - 30;
 	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
 	
 	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
 	for(i = 0; i < gm->person_num; i++){
+			//gm->person[i].o.f.y += -30;
 		if(gm->person[i].state == SAFE ||gm->person[i].state == P_Z){
 			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
 			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
@@ -564,6 +578,7 @@ void gm_update(game gm, double dt){
 }
 
 void gm_render(game gm){
+    gm_update_view(gm);
 	int i;
 	glColor3f(0.8,0.8,0.8);
 	
@@ -775,27 +790,32 @@ void gm_message_render(game gm){
 
 	/*Messages*/
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glColor3f(0,0,0);
 	char buf[18];
+
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    int width = glutGet(GLUT_WINDOW_WIDTH);
+    int height = glutGet(GLUT_WINDOW_HEIGHT);
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+
+    float c[4] = {1,.5,.4,1};
+    rat_set_text_color(gm->font, c);
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
-	glPushMatrix();
-	glLoadIdentity();
-	renderBitmapString((gm->vmax.x-gm->vmin.x)/2+gm->vmin.x ,gm->vmax.y-gm->viewratio/10, GLUT_BITMAP_HELVETICA_18, buf);
-	glPopMatrix();
-	
-	sprintf(buf, "Time: %.2lf", gm->timer);	
-	glPushMatrix();
-	glLoadIdentity();
-	renderBitmapString((gm->vmax.x-gm->vmin.x)/2+gm->vmin.x ,gm->vmax.y-1.4*gm->viewratio/10, GLUT_BITMAP_HELVETICA_18, buf);
-	glPopMatrix();
+    float len = rat_font_text_length(gm->font, buf);
+    rat_font_render_text(gm->font,(width-len)/2,height-4, buf);
+
+	sprintf(buf, "Time: %.1lf", gm->timer);	
+    len = rat_font_text_length(gm->font, buf);
+    rat_font_render_text(gm->font,(width-len)/2,height-30, buf);
 	
 
-		sprintf(buf, "Score: %.2lf", ((float)add) / gm->timer * 1000 );	
-		glPushMatrix();
-		glLoadIdentity();
-		renderBitmapString((gm->vmax.x-gm->vmin.x)/2+gm->vmin.x ,gm->vmax.y-1.8*gm->viewratio/10, GLUT_BITMAP_HELVETICA_18, buf);
-		glPopMatrix();
-		
+    sprintf(buf, "Score: %.0lf", ((float)add) / gm->timer * 1000 );	
+    len = rat_font_text_length(gm->font, buf);
+    rat_font_render_text(gm->font,(width-len)/2,height-60, buf);
+
+    glPopMatrix();
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 }
 

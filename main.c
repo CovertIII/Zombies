@@ -4,6 +4,12 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include <GLUT/glut.h>
+#include <ft2build.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
+#include <freetype/ftoutln.h>
+#include <freetype/fttrigon.h>
+#include "freetype_imp.h"
 #include "vector2.h"
 #include "game.h"
 
@@ -26,20 +32,9 @@ ALCdevice * device;
 ALCcontext * context;
 ALenum error;
 
-GLuint count[4];
 int message = 0;
 
-static void renderBitmapString(
-						float x, 
-						float y, 
-						void *font,
-						char *string) {  
-	char *c;
-	glRasterPos2f(x, y);
-	for (c=string; *c != '\0'; c++) {
-		glutBitmapCharacter(font, *c);
-	}
-}
+rat_font * font;
 
 void cleanup (void) {
 	gm_free(gm);
@@ -61,6 +56,9 @@ void init(int argc, char** argv){
 		context = alcCreateContext(device, NULL);
 	}
 	alcMakeContextCurrent(context);
+
+    font = rat_init();
+    rat_load_font(font, "imgs/MarkerFelt.ttc", 172);
 	
 	gm = gm_init();	
 	//gm_init_sounds(gm);
@@ -78,55 +76,6 @@ void init(int argc, char** argv){
 	
 	gm_update(gm,0.0001);
 	
-	GLubyte *textureImage;
-	int width, height;
-    int hasAlpha;
-    int success;
-   	success = load_png("imgs/1one.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &count[1]);
-		glBindTexture( GL_TEXTURE_2D, count[1]);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/2two.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &count[2]);
-		glBindTexture( GL_TEXTURE_2D, count[2]);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/3three.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &count[3]);
-		glBindTexture( GL_TEXTURE_2D, count[3]);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-
 	atexit(cleanup);
 	
 	glEnable(GL_TEXTURE_2D);
@@ -178,7 +127,7 @@ void numbers(int value)
 	
 	switch(game_mode){
 		case PREGAME:
-			if(gm_timer > 3){
+			if(gm_timer >= 4){
 				gm_timer = 0;
 				game_mode = GAME;
 				gm_message_render(gm);
@@ -221,48 +170,25 @@ void display(void) {
 	//-----This is the stuff involved with drawing the screen----//	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	gm_render(gm);
-	gm_update_view(gm);
 	
-	if(game_mode == PREGAME){
-		gm_message_render(gm);
-		if(gm_timer < 1){
-			glBindTexture( GL_TEXTURE_2D, count[3]);
-		}
-		else if(gm_timer > 1 && gm_timer < 2){
-			glBindTexture( GL_TEXTURE_2D, count[2]);
-		}
-		else if(gm_timer > 2 && gm_timer < 3){
-			glBindTexture( GL_TEXTURE_2D, count[1]);
-		}
-		
-		vector2 dm = gm_dim(gm);
-		
-		glPushMatrix();
-		glTranslatef(dm.x, dm.y, 0);
-		glScalef(10, 10,0);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0);
-		glVertex3f(-1.0, -1.0, 0.0);
-		glTexCoord2f(0.0, 1.0);
-		glVertex3f(-1.0, 1.0, 0.0);
-		glTexCoord2f(1.0, 1.0);
-		glVertex3f(1.0, 1.0, 0.0);
-		glTexCoord2f(1.0, 0.0);
-		glVertex3f(1.0, -1.0, 0.0);
-		glEnd();
-		glPopMatrix();
-	} else if(game_mode == GAME){
-		if(message){
-			gm_message_render(gm);
-		}
-	}
-	else if(game_mode == POSTGAME){
-		gm_message_render(gm);
-	}
-	
+    gm_message_render(gm);
+    if(game_mode == PREGAME){
+        int width = glutGet(GLUT_WINDOW_WIDTH);
+        int height = glutGet(GLUT_WINDOW_HEIGHT);
+        char buf[18];
+        if(gm_timer < 3){
+            sprintf(buf, "%.0f",4-gm_timer);	
+        }
+        else{
+            sprintf(buf, "GO!");	
+        }
+
+        float top = rat_font_height(font);
+        float len = rat_font_text_length(font, buf);
+        rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
+    }
 
     glutSwapBuffers();
 	
