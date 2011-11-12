@@ -58,7 +58,7 @@ void init(int argc, char** argv){
 	alcMakeContextCurrent(context);
 
     font = rat_init();
-    rat_load_font(font, "imgs/MarkerFelt.ttc", 172);
+    rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);
 	
 	gm = gm_init();	
 	//gm_init_sounds(gm);
@@ -177,6 +177,8 @@ void display(void) {
     if(game_mode == PREGAME){
         int width = glutGet(GLUT_WINDOW_WIDTH);
         int height = glutGet(GLUT_WINDOW_HEIGHT);
+        float c[4] = {0,0,0,.1};
+        rat_set_text_color(font, c);
         char buf[18];
         if(gm_timer < 3){
             sprintf(buf, "%.0f",4-gm_timer);	

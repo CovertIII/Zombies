@@ -41,6 +41,7 @@ pressKey	main.c	/^void pressKey(int key, int xx, int yy) {$/
 processNormalKeys	main.c	/^void processNormalKeys(unsigned char key, int xx, /
 r_collision	physics.c	/^int r_collision(object *ta, object *tb){$/
 rat_font	freetype_imp.h	/^} rat_font;$/
+rat_font_free	freetype_imp.c	/^void rat_font_free(rat_font * font){$/
 rat_font_glyph_length	freetype_imp.c	/^float rat_font_glyph_length(rat_font *font,char ch/
 rat_font_height	freetype_imp.c	/^float rat_font_height(rat_font *font)$/
 rat_font_render_text	freetype_imp.c	/^void rat_font_render_text(rat_font *font,float x,f/
@@ -48,15 +49,15 @@ rat_font_render_text_notform	freetype_imp.c	/^void rat_font_render_text_notform(
 rat_font_text_length	freetype_imp.c	/^float rat_font_text_length(rat_font *font,char *te/
 rat_get_text_color	freetype_imp.c	/^void rat_get_text_color(rat_font * font, float *rg/
 rat_glyph_font	freetype_imp.h	/^} rat_glyph_font;$/
-rat_glyph_font_destroy	freetype_imp.c	/^void rat_glyph_font_destroy(rat_glyph_font *font)$/
-rat_glyph_font_load	freetype_imp.c	/^rat_glyph_font *rat_glyph_font_load(FT_Library ftl/
+rat_glyph_font_destroy	freetype_imp.c	/^static void rat_glyph_font_destroy(rat_glyph_font /
+rat_glyph_font_load	freetype_imp.c	/^static rat_glyph_font *rat_glyph_font_load(FT_Libr/
 rat_init	freetype_imp.c	/^rat_font * rat_init()$/
 rat_load_font	freetype_imp.c	/^void rat_load_font(rat_font * font, char * file, i/
 rat_set_text_color	freetype_imp.c	/^void rat_set_text_color(rat_font * font, float *rg/
-rat_stop_font_system	freetype_imp.c	/^void rat_stop_font_system(rat_font * font)$/
+rat_stop_font_system	freetype_imp.c	/^static void rat_stop_font_system(rat_font * font)$/
 rat_texture_font	freetype_imp.h	/^} rat_texture_font;$/
-rat_texture_font_destroy	freetype_imp.c	/^void rat_texture_font_destroy(rat_texture_font *fo/
-rat_texture_font_from_glyph_font	freetype_imp.c	/^rat_texture_font *rat_texture_font_from_glyph_font/
+rat_texture_font_destroy	freetype_imp.c	/^static void rat_texture_font_destroy(rat_texture_f/
+rat_texture_font_from_glyph_font	freetype_imp.c	/^static rat_texture_font *rat_texture_font_from_gly/
 releaseKey	main.c	/^void releaseKey(int key, int xx, int yy) {$/
 releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key, int xx, /
 renderBitmapString	game.c	/^static void renderBitmapString($/

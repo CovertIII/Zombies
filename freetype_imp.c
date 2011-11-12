@@ -13,26 +13,12 @@
 
 
 /*Delaraction of private stuctures and functions*/
-typedef struct rat_texture_font
-{
-	float pt;
-    float *wids,*hoss;
-	int *qvws,*qvhs;
-	float *qtws,*qths;
-	unsigned int *textures;
-	float ascend;
-} rat_texture_font;
-
-typedef struct rat_glyph_font
-{
-	float pt;
-	FT_Face face;
-} rat_glyph_font;
-
 static rat_glyph_font *rat_glyph_font_load(FT_Library ftlib, char *filename,int pt);
 static void rat_glyph_font_destroy(rat_glyph_font *font);
 static int make_glyph_texture(rat_glyph_font *gf,rat_texture_font *tf,unsigned char ch);
 static rat_texture_font *rat_texture_font_from_glyph_font(rat_glyph_font *font);
+static void rat_stop_font_system(rat_font * font);
+static void rat_texture_font_destroy(rat_texture_font *font);
 
 //Implementation of the public functions
 rat_font * rat_init()
@@ -46,6 +32,12 @@ rat_font * rat_init()
 void rat_load_font(rat_font * font, char * file, int pt){
     font->gfont = rat_glyph_font_load(font->ftlib, file, pt);
     font->tfont = rat_texture_font_from_glyph_font(font->gfont);
+}
+
+void rat_font_free(rat_font * font){
+    rat_glyph_font_destroy(font->gfont);
+    rat_texture_font_destroy(font->tfont);
+    rat_stop_font_system(font);
 }
 
 void rat_set_text_color(rat_font * font, float *rgba)
@@ -88,9 +80,10 @@ void rat_font_render_text(rat_font *font,float x,float y,char *text)
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-		glColor4fv(font->c);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 		glPushMatrix();
+		glColor4fv(font->c);
 			for (ch=text; *ch; ch++)
 			{
 				glPushMatrix();
@@ -129,6 +122,7 @@ void rat_font_render_text_notform(rat_font *font,char *text)
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 		glColor4fv(font->c);
 
 		glPushMatrix();
@@ -174,10 +168,8 @@ static rat_glyph_font *rat_glyph_font_load(FT_Library ftlib, char *filename,int 
 		return NULL;
 	}
 
-	// freetype measures fonts in 64ths of pixels, which
-	// I will never understand.  6 left bit shift multiplies
-	// the pt size by 64.
-	FT_Set_Char_Size(font->face,pt<<6,pt<<6,96,96);
+	//FT_Set_Char_Size(font->face,0,pt*64,72,72);
+    FT_Set_Pixel_Sizes(font->face, 0, pt);
 	font->pt=pt;
 
 	printf("done.\n");
@@ -244,7 +236,7 @@ static int make_glyph_texture(rat_glyph_font *gf,rat_texture_font *tf,unsigned c
 
     free((void *)expanded_data);
 
-	tf->wids[ch]=(float)(face->glyph->advance.x>>6);
+	tf->wids[ch]=(float)(face->glyph->advance.x/64);
 	tf->hoss[ch]=(float)((face->glyph->metrics.horiBearingY-face->glyph->metrics.height)>>6);
 
 	tf->qvws[ch]=bitmap.width;

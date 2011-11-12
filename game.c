@@ -102,7 +102,7 @@ game gm_init(void){
 
 
     gm->font = rat_init();
-    rat_load_font(gm->font, "imgs/MarkerFelt.ttc", 20);
+    rat_load_font(gm->font, "/Library/Fonts/Impact.ttf", 28);
 	
 	gm->viewratio = VIEWRATIO;
 	gm->zoom = 0;
@@ -789,8 +789,7 @@ void gm_message_render(game gm){
 	}
 
 	/*Messages*/
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	char buf[18];
+	char buf[45];
 
 	glPushMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -800,20 +799,27 @@ void gm_message_render(game gm){
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
 
-    float c[4] = {1,.5,.4,1};
+    float c[4] = {1,.5,.4,.4};
     rat_set_text_color(gm->font, c);
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
     float len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,(width-len)/2,height-4, buf);
+    rat_font_render_text(gm->font,20,height-4, buf);
 
 	sprintf(buf, "Time: %.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,(width-len)/2,height-30, buf);
+    rat_font_render_text(gm->font,220,height-1, buf);
 	
 
     sprintf(buf, "Score: %.0lf", ((float)add) / gm->timer * 1000 );	
     len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,(width-len)/2,height-60, buf);
+    rat_font_render_text(gm->font,360,height-4, buf);
+
+	if(add >= gm->save_count){
+        sprintf(buf, "Press 'c' to continue.");	
+        len = rat_font_text_length(gm->font, buf);
+        rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
+    }
+
 
     glPopMatrix();
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

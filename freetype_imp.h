@@ -1,3 +1,28 @@
+/* I used the source found here:
+ * http://musingsofninjarat.wordpress.com/opengl-freetype-texture-fonts/
+ * to start this. I left the rat prefix as a credit the origonal author.
+ *  Evidently this persom got it from a NeHe tutorial.
+ * That code had some weaknesses in that you couldn't use it in more than 
+ * one spot for multipule point sizes.  Also, some of the way you called the
+ * functions was weird.  I made it better.  Here is my implimentation:
+ */
+typedef struct rat_texture_font
+{
+	float pt;
+    float *wids,*hoss;
+	int *qvws,*qvhs;
+	float *qtws,*qths;
+	unsigned int *textures;
+	float ascend;
+} rat_texture_font;
+
+typedef struct rat_glyph_font
+{
+	float pt;
+	FT_Face face;
+} rat_glyph_font;
+
+
 typedef struct rat_font
 {
     FT_Library ftlib;
