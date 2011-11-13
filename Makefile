@@ -1,6 +1,6 @@
 CFLAGS=-g
 MACFLAGS=-framework GLUT -framework OpenGL -framework Cocoa -framework OpenAL
-STATIC = /usr/local/lib/libvorbis.a /usr/local/lib/libogg.a /usr/local/lib/libvorbisfile.a -lpng -lfreetype
+STATIC = -lvorbis -logg -lvorbisfile -lpng -lfreetype
 CC=gcc
 
 all: Zombies CTags

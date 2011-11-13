@@ -59,6 +59,8 @@ typedef struct gametype {
 	
 	double timer;
 	double total_time;
+
+    int c; //Varibale to keep track if the c key is being pressed down.
 	
 	float h,w; //Height and width of the level
 	ppl person[100]; //Zombies and people array
@@ -89,17 +91,11 @@ typedef struct gametype {
 } gametype;
 
 int load_level_file(game gm, char * file);
-static void renderBitmapString(
-						float x, 
-						float y, 
-						void *font,
-						char *string);
 
 game gm_init(void){
 	gametype * gm;
 	gm = (game)malloc(sizeof(gametype));
 	if(!gm) {return NULL;}
-
 
     gm->font = rat_init();
     rat_load_font(gm->font, "/Library/Fonts/Impact.ttf", 28);
@@ -107,211 +103,26 @@ game gm_init(void){
 	gm->viewratio = VIEWRATIO;
 	gm->zoom = 0;
 	gm->timer = 0;
+    gm->c=0;
 
 	return gm;
 }
 
 int gm_init_textures(game gm){
-	GLubyte *textureImage;
-	int width, height;
-    int hasAlpha;
-    int success;
-   	success = load_png("imgs/zombie.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->zombie_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->zombie_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/person.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->person_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->person_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/safe.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->safe_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	
-	success = load_png("imgs/eye.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->eye_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->eye_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/safezone.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->safezone_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->safezone_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/hero.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->hero_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->hero_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/p_z.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures( 1, &gm->p_z_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->p_z_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/h_z.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures(1, &gm->h_z_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->h_z_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/hzombie.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures(1, &gm->hzombie_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/heroattached.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures(1, &gm->heroattached_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->heroattached_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/herosafe.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures(1, &gm->herosafe_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->herosafe_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/rope.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures(1, &gm->rope_tex);
-		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	
-	success = load_png("imgs/bk.png", &width, &height, &hasAlpha, &textureImage);
-    if (success) {
-		glGenTextures(1, &gm->bk);
-		glBindTexture( GL_TEXTURE_2D, gm->bk);
-    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
-    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
-    	        textureImage);
-		free(textureImage);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-}
+    load_texture("imgs/zombie.png", &gm->zombie_tex);
+    load_texture("imgs/person.png", &gm->person_tex);
+    load_texture("imgs/safe.png",   &gm->safe_tex);
+    load_texture("imgs/eye.png",    &gm->eye_tex);
+    load_texture("imgs/safezone.png",   &gm->safezone_tex);
+    load_texture("imgs/hero.png",   &gm->hero_tex);
+    load_texture("imgs/p_z.png",   &gm->p_z_tex);
+    load_texture("imgs/h_z.png",   &gm->h_z_tex);
+    load_texture("imgs/hzombie.png",   &gm->hzombie_tex);
+    load_texture("imgs/heroattached.png",   &gm->heroattached_tex);
+    load_texture("imgs/herosafe.png",   &gm->herosafe_tex);
+    load_texture("imgs/rope.png",   &gm->rope_tex);
+    load_texture("imgs/bk.png",   &gm->bk);
+}	
 
 void gm_set_view(game gm){
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
@@ -782,14 +593,19 @@ void gm_render(game gm){
 
 void gm_message_render(game gm){
 	int i, add = 0;
+    int check = 0;
 	for(i = 0; i < gm->person_num; i++){
 		if(gm->person[i].state == SAFE){
 			add++;
+            check++;
 		}
+        if(gm->person[i].state == PERSON){
+            check++;
+        }
 	}
 
 	/*Messages*/
-	char buf[45];
+	char buf[100];
 
 	glPushMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -807,35 +623,60 @@ void gm_message_render(game gm){
 
 	sprintf(buf, "Time: %.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,220,height-1, buf);
+    rat_font_render_text(gm->font,220,height-4, buf);
 	
 
     sprintf(buf, "Score: %.0lf", ((float)add) / gm->timer * 1000 );	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,360,height-4, buf);
 
-	if(add >= gm->save_count){
+
+    float co[4] = {0,0,0,0};
+    rat_set_text_color(gm->font, co);
+
+	if(add >= gm->save_count && gm->hero.state == SAFE){
         sprintf(buf, "Press 'c' to continue.");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
-
+    else if(gm->hero.state == DONE){
+        sprintf(buf, "Completed Level.");	
+        len = rat_font_text_length(gm->font, buf);
+        rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
+    }
+    else if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
+        sprintf(buf, "You've been infected! You loose!");	
+        len = rat_font_text_length(gm->font, buf);
+        rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
+    }
+    else if(check < gm->save_count){
+        sprintf(buf, "Too many people turned into Zombies! You loose!");	
+        len = rat_font_text_length(gm->font, buf);
+        rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
+	}
 
     glPopMatrix();
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 }
 
 int gm_progress(game gm){
 	int i, add = 0;
-	if(gm->hero.state == ZOMBIE){
-		return -1;
-	}
+    int check = 0;
+    int person = 0;
 	for(i = 0; i < gm->person_num; i++){
 		if(gm->person[i].state == SAFE){
 			add++;
+            check++;
 		}
+        if(gm->person[i].state == PERSON){
+            check++;
+            person++;
+        }
 	}
-	if(add >= gm->save_count && gm->hero.state == SAFE){
+	if(gm->hero.state == ZOMBIE || check < gm->save_count){
+		return -1;
+	}
+	if((add >= gm->save_count && gm->hero.state == SAFE && gm->c == 1) ||
+        (person == 0 && add >= gm->save_count && gm->hero.state == SAFE)){
 		gm->hero.state = DONE;
 		return 1;
 	}
@@ -860,6 +701,9 @@ void gm_nkey_down(game gm, unsigned char key){
 		case ' ':
 			gm->hero.spring_state = NOT_ATTACHED;
 			break;
+
+        case 'c':
+            gm->c = 1;
 	}
 }
 
@@ -871,6 +715,9 @@ void gm_nkey_up(game gm, unsigned char key){
 		
 		case 'x':
 			gm->zoom = 0;
+			break;
+		case 'c':
+			gm->c = 0;
 			break;
 	}
 	
@@ -931,7 +778,7 @@ int load_level_file(game gm, char * file){
 		char type[5];
 		int result;
 		
-		gm->safe_zone.m = 5000;
+		gm->safe_zone.m = 1000;
 		gm->person_num = 0;
 		gm->wall_num = 0;
         gm->save_count = 1;
@@ -1036,17 +883,4 @@ int load_level_file(game gm, char * file){
 		fclose(loadFile);
 		printf("Level file %s loaded.\n", file);
 		return 1;
-}
-
-
-static void renderBitmapString(
-						float x, 
-						float y, 
-						void *font,
-						char *string) {  
-	char *c;
-	glRasterPos2f(x, y);
-	for (c=string; *c != '\0'; c++) {
-		glutBitmapCharacter(font, *c);
-	}
 }

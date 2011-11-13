@@ -7,7 +7,7 @@ int r_collision(object *ta, object *tb){
 	
 	if(v2SPow(v2Sub(a.p, b.p)) > (a.r + b.r)*(a.r + b.r)) {
 		vector2 n, vn1, vn1f, vn2, vn2f, vt1, vt2;
-		float m1 = a.m, m2 = b.m;
+		double m1 = a.m, m2 = b.m;
 		
 		n = v2Unit(v2Sub(a.p, b.p)); //n = (r1-r2)/|r1-r2|
 		
@@ -60,7 +60,7 @@ int collision(object *ta, object *tb){
 	
 	if(v2SPow(v2Sub(a.p, b.p)) < (a.r+b.r)*(a.r+b.r)) {
 		vector2 n, vn1, vn1f, vn2, vn2f, vt1, vt2;
-		float m1 = a.m, m2 = b.m;
+		double m1 = a.m, m2 = b.m;
 		
 		n = v2Unit(v2Sub(a.p, b.p)); //n = (r1-r2)/|r1-r2|
 		

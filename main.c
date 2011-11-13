@@ -151,7 +151,7 @@ void numbers(int value)
 			break;
 		case POSTGAME:
 			gm_update(gm,h);
-			if (gm_timer > 3){
+			if (gm_timer > 4){
 				gm_timer = 0;
 				game_mode = PREGAME;
 				//gm_free_level(gm);

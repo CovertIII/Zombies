@@ -137,3 +137,23 @@ int load_png(char *name, int *outWidth, int *outHeight, int *outHasAlpha, GLubyt
     /* That's it */
     return 1;
 }
+
+int load_texture(char * file, GLuint * texture){
+	GLubyte *textureImage;
+	int width, height;
+    int hasAlpha;
+   	int success = load_png(file, &width, &height, &hasAlpha, &textureImage);
+    if (success) {
+		glGenTextures(1, texture);
+		glBindTexture( GL_TEXTURE_2D, *texture);
+    	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    	glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? 4 : 3, width,
+    	        height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+    	        textureImage);
+		free(textureImage);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    }
+}

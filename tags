@@ -32,6 +32,7 @@ line	physics.h	/^} line;$/
 line_collision	physics.c	/^int line_collision(vector2 pt1, vector2 pt2, objec/
 load_level_file	game.c	/^int load_level_file(game gm, char * file){$/
 load_png	load_png.c	/^int load_png(char *name, int *outWidth, int *outHe/
+load_texture	load_png.c	/^int load_texture(char * file, GLuint * texture){$/
 make_glyph_texture	freetype_imp.c	/^static int make_glyph_texture(rat_glyph_font *gf,r/
 numbers	main.c	/^void numbers(int value)$/
 object	physics.h	/^} object;$/
@@ -60,7 +61,6 @@ rat_texture_font_destroy	freetype_imp.c	/^static void rat_texture_font_destroy(r
 rat_texture_font_from_glyph_font	freetype_imp.c	/^static rat_texture_font *rat_texture_font_from_gly/
 releaseKey	main.c	/^void releaseKey(int key, int xx, int yy) {$/
 releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key, int xx, /
-renderBitmapString	game.c	/^static void renderBitmapString($/
 reshape	main.c	/^void reshape(int width, int height)$/
 s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, vector2 p){$/
 s_free	sound_list.c	/^void s_free(s_list sl){$/
