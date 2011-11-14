@@ -623,12 +623,12 @@ void gm_message_render(game gm){
 
 	sprintf(buf, "Time: %.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,220,height-4, buf);
+    rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
 	
 
     sprintf(buf, "Score: %.0lf", ((float)add) / gm->timer * 1000 );	
     len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,360,height-4, buf);
+    rat_font_render_text(gm->font, width - 150,height-4, buf);
 
 
     float co[4] = {0,0,0,0};
@@ -640,17 +640,17 @@ void gm_message_render(game gm){
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(gm->hero.state == DONE){
-        sprintf(buf, "Completed Level.");	
+        sprintf(buf, "Level Complete");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
-        sprintf(buf, "You've been infected! You loose!");	
+        sprintf(buf, "Infected! You loose!");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(check < gm->save_count){
-        sprintf(buf, "Too many people turned into Zombies! You loose!");	
+        sprintf(buf, "Too many Zombies! You loose!");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
 	}

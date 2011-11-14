@@ -35,6 +35,7 @@ ALenum error;
 int message = 0;
 
 rat_font * font;
+rat_font * sfont;
 
 void cleanup (void) {
 	gm_free(gm);
@@ -59,6 +60,8 @@ void init(int argc, char** argv){
 
     font = rat_init();
     rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);
+    sfont = rat_init();
+    rat_load_font(sfont, "imgs/MarkerFelt.ttc", 100);
 	
 	gm = gm_init();	
 	//gm_init_sounds(gm);
@@ -181,7 +184,7 @@ void display(void) {
         rat_set_text_color(font, c);
         char buf[18];
         if(gm_timer < 3){
-            sprintf(buf, "%.0f",4-gm_timer);	
+            sprintf(buf, "%d",(int)round(3.5-gm_timer));	
         }
         else{
             sprintf(buf, "GO!");	
@@ -190,6 +193,12 @@ void display(void) {
         float top = rat_font_height(font);
         float len = rat_font_text_length(font, buf);
         rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
+
+        sprintf(buf, "Level %d",gm_lvl);	
+        top = rat_font_height(sfont);
+        len = rat_font_text_length(sfont, buf);
+        rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
+
     }
 
     glutSwapBuffers();
