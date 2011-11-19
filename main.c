@@ -18,13 +18,17 @@
 #define PREGAME 0
 #define GAME 1
 #define POSTGAME 2
+#define GAMEOVER 3
 
 int lastFrameTime = 0;
 
 int game_mode = PREGAME;
 double gm_timer = 0.0f;
 int gm_lvl = 1;
+int lives = 3;
+GLuint lives_tex;
 game gm;
+
 
 char * argv1;
 
@@ -63,6 +67,9 @@ void init(int argc, char** argv){
     sfont = rat_init();
     rat_load_font(sfont, "imgs/MarkerFelt.ttc", 100);
 	
+
+    load_texture("imgs/hero.png",   &lives_tex);
+
 	gm = gm_init();	
 	//gm_init_sounds(gm);
 	gm_init_textures(gm);
@@ -143,7 +150,8 @@ void numbers(int value)
 			switch(state){
 				case -1:
 				gm_timer = 0;
-				game_mode = POSTGAME;
+                lives--;
+				game_mode = lives < 0 ? GAMEOVER : POSTGAME;
 				break;
 				
 				case 1:
@@ -164,6 +172,20 @@ void numbers(int value)
 				gm_update(gm,h);
 			}
 			break;
+        case GAMEOVER:
+			gm_update(gm,h);
+			if (gm_timer > 4){
+				gm_timer = 0;
+				game_mode = PREGAME;
+                gm_lvl = 1;
+                lives = 3;
+				//gm_free_level(gm);
+				char level[30];
+				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
+				gm_load_level(gm, level);
+				gm_update(gm,h);
+			}
+            break;
 	}
 	
 	glutPostRedisplay();
@@ -177,6 +199,27 @@ void display(void) {
 	gm_render(gm);
 	
     gm_message_render(gm);
+
+    //This displays the number of lives left
+    int i;
+    glBindTexture(GL_TEXTURE_2D, lives_tex);
+    for (i = 0; i < lives; i++)
+    {
+        glPushMatrix();
+        glTranslatef(i*26 + 20, 20, 0);
+        glScalef(12, 12,0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(-1.0, -1.0, 0.0);
+        glTexCoord2f(0.0, 1.0);
+        glVertex3f(-1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 1.0);
+        glVertex3f(1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 0.0);
+        glVertex3f(1.0, -1.0, 0.0);
+        glEnd();
+        glPopMatrix();
+    }
     if(game_mode == PREGAME){
         int width = glutGet(GLUT_WINDOW_WIDTH);
         int height = glutGet(GLUT_WINDOW_HEIGHT);
@@ -199,6 +242,18 @@ void display(void) {
         len = rat_font_text_length(sfont, buf);
         rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
 
+    }
+    else if (game_mode == GAMEOVER){
+        int width = glutGet(GLUT_WINDOW_WIDTH);
+        int height = glutGet(GLUT_WINDOW_HEIGHT);
+        float c[4] = {0,0,0,.1};
+        rat_set_text_color(font, c);
+        char buf[18];
+        sprintf(buf, "Game Over!");
+
+        float top = rat_font_height(font);
+        float len = rat_font_text_length(font, buf);
+        rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
     }
 
     glutSwapBuffers();

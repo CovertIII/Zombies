@@ -1,3 +1,6 @@
+My Random TODO list for the zombie game.
+
+
 make better levels. 
 Load a different background for each level.  
 
@@ -8,18 +11,20 @@ DONE Add walls??  Some how make the game interesting and more playable.
 
 Add sound!!
 
-Add scoring; time level took to complete over the number of Zombies saved.
+DONE Add scoring; time level took to complete over the number of Zombies 
+saved.
 
-Display the number of people a person has to save in a level.
+DONE Display the number of people a person has to save in a level.
 
-Allow the hero to resue other people after he has completed the save count.
+DONE Allow the hero to resue other people after he has completed the save 
+count.
     -Have a message saying, if you wish to continue type ' '.
 
 Add difference accounts.  Look into sqlite3 to do this.
 
-Go once through the levels trying to rescue the people.  In the middle you have
-to find a Zombie antidote.  after the antidote has been retrieved you must
-rescue all the Zombies in the levels you already played by turning them into
-people and bringing them into the safezone.  At the end of the game you will
+go once through the levels trying to rescue the peoplein the middle you have
+to find a zombie antidote.  after the antidote has been retrieved you must
+rescue all the zombies in the levels you already played by turning them into
+people and bringing them into the safezone.  at the end of the game you will
 have saved mankind.
 

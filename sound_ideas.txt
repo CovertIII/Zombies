@@ -1,0 +1,10 @@
+Count down
+Person saved
+Hero hits wall and his tangental velocity is big
+Person gets hit by a zombie
+person turns into a zombie
+hero attches to a person
+level is complete
+hero gets hit by zombie
+too many zombies
+game over

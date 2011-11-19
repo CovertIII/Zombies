@@ -24,6 +24,10 @@
 #define SAFE 4
 #define DONE 5
 
+//Different Emotional states
+#define NORMAL 0
+#define SCARED 1
+
 #define ATTACHED 0
 #define NOT_ATTACHED 1
 
@@ -37,6 +41,7 @@ typedef struct {
 	object o;
 	float timer;
 	int state; 
+	int emo; 
 	int ready;
 } ppl;
 
@@ -80,6 +85,7 @@ typedef struct gametype {
 	GLuint hero_tex;
 	GLuint heroattached_tex;
 	GLuint herosafe_tex;
+	GLuint person_s_tex;
 	GLuint p_z_tex;
 	GLuint h_z_tex;
 	GLuint hzombie_tex;
@@ -110,6 +116,7 @@ game gm_init(void){
 
 int gm_init_textures(game gm){
     load_texture("imgs/zombie.png", &gm->zombie_tex);
+    load_texture("imgs/person_s.png", &gm->person_s_tex);
     load_texture("imgs/person.png", &gm->person_tex);
     load_texture("imgs/safe.png",   &gm->safe_tex);
     load_texture("imgs/eye.png",    &gm->eye_tex);
@@ -290,6 +297,16 @@ void gm_update(game gm, double dt){
 		}
 		gm->safe_zone.p = p;
 		
+
+        gm->person[i].emo = NORMAL;
+		for(k = 0; k < gm->person_num; k++){
+            if(k != i && gm->person[k].state == ZOMBIE && gm->person[i].state == PERSON){
+                if(v2Len(v2Sub(gm->person[i].o.p, gm->person[k].o.p)) < 10){
+                    gm->person[i].emo = SCARED;
+                }
+            }
+        }
+
 		/*This deals with collisions between people*/	
 		for(k = 1+i; k < gm->person_num; k++){
 			if(collision(&gm->person[i].o, &gm->person[k].o)){
@@ -516,8 +533,11 @@ void gm_render(game gm){
 	glPopMatrix();
 
 	for(i=0; i<gm->person_num; i++){
-		if(gm->person[i].state == PERSON){
+		if(gm->person[i].state == PERSON && gm->person[i].emo == NORMAL){
 			glBindTexture( GL_TEXTURE_2D, gm->person_tex);
+		}
+        else if(gm->person[i].state == PERSON && gm->person[i].emo == SCARED){
+			glBindTexture( GL_TEXTURE_2D, gm->person_s_tex);
 		}
 		else if(gm->person[i].state == P_Z){
 			glBindTexture( GL_TEXTURE_2D, gm->p_z_tex);
@@ -779,6 +799,8 @@ int load_level_file(game gm, char * file){
 		int result;
 		
 		gm->safe_zone.m = 1000;
+		gm->safe_zone.v.x = 0;
+		gm->safe_zone.v.y = 0;
 		gm->person_num = 0;
 		gm->wall_num = 0;
         gm->save_count = 1;
@@ -812,6 +834,7 @@ int load_level_file(game gm, char * file){
 			else if(!strncmp(type, "p", 1)){
 				int num = gm->person_num;
 				gm->person[num].state = PERSON;
+				gm->person[num].emo = NORMAL;
 				gm->person[num].ready = 0;
 				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
 					&gm->person[num].o.p.x,
@@ -831,6 +854,7 @@ int load_level_file(game gm, char * file){
 			else if(!strncmp(type, "z", 1)){
 				int num = gm->person_num;
 				gm->person[num].state = ZOMBIE;
+				gm->person[num].emo = NORMAL;
 				gm->person[num].ready = 0;
 				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
 					&gm->person[num].o.p.x,

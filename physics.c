@@ -19,9 +19,12 @@ int r_collision(object *ta, object *tb){
 		
 		vt1 = v2Sub(vn1, a.v); // vt1 = vn1 - v1
 		vt2 = v2Sub(vn2, b.v); // vt2 = vn2 - v2
-		
-		vn1f = v2sMul(1/(m1+m2), v2Add(v2sMul(m1-m2, vn1), v2sMul(2*m2, vn2))); //v1f = (v1i*(m1-m2)+2*m2*v2i)/(m1+m2)
-		vn2f = v2sMul(1/(m1+m2), v2Add(v2sMul(m2-m1, vn2), v2sMul(2*m1, vn1))); //v1f = (v2i*(m2-m1)+2*m1*v1i)/(m1+m2)
+
+
+		//v1f = (v1i*(m1-m2)+2*m2*v2i)/(m1+m2)
+		vn1f = v2sMul(1/(m1+m2), v2Add(v2sMul(m1-m2, vn1), v2sMul(2*m2, vn2))); 
+        //v1f = (v2i*(m2-m1)+2*m1*v1i)/(m1+m2)
+		vn2f = v2sMul(1/(m1+m2), v2Add(v2sMul(m2-m1, vn2), v2sMul(2*m1, vn1))); 
 		
 		ta->v = v2Sub(vn1f, vt1);  
 		tb->v = v2Sub(vn2f, vt2);
