@@ -11,7 +11,7 @@ gametype	game.c	/^} gametype;$/
 gm_dim	game.c	/^vector2 gm_dim(game gm){$/
 gm_free	game.c	/^void gm_free(game gm){$/
 gm_init	game.c	/^game gm_init(void){$/
-gm_init_sound	game.c	/^void gm_init_sound(game gm){$/
+gm_init_sounds	game.c	/^void gm_init_sounds(game gm){$/
 gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
 gm_load_level	game.c	/^void gm_load_level(game gm, char * lvl){$/
 gm_message_render	game.c	/^void gm_message_render(game gm){$/

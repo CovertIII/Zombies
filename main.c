@@ -71,7 +71,7 @@ void init(int argc, char** argv){
     load_texture("imgs/hero.png",   &lives_tex);
 
 	gm = gm_init();	
-	//gm_init_sounds(gm);
+	gm_init_sounds(gm);
 	gm_init_textures(gm);
 	char level[30];
 	if(argc == 1){

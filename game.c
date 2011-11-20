@@ -75,7 +75,10 @@ typedef struct gametype {
 	int save_count;  //How many people you have to save to win the level
 	line walls[100];
 	int wall_num;
-	
+
+
+	ALuint saved_buf;
+    s_list saved_src;
 	
 	GLuint zombie_tex;
 	GLuint person_tex;
@@ -130,6 +133,17 @@ int gm_init_textures(game gm){
     load_texture("imgs/rope.png",   &gm->rope_tex);
     load_texture("imgs/bk.png",   &gm->bk);
 }	
+
+void gm_init_sounds(game gm){
+	alGenBuffers(1, &gm->saved_buf);
+	snd_load_file("./snd/saved.ogg", gm->saved_buf);
+	gm->saved_src = s_init(gm->saved_buf);
+
+	ALfloat	listenerOri[]={0.0,1.0,0.0, 0.0,0.0,1.0};
+	alListenerfv(AL_ORIENTATION,listenerOri);
+	alListener3f(AL_POSITION, gm->hero.o.p.x, 0, gm->hero.o.p.y);
+	alListener3f(AL_VELOCITY, gm->hero.o.v.x, 0, gm->hero.o.v.y);
+}
 
 void gm_set_view(game gm){
 	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
@@ -194,10 +208,6 @@ void gm_load_level(game gm, char * lvl){
 	gm->ak.y = 0;
 
 	load_level_file(gm, lvl);
-}
-
-void gm_init_sound(game gm){
-	
 }
 
 void gm_update_sound(game gm){
@@ -294,6 +304,7 @@ void gm_update(game gm, double dt){
 		else if (safe_zone_test(gm->safe_zone, gm->person[i].o)){
 			gm->hero.spring_state = NOT_ATTACHED;
 			gm->person[i].state = SAFE;
+			s_add_snd(gm->saved_src, gm->person[i].o.p);
 		}
 		gm->safe_zone.p = p;
 		
@@ -403,6 +414,8 @@ void gm_update(game gm, double dt){
 	gm->viewratio = gm->vmax.y - gm->vmin.y;
 	
 	
+	alListener3f(AL_POSITION, gm->hero.o.p.x, gm->hero.o.p.y, 0);
+	alListener3f(AL_VELOCITY, gm->hero.o.v.x, gm->hero.o.v.y, 0);
 }
 
 void gm_render(game gm){

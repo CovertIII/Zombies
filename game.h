@@ -3,7 +3,7 @@ typedef struct gametype *game;
 game gm_init(void);
 
 int gm_init_textures(game gm);
-//void gm_init_sound(game gm);
+void gm_init_sounds(game gm);
 
 void gm_load_level(game gm, char * lvl);
 
