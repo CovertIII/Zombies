@@ -26,7 +26,9 @@ int game_mode = PREGAME;
 double gm_timer = 0.0f;
 int gm_lvl = 1;
 int lives = 3;
+int extra_ppl = 0;
 GLuint lives_tex;
+GLuint extra_tex;
 game gm;
 
 
@@ -69,6 +71,7 @@ void init(int argc, char** argv){
 	
 
     load_texture("imgs/hero.png",   &lives_tex);
+    load_texture("imgs/extra.png",   &extra_tex);
 
 	gm = gm_init();	
 	gm_init_sounds(gm);
@@ -147,18 +150,24 @@ void numbers(int value)
 			gm_update(gm,h);
 			
 			int state = gm_progress(gm);
-			switch(state){
-				case -1:
-				gm_timer = 0;
-                lives--;
-				game_mode = lives < 0 ? GAMEOVER : POSTGAME;
-				break;
-				
-				case 1:
+            if(state > 0){
 				gm_timer = 0;
 				game_mode = POSTGAME;
 				gm_lvl++;	
-			}
+                extra_ppl += state - 1;
+                while(extra_ppl >= 3){
+                    lives++;
+                    extra_ppl -= 3;
+                    extra_ppl = extra_ppl < 0 ? 0 : extra_ppl;
+                }
+            }
+            else if(state < 0){
+				gm_timer = 0;
+                lives--;
+                extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
+				game_mode = lives < 0 ? GAMEOVER : POSTGAME;
+            }
+
 			break;
 		case POSTGAME:
 			gm_update(gm,h);
@@ -194,7 +203,9 @@ void numbers(int value)
 void display(void) {
 	//-----This is the stuff involved with drawing the screen----//	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    int height = 600;
+    int width = height*ratio;
 
 	gm_render(gm);
 	
@@ -220,9 +231,25 @@ void display(void) {
         glEnd();
         glPopMatrix();
     }
+    glBindTexture(GL_TEXTURE_2D, extra_tex);
+    for (i = 0; i < extra_ppl; i++)
+    {
+        glPushMatrix();
+        glTranslatef(width - i*26 - 20, 20, 0);
+        glScalef(12, 12,0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(-1.0, -1.0, 0.0);
+        glTexCoord2f(0.0, 1.0);
+        glVertex3f(-1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 1.0);
+        glVertex3f(1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 0.0);
+        glVertex3f(1.0, -1.0, 0.0);
+        glEnd();
+        glPopMatrix();
+    }
     if(game_mode == PREGAME){
-        int width = glutGet(GLUT_WINDOW_WIDTH);
-        int height = glutGet(GLUT_WINDOW_HEIGHT);
         float c[4] = {0,0,0,.1};
         rat_set_text_color(font, c);
         char buf[18];
@@ -244,8 +271,6 @@ void display(void) {
 
     }
     else if (game_mode == GAMEOVER){
-        int width = glutGet(GLUT_WINDOW_WIDTH);
-        int height = glutGet(GLUT_WINDOW_HEIGHT);
         float c[4] = {0,0,0,.1};
         rat_set_text_color(font, c);
         char buf[18];

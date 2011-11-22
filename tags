@@ -70,6 +70,12 @@ s_node	sound_list.c	/^} s_node;$/
 s_type	sound_list.c	/^} s_type;$/
 s_update	sound_list.c	/^void s_update(s_list sl){$/
 safe_zone_test	physics.c	/^int safe_zone_test(object ta, object tb){$/
+sf_add_snd	sound_list_follow.c	/^void sf_add_snd(sf_list sl, object * o){$/
+sf_free	sound_list_follow.c	/^void sf_free(sf_list sl){$/
+sf_init	sound_list_follow.c	/^sf_list sf_init(ALuint buffer){$/
+sf_node	sound_list_follow.c	/^} sf_node;$/
+sf_type	sound_list_follow.c	/^} sf_type;$/
+sf_update	sound_list_follow.c	/^void sf_update(sf_list sl){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
 v2Add	vector2.c	/^vector2 v2Add(vector2 a, vector2 b) {$/
 v2Arg	vector2.c	/^float v2Arg(vector2 v) {$/

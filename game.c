@@ -94,6 +94,8 @@ typedef struct gametype {
 	GLuint hzombie_tex;
 	GLuint bk;
 	GLuint rope_tex;
+	GLuint blank_tex;
+    GLuint extra_tex;
 
     rat_font * font;
 	
@@ -131,7 +133,9 @@ int gm_init_textures(game gm){
     load_texture("imgs/heroattached.png",   &gm->heroattached_tex);
     load_texture("imgs/herosafe.png",   &gm->herosafe_tex);
     load_texture("imgs/rope.png",   &gm->rope_tex);
+    load_texture("imgs/blank.png",   &gm->blank_tex);
     load_texture("imgs/bk.png",   &gm->bk);
+    load_texture("imgs/extra.png",   &gm->extra_tex);
 }	
 
 void gm_init_sounds(game gm){
@@ -141,8 +145,9 @@ void gm_init_sounds(game gm){
 
 	ALfloat	listenerOri[]={0.0,1.0,0.0, 0.0,0.0,1.0};
 	alListenerfv(AL_ORIENTATION,listenerOri);
+	alListenerf(AL_GAIN,12);
 	alListener3f(AL_POSITION, gm->hero.o.p.x, 0, gm->hero.o.p.y);
-	alListener3f(AL_VELOCITY, gm->hero.o.v.x, 0, gm->hero.o.v.y);
+	alListener3f(AL_VELOCITY, 0, 0, 0);
 }
 
 void gm_set_view(game gm){
@@ -415,7 +420,7 @@ void gm_update(game gm, double dt){
 	
 	
 	alListener3f(AL_POSITION, gm->hero.o.p.x, gm->hero.o.p.y, 0);
-	alListener3f(AL_VELOCITY, gm->hero.o.v.x, gm->hero.o.v.y, 0);
+    s_update(gm->saved_src);
 }
 
 void gm_render(game gm){
@@ -643,17 +648,19 @@ void gm_message_render(game gm){
 	glPushMatrix();
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    int width = glutGet(GLUT_WINDOW_WIDTH);
-    int height = glutGet(GLUT_WINDOW_HEIGHT);
+    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    int height = 600;
+    int width = height*ratio;
+   
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
 
     float c[4] = {1,.5,.4,.4};
-    rat_set_text_color(gm->font, c);
+    /*rat_set_text_color(gm->font, c);
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
     float len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,20,height-4, buf);
-
+    rat_font_render_text(gm->font,20,height-4, buf);*/
+    float len;
 	sprintf(buf, "Time: %.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
@@ -687,6 +694,42 @@ void gm_message_render(game gm){
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
 	}
+    glBindTexture(GL_TEXTURE_2D, gm->blank_tex);
+    for (i = 0; i < gm->save_count; i++)
+    {
+        glPushMatrix();
+        glTranslatef(i*31 + 20, height - 20, 0);
+        glScalef(15, 15,0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(-1.0, -1.0, 0.0);
+        glTexCoord2f(0.0, 1.0);
+        glVertex3f(-1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 1.0);
+        glVertex3f(1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 0.0);
+        glVertex3f(1.0, -1.0, 0.0);
+        glEnd();
+        glPopMatrix();
+    }
+    glBindTexture(GL_TEXTURE_2D, gm->extra_tex);
+    for (i = 0; i < add; i++)
+    {
+        glPushMatrix();
+        glTranslatef(i*31 + 20, height - 20, 0);
+        glScalef(12, 12,0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(-1.0, -1.0, 0.0);
+        glTexCoord2f(0.0, 1.0);
+        glVertex3f(-1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 1.0);
+        glVertex3f(1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 0.0);
+        glVertex3f(1.0, -1.0, 0.0);
+        glEnd();
+        glPopMatrix();
+    }
 
     glPopMatrix();
 }
@@ -711,7 +754,7 @@ int gm_progress(game gm){
 	if((add >= gm->save_count && gm->hero.state == SAFE && gm->c == 1) ||
         (person == 0 && add >= gm->save_count && gm->hero.state == SAFE)){
 		gm->hero.state = DONE;
-		return 1;
+		return add - gm->save_count + 1;
 	}
 	
 	return 0;
