@@ -63,7 +63,8 @@ data_record init_data_record(char * file_name){
     db->level_l = NULL;
     db->game_l = NULL;
 
-
+    db->font = rat_init();
+    rat_load_font(db->font, "/Library/Fonts/Impact.ttf", 28);
 
     db->file_name = (char*)malloc(sizeof(file_name) + 1); 
     strcpy(db->file_name, file_name);
@@ -104,8 +105,28 @@ void prepare_user_list(data_record db){
 }
 
 void render_user_list(data_record db){
+	char buf[100];
 
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    int height = 600;
+    int width = height*ratio;
+   
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
 
+    user_list * node;
+
+    for(node = db->user_l; node != NULL; node = node->next){
+
+    float c[4] = {.1,.1,.1,.4};
+    float len;
+	sprintf(buf, "lf", gm->timer);	
+    len = rat_font_text_length(gm->font, buf);
+    rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
+    }
 }
 /*prepare_level_scores();
 render_level_scores();

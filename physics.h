@@ -26,3 +26,5 @@ int safe_zone_test(object ta, object tb);
 int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us);
 
 int point_collision(vector2 pt, object *c);
+
+int line_line(vector2 p, vector2 bp, vector2 q, vector2 bq);

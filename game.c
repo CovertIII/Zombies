@@ -258,6 +258,18 @@ void gm_update(game gm, double dt){
 	for(k=0; k < gm->wall_num; k++){
 		line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->hero.o, 0.2, 0.3);
 	}
+
+    if(gm->hero.spring_state == ATTACHED)
+    {
+        vector2 p = gm->hero.o.p;
+        vector2 bp = gm->person[gm->hero.person_id].o.p;
+        for(i = 0; i < gm->wall_num; i++){
+           if(line_line(p, bp, gm->walls[i].p1, gm->walls[i].p2)){
+                gm->hero.spring_state = NOT_ATTACHED;
+                i = gm->wall_num;
+           } 
+        }
+    }
 	/*Circle Collisons*/
 	
 	if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){

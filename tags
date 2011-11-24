@@ -35,6 +35,7 @@ init_data_record	data_interface.c	/^data_record init_data_record(char * file_nam
 level_list	data_interface.c	/^} level_list;$/
 line	physics.h	/^} line;$/
 line_collision	physics.c	/^int line_collision(vector2 pt1, vector2 pt2, objec/
+line_line	physics.c	/^int line_line(vector2 p, vector2 bp, vector2 q, ve/
 load_level_file	game.c	/^int load_level_file(game gm, char * file){$/
 load_png	load_png.c	/^int load_png(char *name, int *outWidth, int *outHe/
 load_texture	load_png.c	/^int load_texture(char * file, GLuint * texture){$/
