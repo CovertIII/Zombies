@@ -9,6 +9,7 @@
 #include <freetype/ftglyph.h>
 #include <freetype/ftoutln.h>
 #include <freetype/fttrigon.h>
+#include "data_interface.h"
 #include "freetype_imp.h"
 #include "vector2.h"
 #include "game.h"
@@ -43,6 +44,8 @@ int message = 0;
 rat_font * font;
 rat_font * sfont;
 
+data_record stats;
+
 void cleanup (void) {
 	gm_free(gm);
 
@@ -63,6 +66,9 @@ void init(int argc, char** argv){
 		context = alcCreateContext(device, NULL);
 	}
 	alcMakeContextCurrent(context);
+
+    stats = init_data_record("blank.db");
+    prepare_user_list(stats);
 
     font = rat_init();
     rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);

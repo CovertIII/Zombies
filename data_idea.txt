@@ -1,0 +1,28 @@
+1. User will type their name in or pick it at start
+of game.  
+2. Link level times to a game session
+3. After each level is finished log time it took,
+level number, and amount of people saved, maybe
+number of tries. 
+4. Maybe display the high score of
+the level after it is done.  
+5. After game is over
+display highscores for the game.
+
+
+user
+id
+name
+
+game_session
+id
+date_time_start
+date_time_end
+deaths
+
+level_stats
+id
+game_session_id
+level_id
+time
+people_saved
