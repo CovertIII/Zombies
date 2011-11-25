@@ -9,7 +9,10 @@ data_record	data_interface.h	/^typedef struct data_record_type * data_record;$/
 data_record_type	data_interface.c	/^} data_record_type;$/
 display	main.c	/^void display(void) {$/
 game	game.h	/^typedef struct gametype *game;$/
+game_finish_session	data_interface.c	/^void game_finish_session(data_record db, int death/
 game_list	data_interface.c	/^} game_list;$/
+game_record_lvl_stats	data_interface.c	/^void game_record_lvl_stats(data_record db, int lvl/
+game_start_session	data_interface.c	/^void game_start_session(data_record db){$/
 gametype	game.c	/^} gametype;$/
 gm_dim	game.c	/^vector2 gm_dim(game gm){$/
 gm_free	game.c	/^void gm_free(game gm){$/
@@ -26,6 +29,7 @@ gm_reshape	game.c	/^void gm_reshape(game gm, int width, int height){$/
 gm_set_view	game.c	/^void gm_set_view(game gm){$/
 gm_skey_down	game.c	/^void gm_skey_down(game gm, int key){$/
 gm_skey_up	game.c	/^void gm_skey_up(game gm, int key){$/
+gm_stats	game.c	/^void gm_stats(game gm, double * time, int * people/
 gm_update	game.c	/^void gm_update(game gm, double dt){$/
 gm_update_sound	game.c	/^void gm_update_sound(game gm){$/
 gm_update_view	game.c	/^void gm_update_view(game gm){$/
@@ -84,8 +88,11 @@ sf_init	sound_list_follow.c	/^sf_list sf_init(ALuint buffer){$/
 sf_node	sound_list_follow.c	/^} sf_node;$/
 sf_type	sound_list_follow.c	/^} sf_type;$/
 sf_update	sound_list_follow.c	/^void sf_update(sf_list sl){$/
+showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
 user_list	data_interface.c	/^} user_list;$/
+user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/
+user_skey_down	data_interface.c	/^void user_skey_down(data_record db, int key){$/
 v2Add	vector2.c	/^vector2 v2Add(vector2 a, vector2 b) {$/
 v2Arg	vector2.c	/^float v2Arg(vector2 v) {$/
 v2Cross	vector2.c	/^float v2Cross(vector2 a, vector2 b) {$/

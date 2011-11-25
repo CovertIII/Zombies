@@ -59,7 +59,7 @@ typedef struct gametype {
 	vector2 ak;  /*arrow key presses*/
 	vector2 vmin; /*sceen size */
 	vector2 vmax; /*sceen size */
-	float viewratio;
+	double viewratio;
 	int zoom;
 	
 	double timer;
@@ -639,6 +639,18 @@ void gm_render(game gm){
 			glPopMatrix();
 		}
 	}
+}
+
+void gm_stats(game gm, double * time, int * people){
+	int i, add = 0;
+	for(i = 0; i < gm->person_num; i++){
+		if(gm->person[i].state == SAFE){
+			add++;
+		}
+	}
+    *people = add;
+    *time = gm->timer;
+
 }
 
 void gm_message_render(game gm){

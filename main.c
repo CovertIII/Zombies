@@ -20,14 +20,16 @@
 #define GAME 1
 #define POSTGAME 2
 #define GAMEOVER 3
+#define USERSELECT 4
 
 int lastFrameTime = 0;
 
-int game_mode = PREGAME;
+int game_mode = USERSELECT;
 double gm_timer = 0.0f;
 int gm_lvl = 1;
 int lives = 3;
 int extra_ppl = 0;
+int total_deaths = 0;
 GLuint lives_tex;
 GLuint extra_tex;
 game gm;
@@ -43,6 +45,7 @@ int message = 0;
 
 rat_font * font;
 rat_font * sfont;
+rat_font * ssfont;
 
 data_record stats;
 
@@ -74,6 +77,8 @@ void init(int argc, char** argv){
     rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);
     sfont = rat_init();
     rat_load_font(sfont, "imgs/MarkerFelt.ttc", 100);
+    ssfont = rat_init();
+    rat_load_font(ssfont, "imgs/MarkerFelt.ttc", 30);
 	
 
     load_texture("imgs/hero.png",   &lives_tex);
@@ -116,6 +121,18 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 	}
 	
 	gm_nkey_down(gm, key);	
+    if(game_mode == USERSELECT){
+        if(user_nkey_down(stats, key) == 1){
+            game_start_session(stats);
+            gm_timer = 0.0f;
+            game_mode = PREGAME;
+        }
+    }
+    else if(game_mode == GAMEOVER){
+        if(key == ' '){
+            game_mode = USERSELECT;
+        }
+    }
 }
 
 void releaseNormalKeys(unsigned char key, int xx, int yy) {
@@ -127,6 +144,8 @@ void pressKey(int key, int xx, int yy) {
 	if(game_mode == GAME || game_mode == POSTGAME){
 		gm_skey_down(gm, key);	
 	}
+
+    user_skey_down(stats, key);
 }
 
 void releaseKey(int key, int xx, int yy) {
@@ -145,11 +164,12 @@ void numbers(int value)
 	gm_timer += h;
 	
 	switch(game_mode){
+        case USERSELECT:
+            break;
 		case PREGAME:
 			if(gm_timer >= 4){
 				gm_timer = 0;
 				game_mode = GAME;
-				gm_message_render(gm);
 			}
 			break;
 		case GAME:
@@ -157,6 +177,10 @@ void numbers(int value)
 			
 			int state = gm_progress(gm);
             if(state > 0){
+                int ppl;
+                double tmp_time;
+                gm_stats(gm, &tmp_time, &ppl);
+                game_record_lvl_stats(stats, gm_lvl, tmp_time, ppl);
 				gm_timer = 0;
 				game_mode = POSTGAME;
 				gm_lvl++;	
@@ -170,6 +194,7 @@ void numbers(int value)
             else if(state < 0){
 				gm_timer = 0;
                 lives--;
+                total_deaths++;
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
 				game_mode = lives < 0 ? GAMEOVER : POSTGAME;
             }
@@ -190,8 +215,9 @@ void numbers(int value)
         case GAMEOVER:
 			gm_update(gm,h);
 			if (gm_timer > 4){
+                game_finish_session(stats, total_deaths);
 				gm_timer = 0;
-				game_mode = PREGAME;
+                total_deaths = 0;
                 gm_lvl = 1;
                 lives = 3;
 				//gm_free_level(gm);
@@ -206,18 +232,10 @@ void numbers(int value)
 	glutPostRedisplay();
 }
 
-void display(void) {
-	//-----This is the stuff involved with drawing the screen----//	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void showhud(void){
     float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
     int height = 600;
     int width = height*ratio;
-
-	gm_render(gm);
-	
-    gm_message_render(gm);
-
-    //This displays the number of lives left
     int i;
     glBindTexture(GL_TEXTURE_2D, lives_tex);
     for (i = 0; i < lives; i++)
@@ -255,38 +273,72 @@ void display(void) {
         glEnd();
         glPopMatrix();
     }
-    if(game_mode == PREGAME){
-        float c[4] = {0,0,0,.1};
-        rat_set_text_color(font, c);
-        char buf[18];
-        if(gm_timer < 3){
-            sprintf(buf, "%d",(int)round(3.5-gm_timer));	
-        }
-        else{
-            sprintf(buf, "GO!");	
-        }
+}
 
-        float top = rat_font_height(font);
-        float len = rat_font_text_length(font, buf);
-        rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
+void display(void) {
+	//-----This is the stuff involved with drawing the screen----//	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    int height = 600;
+    int width = height*ratio;
 
-        sprintf(buf, "Level %d",gm_lvl);	
-        top = rat_font_height(sfont);
-        len = rat_font_text_length(sfont, buf);
-        rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
+    switch(game_mode){
+        case USERSELECT:
+            render_user_list(stats);
+            break;
+        case PREGAME:
+            gm_render(gm);
+            gm_message_render(gm);
+            showhud();
+            float c[4] = {0,0,0,.1};
+            rat_set_text_color(font, c);
+            char buf[180];
+            if(gm_timer < 3){
+                sprintf(buf, "%d",(int)round(3.5-gm_timer));	
+            }
+            else{
+                sprintf(buf, "GO!");	
+            }
 
+            float top = rat_font_height(font);
+            float len = rat_font_text_length(font, buf);
+            rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
+
+            sprintf(buf, "Level %d",gm_lvl);	
+            top = rat_font_height(sfont);
+            len = rat_font_text_length(sfont, buf);
+            rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
+            break;
+        case GAME:
+            gm_render(gm);
+            gm_message_render(gm);
+            showhud();
+            break;
+        case POSTGAME:
+            gm_render(gm);
+            gm_message_render(gm);
+            showhud();
+            break;
+        case GAMEOVER:
+            gm_render(gm);
+            gm_message_render(gm);
+            c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
+            rat_set_text_color(font, c);
+            sprintf(buf, "Game Over!");
+
+            top = rat_font_height(font);
+            len = rat_font_text_length(font, buf);
+            rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
+            c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
+            rat_set_text_color(ssfont, c);
+            sprintf(buf, "Push space to continue or esc to exit.");
+
+            top = rat_font_height(ssfont);
+            len = rat_font_text_length(ssfont, buf);
+            rat_font_render_text(ssfont,(width-len)/2,(height+top)/2 - 100, buf);
+            showhud();
+            break;
     }
-    else if (game_mode == GAMEOVER){
-        float c[4] = {0,0,0,.1};
-        rat_set_text_color(font, c);
-        char buf[18];
-        sprintf(buf, "Game Over!");
-
-        float top = rat_font_height(font);
-        float len = rat_font_text_length(font, buf);
-        rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
-    }
-
     glutSwapBuffers();
 	
 }
