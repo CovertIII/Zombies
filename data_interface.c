@@ -100,7 +100,6 @@ void prepare_user_list(data_record db){
         node->id = sqlite3_column_int(sql, 0);
         node->name = (char*)malloc(sizeof(sqlite3_column_text(sql, 1)));
         strcpy(node->name, sqlite3_column_text(sql, 1));
-        printf("%d %s\n", node->id, node->name);
         max++;
     }
     db->v_max = max-1;

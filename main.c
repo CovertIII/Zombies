@@ -107,9 +107,13 @@ void init(int argc, char** argv){
 }
 
 void processNormalKeys(unsigned char key, int xx, int yy) {
-	if (key == 27) 
+	if (key == 27) {
+        if(game_mode == PREGAME || game_mode == GAME || game_mode == POSTGAME){
+                game_finish_session(stats, total_deaths);
+        }
 		exit(0);
-		
+    }
+
 	if(key == 'r'){
 		game_mode = GAME;
 		gm_load_level(gm, argv1);
@@ -130,6 +134,15 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
     }
     else if(game_mode == GAMEOVER){
         if(key == ' '){
+            gm_timer = 0;
+            total_deaths = 0;
+            gm_lvl = 1;
+            lives = 3;
+            //gm_free_level(gm);
+            char level[30];
+            sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
+            gm_load_level(gm, level);
+            gm_update(gm,.01);
             game_mode = USERSELECT;
         }
     }
@@ -197,6 +210,9 @@ void numbers(int value)
                 total_deaths++;
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
 				game_mode = lives < 0 ? GAMEOVER : POSTGAME;
+                if(lives < 0 ){
+                    game_finish_session(stats, total_deaths);
+                }
             }
 
 			break;
@@ -214,18 +230,6 @@ void numbers(int value)
 			break;
         case GAMEOVER:
 			gm_update(gm,h);
-			if (gm_timer > 4){
-                game_finish_session(stats, total_deaths);
-				gm_timer = 0;
-                total_deaths = 0;
-                gm_lvl = 1;
-                lives = 3;
-				//gm_free_level(gm);
-				char level[30];
-				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
-				gm_load_level(gm, level);
-				gm_update(gm,h);
-			}
             break;
 	}
 	
