@@ -42,7 +42,7 @@ typedef struct data_record_type{
     int h_cursor;
     int v_cursor;
     int v_max;
-    char * tmp_name;
+    char tmp_name[100];
 
     int user_id;
     int game_id;
@@ -55,12 +55,16 @@ typedef struct data_record_type{
 } data_record_type;
 
 
+int ck_create_tables(data_record db);
+
 data_record init_data_record(char * file_name){
     data_record_type * db;
     db = (data_record)malloc(sizeof(data_record_type));
     if(!db){return NULL;}
 
     db->h_cursor = 0;
+    db->tmp_name[0] = '|';
+    db->tmp_name[1] = '\0';
     db->v_cursor = 0;
     db->user_l = NULL;
     db->level_l = NULL;
@@ -71,11 +75,73 @@ data_record init_data_record(char * file_name){
 
     db->file_name = (char*)malloc(sizeof(file_name) + 1); 
     strcpy(db->file_name, file_name);
-    
+
+    ck_create_tables(db);
+
     return db;
 }
 
+int ck_create_tables(data_record db){
+    printf("Checking to see if database is empty...\n");
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    char * extra;
+    char stmt[200];
+    sprintf(stmt,
+            "SELECT COUNT(name) as cnt FROM sqlite_master;"
+           );
+    printf("%s\n", stmt);
+    int result; 
+    result = sqlite3_open(db->file_name, &sdb);
+    printf("Open result: %d; ", result);
+    if(result != 0 ){return;}
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d; ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d; ", result);
+    int count  = sqlite3_column_int(sql, 0);
+    printf("Count: %d\n", count);
+    sqlite3_finalize(sql);
+
+    if(count > 0){
+        printf("Database Not Empty.\n");
+        sqlite3_close(sdb);
+        return 0;
+    }
+    
+    
+    printf("Database Empty.  Making tables...\n");
+    sprintf(stmt, "CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT);");
+    printf("%s\n", stmt);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d; ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    sqlite3_finalize(sql);
+
+
+    sprintf(stmt, "CREATE TABLE level_stats (id INTEGER PRIMARY KEY, game_session_id NUMERIC, level_id NUMERIC, time NUMERIC, people_saved NUMERIC);");
+    printf("%s\n", stmt);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d; ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    sqlite3_finalize(sql);
+
+
+    sprintf(stmt, "CREATE TABLE game_session (user_id NUMERIC, id INTEGER PRIMARY KEY, date_time_start NUMERIC, date_time_end NUMERIC, deaths NUMERIC);");
+    printf("%s\n", stmt);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d; ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    sqlite3_finalize(sql);
+
+    sqlite3_close(sdb);
+}
+
 void prepare_user_list(data_record db){
+    printf("Caching user list...\n");
     user_list * node = db->user_l;
 
     while(node != NULL){
@@ -89,7 +155,7 @@ void prepare_user_list(data_record db){
     char stmt[] = "SELECT id, name FROM user ORDER BY name;";
     int result; 
     result = sqlite3_open(db->file_name, &sdb);
-    printf("Open result: %d\n", result);
+    printf("Open result: %d; ", result);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
     printf("prepare result: %d\n", result);
     int max = 0;
@@ -103,7 +169,6 @@ void prepare_user_list(data_record db){
         max++;
     }
     db->v_max = max-1;
-    printf("result: %d\n", result);
     sqlite3_finalize(sql);
     sqlite3_close(sdb);
 }
@@ -143,9 +208,31 @@ void render_user_list(data_record db){
         float len;
         sprintf(buf, "%s", node->name);	
         len = rat_font_text_length(db->font, buf);
-        rat_font_render_text(db->font,width/2 - 50,height-4-30*i, buf);
+        rat_font_render_text(db->font,width/2 - 50,height-40-30*i, buf);
         i++;
     }
+
+    /*This part will render the name typed in by the user*/
+
+    float c[4]; 
+    if(db->v_cursor == -1){
+        db->tmp_name[db->h_cursor] = '|';
+        c[0] = 1;
+        c[1] = 1;
+        c[2] = 1;
+        c[3] = 1;
+    }
+    else{
+        db->tmp_name[db->h_cursor] = ' ';
+        c[0] = .1;
+        c[1] = .1;
+        c[2] = .1;
+        c[3] = .1;
+    }
+    rat_set_text_color(db->font, c);
+    float len;
+    len = rat_font_text_length(db->font, db->tmp_name);
+    rat_font_render_text(db->font,width/2 - 50,height-4, db->tmp_name);
 }
 
 
@@ -227,18 +314,29 @@ void game_record_lvl_stats(data_record db, int lvl, double time, int extra_ppl){
 void user_skey_down(data_record db, int key){
 	switch(key) {
 		case GLUT_KEY_UP : 
-            db->v_cursor = db->v_cursor - 1 < 0 ? 0 : db->v_cursor - 1;
+            db->v_cursor = db->v_cursor < 0 ? -1 : db->v_cursor - 1;
 			break;
 		case GLUT_KEY_DOWN : 
-            db->v_cursor = db->v_cursor + 1 > db->v_max ? db->v_max : db->v_cursor + 1;
+            db->v_cursor = db->v_cursor >= db->v_max ? db->v_max : db->v_cursor + 1;
 			break;
 	}
 }
 
 int user_nkey_down(data_record db, unsigned char key){
-    if(key==10 || key==13){
-        return 1;
-    }
+	if(key==10 || key==13){
+		return 1;
+	}
+	else if(key>=1 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
+		db->tmp_name[db->h_cursor]=key;
+		db->h_cursor++;
+		db->tmp_name[db->h_cursor+1] = '\0';
+		return 0;
+	}
+	else if (key == 127 && db->h_cursor > 0 && db->v_cursor == -1) {
+		db->h_cursor--;
+		db->tmp_name[db->h_cursor+1] = '\0';
+		return 0;
+	}
     return 0;
 }
 

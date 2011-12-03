@@ -2,6 +2,7 @@ Mmain	main.c	/^int main(int argc, char** argv)$/
 _hero	game.c	/^} _hero;$/
 _pow2	freetype_imp.c	/^inline static unsigned int _pow2(unsigned int i)$/
 bounce	physics.c	/^int bounce(object * obj, int x, int y){$/
+ck_create_tables	data_interface.c	/^int ck_create_tables(data_record db){$/
 cleanup	main.c	/^void cleanup (void) {$/
 collision	physics.c	/^int collision(object *ta, object *tb){$/
 collision_test	physics.c	/^int collision_test(object ta, object tb){$/

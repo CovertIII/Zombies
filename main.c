@@ -70,7 +70,7 @@ void init(int argc, char** argv){
 	}
 	alcMakeContextCurrent(context);
 
-    stats = init_data_record("blank.db");
+    stats = init_data_record(".zombie_stats.db");
     prepare_user_list(stats);
 
     font = rat_init();

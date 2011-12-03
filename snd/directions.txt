@@ -1,0 +1,23 @@
+Hey Mathew,
+
+Thanks for trying it out.  I am glad that you had fun playing.  Attached is a modified version of the game that should be a bit easier.  I moved level five to level 9 and put a new level in for level five.  (If you right click on the game and open the package contents, and look in the resources folder, you can see all the image files, and level files that make up the game.  That's where the sound files will go.)
+
+I'm in no big hurry to get this done; so it's no big deal if you don't get to it for awhile.  Here's the directions:
+
+1. When you send the sound files to me, put them all in the same folder and compress the folder.  Send them to billy.covert@gmail.com.
+
+2. Make a file with TextEdit called index.txt.  Have this file in the folder with the rest of the sounds. In it write the name of the sound file followed by a brief description of the event it is made for.  Try to make the names of the file as self-explanatory as possible Ex:
+
+saved.ogg This is the sound that the people make when they are put in the safe zone by the hero.
+
+3. All the sound files must be saved as a Vorbis Ogg file; it is a free alternative to mp3.
+
+4. All the sounds that the people, zombies, or heros make must be saved as a mono sound file.  This way the sound library will play the sound to the left or right or lounder or softer relative to the hero's position to the sound source.
+
+5. All the sounds that aren't dependent on hero's position can be saved as a stereo file.  Ex. Background music, a count down sound, etc.
+
+One last note, I haven't written code to play background music yet.  I still have to do some research on that.  I can load and play small sound files, but not large ones.  So if your going to start doing anything, you could work on general sound effects first.
+
+I hope you have fun with this little project.
+
+Bill Covert
