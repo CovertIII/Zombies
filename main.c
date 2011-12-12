@@ -72,6 +72,7 @@ void init(int argc, char** argv){
 
     stats = init_data_record(".zombie_stats.db");
     prepare_user_list(stats);
+    prepare_game_list(stats);
 
     font = rat_init();
     rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);
@@ -114,15 +115,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		exit(0);
     }
 
-	if(key == 'r'){
-		game_mode = GAME;
-		gm_load_level(gm, argv1);
-	}
 
-	
-	if(key == 'm'){
-		message = message ? 0 : 1;
-	}
 	
 	gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
@@ -144,6 +137,13 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
             gm_load_level(gm, level);
             gm_update(gm,.01);
             game_mode = USERSELECT;
+            prepare_user_list(stats);
+        }
+    }
+    else{
+        if(key == 'r'){
+            game_mode = GAME;
+            gm_load_level(gm, argv1);
         }
     }
 }
@@ -288,7 +288,8 @@ void display(void) {
 
     switch(game_mode){
         case USERSELECT:
-            render_user_list(stats);
+            //render_user_list(stats);
+            render_game_list(stats);
             break;
         case PREGAME:
             gm_render(gm);

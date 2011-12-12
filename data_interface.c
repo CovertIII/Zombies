@@ -12,6 +12,10 @@
 #include "freetype_imp.h"
 #include "data_interface.h"
 
+#define USERLIST 0
+#define GAMELIST 1
+#define LEVELLIST 2
+
 typedef struct user_list{
     char * name;
     int id;
@@ -30,9 +34,11 @@ typedef struct level_list{
 typedef struct game_list{
     int id;
     char * name;
-    double time;
-    int people_saved;
     int max_level;
+    unsigned long int date;
+    int elapsed_time;
+    int people_saved;
+    int deaths;
     struct game_list * next;
 } game_list;
 
@@ -90,11 +96,10 @@ int ck_create_tables(data_record db){
     sprintf(stmt,
             "SELECT COUNT(name) as cnt FROM sqlite_master;"
            );
-    printf("%s\n", stmt);
     int result; 
     result = sqlite3_open(db->file_name, &sdb);
     printf("Open result: %d; ", result);
-    if(result != 0 ){return;}
+    if(result != 0 ){return 1;}
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
     printf("prepare result: %d; ", result);
     result = sqlite3_step(sql);
@@ -236,6 +241,86 @@ void render_user_list(data_record db){
 }
 
 
+void prepare_game_list(data_record db){
+    printf("Caching games played list...\n");
+    game_list * node = db->game_l;
+
+    while(node != NULL){
+        node = node->next;
+        free(node);
+    }
+
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    char * extra;
+    char stmt[] = "SELECT hlvl, "
+      "name, "
+      "time, "
+      "hlvl, "
+      "elapsed, "
+      "people_saved, "
+      "deaths "
+      "FROM game_view LIMIT 10;";
+    printf("%s\n", stmt);
+    int result; 
+    result = sqlite3_open(db->file_name, &sdb);
+    printf("Open result: %d; ", result);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d\n", result);
+    int max = 0;
+    while((result = sqlite3_step(sql)) == SQLITE_ROW){
+        node = (game_list*)malloc(sizeof(game_list));
+        node->next = db->game_l;
+        db->game_l = node;  
+        node->id = sqlite3_column_int(sql, 0);
+        node->name = (char*)malloc(sizeof(sqlite3_column_text(sql, 1)));
+        strcpy(node->name, sqlite3_column_text(sql, 1));
+        node->date = sqlite3_column_int(sql, 2);
+        node->max_level = sqlite3_column_int(sql, 3);
+        node->elapsed_time = sqlite3_column_int(sql, 4);
+        node->people_saved = sqlite3_column_int(sql, 5);
+        node->deaths = sqlite3_column_int(sql, 6);
+        max++;
+    }
+    sqlite3_finalize(sql);
+    sqlite3_close(sdb);
+}
+
+
+void render_game_list(data_record db){
+	char buf[100];
+
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    int height = 600;
+    int width = height*ratio;
+   
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+
+    game_list * node;
+    int i = 0;
+    for(node = db->game_l; node != NULL; node = node->next){
+        float c[4]; 
+        c[0] = .1;
+        c[1] = .1;
+        c[2] = .1;
+        c[3] = .1;
+        rat_set_text_color(db->font, c);
+        float len;
+        sprintf(buf, "%s %d %d %d %d", node->name,
+                node->max_level,
+                node->elapsed_time,
+                node->people_saved,
+                node->deaths);	
+        len = rat_font_text_length(db->font, buf);
+        rat_font_render_text(db->font,width/2 - 50,height-40-30*i, buf);
+        i++;
+    }
+}
+
 void game_start_session(data_record db){
     sqlite3 * sdb;
     sqlite3_stmt * sql;
@@ -324,6 +409,28 @@ void user_skey_down(data_record db, int key){
 
 int user_nkey_down(data_record db, unsigned char key){
 	if(key==10 || key==13){
+        if(db->v_cursor == -1 && db->h_cursor > 1){
+            sqlite3 * sdb;
+            sqlite3_stmt * sql;
+            char * extra;
+            char stmt[200];
+            db->tmp_name[db->h_cursor] = '\0';
+            sprintf(stmt,
+                    "INSERT INTO user (name) VALUES ('%s');",
+                    db->tmp_name
+                   );
+            printf("%s\n", stmt);
+            int result; 
+            result = sqlite3_open(db->file_name, &sdb);
+            printf("game_st Open result: %d\n", result);
+            result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+            printf("prepare result: %d\n", result);
+            result = sqlite3_step(sql);
+            printf("Step result: %d\n", result);
+            db->user_id = sqlite3_last_insert_rowid(sdb);
+            sqlite3_finalize(sql);
+            sqlite3_close(sdb);
+        }
 		return 1;
 	}
 	else if(key>=1 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
