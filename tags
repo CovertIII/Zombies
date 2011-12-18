@@ -99,6 +99,7 @@ sf_type	sound_list_follow.c	/^} sf_type;$/
 sf_update	sound_list_follow.c	/^void sf_update(sf_list sl){$/
 showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
+stats_render	data_interface.c	/^void stats_render(data_record db){$/
 user_list	data_interface.c	/^} user_list;$/
 user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/
 user_skey_down	data_interface.c	/^void user_skey_down(data_record db, int key){$/

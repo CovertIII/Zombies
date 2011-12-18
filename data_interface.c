@@ -3,6 +3,7 @@
 #include <sqlite3.h>
 #include <GLUT/GLUT.h>
 #include <string.h>
+#include <math.h>
 #include <time.h>
 #include <ft2build.h>
 #include <freetype/freetype.h>
@@ -45,6 +46,7 @@ typedef struct game_list{
 typedef struct data_record_type{
     char * file_name;
     
+    int disp;
     int h_cursor;
     int v_cursor;
     int v_max;
@@ -69,6 +71,7 @@ data_record init_data_record(char * file_name){
     if(!db){return NULL;}
 
     db->h_cursor = 0;
+    db->disp = 0;
     db->tmp_name[0] = '|';
     db->tmp_name[1] = '\0';
     db->v_cursor = 0;
@@ -270,8 +273,21 @@ void prepare_game_list(data_record db){
     int max = 0;
     while((result = sqlite3_step(sql)) == SQLITE_ROW){
         node = (game_list*)malloc(sizeof(game_list));
-        node->next = db->game_l;
-        db->game_l = node;  
+        if(db->game_l == NULL){
+            db->game_l = node;
+        }
+        else {
+            game_list * findend = db->game_l;
+            game_list * prev = NULL;
+            while(findend != NULL){
+                prev = findend;
+                findend = findend->next;
+            }
+            prev->next = node;
+        }
+        node->next = NULL;
+
+        //Fill up the structure with data
         node->id = sqlite3_column_int(sql, 0);
         node->name = (char*)malloc(sizeof(sqlite3_column_text(sql, 1)));
         strcpy(node->name, sqlite3_column_text(sql, 1));
@@ -282,8 +298,10 @@ void prepare_game_list(data_record db){
         node->deaths = sqlite3_column_int(sql, 6);
         max++;
     }
+
     sqlite3_finalize(sql);
     sqlite3_close(sdb);
+
 }
 
 
@@ -300,24 +318,75 @@ void render_game_list(data_record db){
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
 
+    float c[4]; 
+    c[0] = .1;
+    c[1] = .1;
+    c[2] = .1;
+    c[3] = .1;
+    rat_set_text_color(db->font, c);
+
+    //Prints the header
+    sprintf(buf, "Name");
+    rat_font_render_text(db->font,width/2 - 250,height-40, buf);
+
+    sprintf(buf, "L");
+    rat_font_render_text(db->font,width/2 - 25,height-40, buf);
+
+    sprintf(buf, "Time");
+    rat_font_render_text(db->font,width/2 + 25,height-40, buf);
+
+    sprintf(buf, "S");
+    rat_font_render_text(db->font,width/2 + 130,height-40, buf);
+
+    sprintf(buf, "D");
+    rat_font_render_text(db->font,width/2 + 200,height-40, buf);
+
+
+    //Printf the data of the game high scores.
+    c[0] = .8;
+    c[1] = .8;
+    c[2] = .8;
+    c[3] = .1;
+    rat_set_text_color(db->font, c);
     game_list * node;
     int i = 0;
     for(node = db->game_l; node != NULL; node = node->next){
-        float c[4]; 
-        c[0] = .1;
-        c[1] = .1;
-        c[2] = .1;
-        c[3] = .1;
-        rat_set_text_color(db->font, c);
         float len;
-        sprintf(buf, "%s %d %d %d %d", node->name,
-                node->max_level,
-                node->elapsed_time,
-                node->people_saved,
-                node->deaths);	
+
+        sprintf(buf, "%s", node->name);
         len = rat_font_text_length(db->font, buf);
-        rat_font_render_text(db->font,width/2 - 50,height-40-30*i, buf);
+        rat_font_render_text(db->font,width/2 - 250,height-80-30*i, buf);
+
+        sprintf(buf, "%d", node->max_level);
+        len = rat_font_text_length(db->font, buf);
+        rat_font_render_text(db->font,width/2 - 25,height-80-30*i, buf);
+
+        int min = floor(node->elapsed_time/60);
+        int sec = node->elapsed_time%60;
+
+        sprintf(buf, "%d : %d", min, sec);
+        len = rat_font_text_length(db->font, buf);
+        rat_font_render_text(db->font,width/2 + 25,height-80-30*i, buf);
+
+        sprintf(buf, "%d", node->people_saved);
+        len = rat_font_text_length(db->font, buf);
+        rat_font_render_text(db->font,width/2 + 130,height-80-30*i, buf);
+
+        sprintf(buf, "%d", node->deaths);
+        len = rat_font_text_length(db->font, buf);
+        rat_font_render_text(db->font,width/2 + 200,height-80-30*i, buf);
         i++;
+    }
+}
+
+void stats_render(data_record db){
+    switch(db->disp){
+        case 0:
+            render_user_list(db);
+            break;
+        case 1:
+            render_game_list(db);
+            break;
     }
 }
 
@@ -403,6 +472,12 @@ void user_skey_down(data_record db, int key){
 			break;
 		case GLUT_KEY_DOWN : 
             db->v_cursor = db->v_cursor >= db->v_max ? db->v_max : db->v_cursor + 1;
+			break;
+		case GLUT_KEY_LEFT : 
+            db->disp = db->disp == 0 ? 1 : 0;
+			break;
+		case GLUT_KEY_RIGHT : 
+            db->disp = db->disp == 0 ? 1 : 0;
 			break;
 	}
 }

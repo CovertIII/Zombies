@@ -288,8 +288,7 @@ void display(void) {
 
     switch(game_mode){
         case USERSELECT:
-            //render_user_list(stats);
-            render_game_list(stats);
+            stats_render(stats);
             break;
         case PREGAME:
             gm_render(gm);
