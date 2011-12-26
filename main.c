@@ -73,6 +73,7 @@ void init(int argc, char** argv){
     stats = init_data_record(".zombie_stats.db");
     prepare_user_list(stats);
     prepare_game_list(stats);
+    prepare_level_scores(stats);
 
     font = rat_init();
     rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);

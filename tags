@@ -55,6 +55,7 @@ object	physics.h	/^} object;$/
 point_collision	physics.c	/^int point_collision(vector2 pt, object *c){$/
 ppl	game.c	/^} ppl;$/
 prepare_game_list	data_interface.c	/^void prepare_game_list(data_record db){$/
+prepare_level_scores	data_interface.c	/^void prepare_level_scores(data_record db){$/
 prepare_user_list	data_interface.c	/^void prepare_user_list(data_record db){$/
 pressKey	main.c	/^void pressKey(int key, int xx, int yy) {$/
 printAttributes	mainsdl.c	/^static void printAttributes ()$/
@@ -81,6 +82,7 @@ rat_texture_font_from_glyph_font	freetype_imp.c	/^static rat_texture_font *rat_t
 releaseKey	main.c	/^void releaseKey(int key, int xx, int yy) {$/
 releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key, int xx, /
 render_game_list	data_interface.c	/^void render_game_list(data_record db){$/
+render_level_scores	data_interface.c	/^void render_level_scores(data_record db)$/
 render_user_list	data_interface.c	/^void render_user_list(data_record db){$/
 reshape	main.c	/^void reshape(int width, int height)$/
 s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, vector2 p){$/
