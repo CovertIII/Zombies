@@ -157,11 +157,15 @@ int ck_create_tables(data_record db){
 void prepare_user_list(data_record db){
     printf("Caching user list...\n");
     user_list * node = db->user_l;
+    user_list * temp;
 
     while(node != NULL){
+        temp = node;
         node = node->next;
-        free(node);
+        free(temp);
     }
+
+    db->user_l = NULL;
 
     sqlite3 * sdb;
     sqlite3_stmt * sql;
@@ -253,11 +257,15 @@ void render_user_list(data_record db){
 void prepare_game_list(data_record db){
     printf("Caching games played list...\n");
     game_list * node = db->game_l;
+    game_list * temp;
 
     while(node != NULL){
+        temp = node;
         node = node->next;
-        free(node);
+        free(temp);
     }
+
+    db->game_l = NULL;
 
     sqlite3 * sdb;
     sqlite3_stmt * sql;
@@ -527,42 +535,44 @@ void user_skey_down(data_record db, int key){
 }
 
 int user_nkey_down(data_record db, unsigned char key){
-	if(key==10 || key==13){
-        if(db->v_cursor == -1 && db->h_cursor > 1){
-            sqlite3 * sdb;
-            sqlite3_stmt * sql;
-            const char * extra;
-            char stmt[200];
-            db->tmp_name[db->h_cursor] = '\0';
-            sprintf(stmt,
-                    "INSERT INTO user (name) VALUES ('%s');",
-                    db->tmp_name
-                   );
-            printf("%s\n", stmt);
-            int result; 
-            result = sqlite3_open(db->file_name, &sdb);
-            printf("game_st Open result: %d\n", result);
-            result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
-            printf("prepare result: %d\n", result);
-            result = sqlite3_step(sql);
-            printf("Step result: %d\n", result);
-            db->user_id = sqlite3_last_insert_rowid(sdb);
-            sqlite3_finalize(sql);
-            sqlite3_close(sdb);
+    if(db->disp == 0){
+        if(key==10 || key==13){
+            if(db->v_cursor == -1 && db->h_cursor > 1){
+                sqlite3 * sdb;
+                sqlite3_stmt * sql;
+                const char * extra;
+                char stmt[200];
+                db->tmp_name[db->h_cursor] = '\0';
+                sprintf(stmt,
+                        "INSERT INTO user (name) VALUES ('%s');",
+                        db->tmp_name
+                       );
+                printf("%s\n", stmt);
+                int result; 
+                result = sqlite3_open(db->file_name, &sdb);
+                printf("game_st Open result: %d\n", result);
+                result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+                printf("prepare result: %d\n", result);
+                result = sqlite3_step(sql);
+                printf("Step result: %d\n", result);
+                db->user_id = sqlite3_last_insert_rowid(sdb);
+                sqlite3_finalize(sql);
+                sqlite3_close(sdb);
+            }
+            return 1;
         }
-		return 1;
-	}
-	else if(key>=1 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
-		db->tmp_name[db->h_cursor]=key;
-		db->h_cursor++;
-		db->tmp_name[db->h_cursor+1] = '\0';
-		return 0;
-	}
-	else if (key == 127 && db->h_cursor > 0 && db->v_cursor == -1) {
-		db->h_cursor--;
-		db->tmp_name[db->h_cursor+1] = '\0';
-		return 0;
-	}
+        else if(key>=1 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
+            db->tmp_name[db->h_cursor]=key;
+            db->h_cursor++;
+            db->tmp_name[db->h_cursor+1] = '\0';
+            return 0;
+        }
+        else if (key == 127 && db->h_cursor > 0 && db->v_cursor == -1) {
+            db->h_cursor--;
+            db->tmp_name[db->h_cursor+1] = '\0';
+            return 0;
+        }
+    }
     return 0;
 }
 
@@ -570,11 +580,15 @@ int user_nkey_down(data_record db, unsigned char key){
 void prepare_level_scores(data_record db){
     printf("Caching level stats...\n");
     level_list * node = db->level_l;
+    level_list * temp;
 
     while(node != NULL){
+        temp = node;
         node = node->next;
-        free(node);
+        free(temp);
     }
+
+    db->level_l = NULL;
 
     sqlite3 * sdb;
     sqlite3_stmt * sql;

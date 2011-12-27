@@ -207,12 +207,12 @@ void gm_reshape(game gm, int width, int height){
     glMatrixMode(GL_MODELVIEW);
 }
 
-void gm_load_level(game gm, char * lvl){
+int gm_load_level(game gm, char * lvl){
 	int i;
 	gm->ak.x =0;
 	gm->ak.y = 0;
 
-	load_level_file(gm, lvl);
+	return load_level_file(gm, lvl);
 }
 
 void gm_update_sound(game gm){

@@ -23,7 +23,7 @@ gm_free	game.c	/^void gm_free(game gm){$/
 gm_init	game.c	/^game gm_init(void){$/
 gm_init_sounds	game.c	/^void gm_init_sounds(game gm){$/
 gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
-gm_load_level	game.c	/^void gm_load_level(game gm, char * lvl){$/
+gm_load_level	game.c	/^int gm_load_level(game gm, char * lvl){$/
 gm_message_render	game.c	/^void gm_message_render(game gm){$/
 gm_nkey_down	game.c	/^void gm_nkey_down(game gm, unsigned char key){$/
 gm_nkey_up	game.c	/^void gm_nkey_up(game gm, unsigned char key){$/

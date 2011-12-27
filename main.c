@@ -27,7 +27,7 @@ int lastFrameTime = 0;
 int game_mode = USERSELECT;
 double gm_timer = 0.0f;
 int gm_lvl = 1;
-int lives = 3;
+int lives = 0;
 int extra_ppl = 0;
 int total_deaths = 0;
 GLuint lives_tex;
@@ -139,6 +139,8 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
             gm_update(gm,.01);
             game_mode = USERSELECT;
             prepare_user_list(stats);
+            prepare_game_list(stats);
+            prepare_level_scores(stats);
         }
     }
     else{
@@ -210,9 +212,12 @@ void numbers(int value)
                 lives--;
                 total_deaths++;
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
-				game_mode = lives < 0 ? GAMEOVER : POSTGAME;
                 if(lives < 0 ){
+                    game_mode = GAMEOVER;
                     game_finish_session(stats, total_deaths);
+                }else
+                {
+                    game_mode = POSTGAME;
                 }
             }
 
@@ -225,7 +230,9 @@ void numbers(int value)
 				//gm_free_level(gm);
 				char level[30];
 				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
-				gm_load_level(gm, level);
+				if(gm_load_level(gm, level) == 0){
+                    game_mode = GAMEOVER;
+                }
 				gm_update(gm,h);
 			}
 			break;
