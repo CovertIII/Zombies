@@ -53,6 +53,12 @@ int main(int argc, char ** argv){
                 pElem->QueryFloatAttribute("r", &r);
                 printf("h %.1f %.1f 0 0 %.1f %.1f\n", cx, h - cy, r, r*r*M_PI/25.2);
             }
+						else if(strcmp(color, "#ff0000") == 0){
+                pElem->QueryFloatAttribute("cx", &cx);
+                pElem->QueryFloatAttribute("cy", &cy);
+                pElem->QueryFloatAttribute("r", &r);
+                printf("h %.1f %.1f 0 0 %.1f %.1f\n", cx, h - cy, r, r*r*M_PI/25.2);
+            }
             else if(strcmp(color, "#00bf5f") == 0){
                 pElem->QueryFloatAttribute("cx", &cx);
                 pElem->QueryFloatAttribute("cy", &cy);

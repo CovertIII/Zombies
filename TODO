@@ -1,15 +1,17 @@
 My Random TODO list for the zombie game.
+========================================
 
+make better levels
 
-make better levels. 
 Load a different background for each level.  
 
 Use the mouse to move the Zombie, not just keyboard.
 
 Add AI to the game to make it more interesting.  
-DONE Add walls??  Some how make the game interesting and more playable.
 
 Add sound!!
+
+DONE Add walls??  Some how make the game interesting and more playable.
 
 DONE Add scoring; time level took to complete over the number of Zombies 
 saved.
@@ -18,10 +20,12 @@ DONE Display the number of people a person has to save in a level.
 
 DONE Allow the hero to resue other people after he has completed the save 
 count.
-    -Have a message saying, if you wish to continue type ' '.
 
-Add difference accounts.  Look into sqlite3 to do this.
+DONE Have a message saying, if you wish to continue type ' '.
 
+DONE Add difference accounts.  Look into sqlite3 to do this.
+
+# Ideas #
 go once through the levels trying to rescue the peoplein the middle you have
 to find a zombie antidote.  after the antidote has been retrieved you must
 rescue all the zombies in the levels you already played by turning them into
