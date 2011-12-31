@@ -1,6 +1,7 @@
 CFLAGS=-g
 MACFLAGS=-framework GLUT -framework OpenGL -framework Cocoa -framework OpenAL
-STATIC = -lsqlite3 -lvorbis -logg -lvorbisfile -lpng -lfreetype
+STATIC = -lsqlite3 -lvorbis -logg -lvorbisfile -lpng -lfreetype `sdl-config --cflags --libs` 
+
 CC=gcc
 
 all: Zombies CTags

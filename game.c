@@ -4,6 +4,8 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include <GLUT/glut.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
@@ -150,8 +152,8 @@ void gm_init_sounds(game gm){
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 }
 
-void gm_set_view(game gm){
-	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
+void gm_set_view(int width, int height, game gm){
+	double ratio = (double)width/(double)height; 
 	vector2 w = {gm->viewratio, gm->viewratio};
 	w.x = ratio * w.y;
 	gm->vmin.x = gm->hero.o.p.x - w.x/2.0f;
@@ -219,7 +221,7 @@ void gm_update_sound(game gm){
 	
 }
 
-void gm_update(game gm, double dt){
+void gm_update(game gm, int height, int width, double dt){
 	int i, k;
 	/*Timers */
 	if(gm->hero.state != DONE){
@@ -419,7 +421,7 @@ void gm_update(game gm, double dt){
 	}
 	
 	/*Advances our view level */
-	double ratio = glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT);
+	double ratio = (double)width/(double)height; 
 	vector2 w = {gm->viewratio, gm->viewratio};
 	w.x = ratio * w.y;
 	
@@ -653,7 +655,7 @@ void gm_stats(game gm, double * time, int * people){
 
 }
 
-void gm_message_render(game gm){
+void gm_message_render(game gm, int width, int height){
 	int i, add = 0;
     int check = 0;
 	for(i = 0; i < gm->person_num; i++){
@@ -672,9 +674,9 @@ void gm_message_render(game gm){
 	glPushMatrix();
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
-    int height = 600;
-    int width = height*ratio;
+    float ratio = (double)width/(double)height;
+    height = 600;
+    width = height*ratio;
    
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
@@ -826,16 +828,16 @@ void gm_nkey_up(game gm, unsigned char key){
 
 void gm_skey_down(game gm, int key){
 	switch(key) {
-		case GLUT_KEY_LEFT : 
+		case SDLK_LEFT : 
 			gm->ak.x = -1;
 			break;
-		case GLUT_KEY_RIGHT : 
+		case SDLK_RIGHT : 
 			gm->ak.x = 1;
 			break;
-		case GLUT_KEY_UP : 
+		case SDLK_UP : 
 			gm->ak.y = 1;
 			break;
-		case GLUT_KEY_DOWN : 
+		case SDLK_DOWN : 
 			gm->ak.y = -1;
 			break;
 	}
@@ -843,16 +845,16 @@ void gm_skey_down(game gm, int key){
 
 void gm_skey_up(game gm, int key){
 	switch (key) {
-		case GLUT_KEY_LEFT : 
+		case SDLK_LEFT : 
 			if(gm->ak.x < 0) {gm->ak.x = 0;}
 			break;
-		case GLUT_KEY_RIGHT: 
+		case SDLK_RIGHT: 
 			if(gm->ak.x > 0) {gm->ak.x = 0;}
 			break;
-		case GLUT_KEY_UP : 
+		case SDLK_UP : 
 			if(gm->ak.y > 0) {gm->ak.y = 0;}
 			break;
-		case GLUT_KEY_DOWN : 
+		case SDLK_DOWN : 
 			if(gm->ak.y < 0) {gm->ak.y = 0;}
 			break;
 	}
@@ -982,8 +984,6 @@ int load_level_file(game gm, char * file){
 				}
 			}
 		}
-		gm_set_view(gm);
-		gm_update_view(gm);
 		fclose(loadFile);
 		printf("Level file %s loaded.\n", file);
 		return 1;

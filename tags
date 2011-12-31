@@ -1,4 +1,5 @@
-Mmain	main.c	/^int main(int argc, char** argv)$/
+Mmain	main.c	/^int main(int argc, char *argv[])$/
+Mmainglut	mainglut.c	/^int main(int argc, char** argv)$/
 Mmainsdl	mainsdl.c	/^int main(int argc, char *argv[])$/
 _hero	game.c	/^} _hero;$/
 _pow2	freetype_imp.c	/^inline static unsigned int _pow2(unsigned int i)$/
@@ -7,11 +8,11 @@ ck_create_tables	data_interface.c	/^int ck_create_tables(data_record db){$/
 cleanup	main.c	/^void cleanup (void) {$/
 collision	physics.c	/^int collision(object *ta, object *tb){$/
 collision_test	physics.c	/^int collision_test(object ta, object tb){$/
-createSurface	mainsdl.c	/^static void createSurface (int fullscreen)$/
+createSurface	main.c	/^static void createSurface (int fullscreen)$/
 data_record	data_interface.h	/^typedef struct data_record_type * data_record;$/
 data_record_type	data_interface.c	/^} data_record_type;$/
-display	main.c	/^void display(void) {$/
-drawGL	mainsdl.c	/^static void drawGL ()$/
+display	mainglut.c	/^void display(void) {$/
+drawGL	main.c	/^static void drawGL ()$/
 game	game.h	/^typedef struct gametype *game;$/
 game_finish_session	data_interface.c	/^void game_finish_session(data_record db, int death/
 game_list	data_interface.c	/^} game_list;$/
@@ -24,22 +25,22 @@ gm_init	game.c	/^game gm_init(void){$/
 gm_init_sounds	game.c	/^void gm_init_sounds(game gm){$/
 gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
 gm_load_level	game.c	/^int gm_load_level(game gm, char * lvl){$/
-gm_message_render	game.c	/^void gm_message_render(game gm){$/
+gm_message_render	game.c	/^void gm_message_render(game gm, int width, int hei/
 gm_nkey_down	game.c	/^void gm_nkey_down(game gm, unsigned char key){$/
 gm_nkey_up	game.c	/^void gm_nkey_up(game gm, unsigned char key){$/
 gm_progress	game.c	/^int gm_progress(game gm){$/
 gm_render	game.c	/^void gm_render(game gm){$/
 gm_reshape	game.c	/^void gm_reshape(game gm, int width, int height){$/
-gm_set_view	game.c	/^void gm_set_view(game gm){$/
+gm_set_view	game.c	/^void gm_set_view(int width, int height, game gm){$/
 gm_skey_down	game.c	/^void gm_skey_down(game gm, int key){$/
 gm_skey_up	game.c	/^void gm_skey_up(game gm, int key){$/
 gm_stats	game.c	/^void gm_stats(game gm, double * time, int * people/
-gm_update	game.c	/^void gm_update(game gm, double dt){$/
+gm_update	game.c	/^void gm_update(game gm, int height, int width, dou/
 gm_update_sound	game.c	/^void gm_update_sound(game gm){$/
 gm_update_view	game.c	/^void gm_update_view(game gm){$/
-idle	main.c	/^void idle(void)$/
+idle	mainglut.c	/^void idle(void)$/
 init	main.c	/^void init(int argc, char** argv){$/
-initAttributes	mainsdl.c	/^static void initAttributes ()$/
+initAttributes	main.c	/^static void initAttributes ()$/
 init_data_record	data_interface.c	/^data_record init_data_record(char * file_name){$/
 level_list	data_interface.c	/^} level_list;$/
 line	physics.h	/^} line;$/
@@ -48,18 +49,18 @@ line_line	physics.c	/^int line_line(vector2 p, vector2 bp, vector2 q, ve/
 load_level_file	game.c	/^int load_level_file(game gm, char * file){$/
 load_png	load_png.c	/^int load_png(char *name, int *outWidth, int *outHe/
 load_texture	load_png.c	/^int load_texture(char * file, GLuint * texture){$/
-mainLoop	mainsdl.c	/^static void mainLoop ()$/
+mainLoop	main.c	/^static void mainLoop ()$/
 make_glyph_texture	freetype_imp.c	/^static int make_glyph_texture(rat_glyph_font *gf,r/
-numbers	main.c	/^void numbers(int value)$/
+numbers	main.c	/^void numbers(void)$/
 object	physics.h	/^} object;$/
 point_collision	physics.c	/^int point_collision(vector2 pt, object *c){$/
 ppl	game.c	/^} ppl;$/
 prepare_game_list	data_interface.c	/^void prepare_game_list(data_record db){$/
 prepare_level_scores	data_interface.c	/^void prepare_level_scores(data_record db){$/
 prepare_user_list	data_interface.c	/^void prepare_user_list(data_record db){$/
-pressKey	main.c	/^void pressKey(int key, int xx, int yy) {$/
-printAttributes	mainsdl.c	/^static void printAttributes ()$/
-processNormalKeys	main.c	/^void processNormalKeys(unsigned char key, int xx, /
+pressKey	main.c	/^void pressKey(int key) {$/
+printAttributes	main.c	/^static void printAttributes ()$/
+processNormalKeys	main.c	/^void processNormalKeys(unsigned char key) {$/
 r_collision	physics.c	/^int r_collision(object *ta, object *tb){$/
 rat_font	freetype_imp.h	/^} rat_font;$/
 rat_font_free	freetype_imp.c	/^void rat_font_free(rat_font * font){$/
@@ -79,12 +80,12 @@ rat_stop_font_system	freetype_imp.c	/^static void rat_stop_font_system(rat_font 
 rat_texture_font	freetype_imp.h	/^} rat_texture_font;$/
 rat_texture_font_destroy	freetype_imp.c	/^static void rat_texture_font_destroy(rat_texture_f/
 rat_texture_font_from_glyph_font	freetype_imp.c	/^static rat_texture_font *rat_texture_font_from_gly/
-releaseKey	main.c	/^void releaseKey(int key, int xx, int yy) {$/
-releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key, int xx, /
-render_game_list	data_interface.c	/^void render_game_list(data_record db){$/
-render_level_scores	data_interface.c	/^void render_level_scores(data_record db)$/
-render_user_list	data_interface.c	/^void render_user_list(data_record db){$/
-reshape	main.c	/^void reshape(int width, int height)$/
+releaseKey	main.c	/^void releaseKey(int key) {$/
+releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key) {$/
+render_game_list	data_interface.c	/^void render_game_list(data_record db, int width, i/
+render_level_scores	data_interface.c	/^void render_level_scores(data_record db, int width/
+render_user_list	data_interface.c	/^void render_user_list(data_record db, int width, i/
+reshape	mainglut.c	/^void reshape(int width, int height)$/
 s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, vector2 p){$/
 s_free	sound_list.c	/^void s_free(s_list sl){$/
 s_init	sound_list.c	/^s_list s_init(ALuint buffer){$/
@@ -101,7 +102,7 @@ sf_type	sound_list_follow.c	/^} sf_type;$/
 sf_update	sound_list_follow.c	/^void sf_update(sf_list sl){$/
 showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
-stats_render	data_interface.c	/^void stats_render(data_record db){$/
+stats_render	data_interface.c	/^void stats_render(data_record db, int width, int h/
 user_list	data_interface.c	/^} user_list;$/
 user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/
 user_skey_down	data_interface.c	/^void user_skey_down(data_record db, int key){$/

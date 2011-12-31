@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <sqlite3.h>
 #include <GLUT/GLUT.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
@@ -101,7 +103,7 @@ int ck_create_tables(data_record db){
     sqlite3 * sdb;
     sqlite3_stmt * sql;
     const char * extra;
-    char stmt[200];
+    char stmt[700];
     sprintf(stmt,
             "SELECT COUNT(name) as cnt FROM sqlite_master;"
            );
@@ -151,6 +153,42 @@ int ck_create_tables(data_record db){
     printf("Step result: %d\n", result);
     sqlite3_finalize(sql);
 
+    sprintf(stmt, "CREATE VIEW game_view AS SELECT user.name,"
+	"game_session.date_time_start,"
+	"datetime(game_session.date_time_start, 'unixepoch', 'localtime') as time,"
+        "MAX(level_stats.level_id) AS hlvl,"
+	"game_session.date_time_end - game_session.date_time_start AS elapsed, "
+        "SUM(level_stats.people_saved) as people_saved,"
+	"game_session.deaths"
+    "FROM game_session"
+    "JOIN user ON (game_session.user_id = user.id)"
+    "JOIN level_stats ON (level_stats.game_session_id = game_session.id)"
+    "GROUP BY level_stats.game_session_id"
+    "ORDER BY hlvl DESC, elapsed;");
+    printf("%s\n", stmt);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d; ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    sqlite3_finalize(sql);
+    
+    sprintf(stmt, "CREATE VIEW level_view AS "
+        "SELECT user.name, "
+        "game_session.date_time_start, "
+        "level_stats.level_id, "
+        "level_stats.time, "
+        "level_stats.people_saved, "
+        "level_stats.people_saved / level_stats.time*1000 score "
+        "FROM level_stats "
+        "JOIN game_session ON (game_session.id = level_stats.game_session_id) "
+        "JOIN user ON (user.id = game_session.user_id);");
+    printf("%s\n", stmt);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d; ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    sqlite3_finalize(sql);
+
     sqlite3_close(sdb);
 }
 
@@ -191,18 +229,8 @@ void prepare_user_list(data_record db){
     sqlite3_close(sdb);
 }
 
-void render_user_list(data_record db){
+void render_user_list(data_record db, int width, int height){
 	char buf[100];
-
-	glPushMatrix();
-	glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
-    int height = 600;
-    int width = height*ratio;
-   
-    gluOrtho2D(0, width, 0, height);
-    glMatrixMode(GL_MODELVIEW);
 
     user_list * node;
     int i = 0;
@@ -328,18 +356,8 @@ void prepare_game_list(data_record db){
 }
 
 
-void render_game_list(data_record db){
+void render_game_list(data_record db, int width, int height){
 	char buf[100];
-
-	glPushMatrix();
-	glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
-    int height = 600;
-    int width = height*ratio;
-   
-    gluOrtho2D(0, width, 0, height);
-    glMatrixMode(GL_MODELVIEW);
 
     float c[4]; 
     c[0] = .1;
@@ -408,16 +426,28 @@ void render_game_list(data_record db){
     }
 }
 
-void stats_render(data_record db){
+void stats_render(data_record db, int width, int height){
+
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float ratio = (double)width/(double)height; 
+    height = 600;
+    width = height*ratio;
+   
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+
+
     switch(db->disp){
         case 0:
-            render_user_list(db);
+            render_user_list(db, width, height);
             break;
         case 1:
-            render_game_list(db);
+            render_game_list(db, width, height);
             break;
         case 2:
-            render_level_scores(db);
+            render_level_scores(db, width, height);
             break;
     }
 }
@@ -499,13 +529,13 @@ void game_record_lvl_stats(data_record db, int lvl, double time, int extra_ppl){
 
 void user_skey_down(data_record db, int key){
 	switch(key) {
-		case GLUT_KEY_UP : 
+		case SDLK_UP : 
             db->v_cursor = db->v_cursor < 0 ? -1 : db->v_cursor - 1;
 			break;
-		case GLUT_KEY_DOWN : 
+		case SDLK_DOWN : 
             db->v_cursor = db->v_cursor >= db->v_max ? db->v_max : db->v_cursor + 1;
 			break;
-		case GLUT_KEY_LEFT : 
+		case SDLK_LEFT : 
             if(db->disp == 0){
                 db->disp = 2;
                 db->show_level = db->max_level;
@@ -518,7 +548,7 @@ void user_skey_down(data_record db, int key){
                 }
             }
 			break;
-		case GLUT_KEY_RIGHT : 
+		case SDLK_RIGHT : 
             if(db->disp == 1){
                 db->disp = 2;
                 db->show_level = 1;
@@ -653,19 +683,10 @@ void prepare_level_scores(data_record db){
     sqlite3_close(sdb);
 }
 
-void render_level_scores(data_record db)
+void render_level_scores(data_record db, int width, int height)
 {
 	char buf[100];
 
-	glPushMatrix();
-	glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
-    int height = 600;
-    int width = height*ratio;
-   
-    gluOrtho2D(0, width, 0, height);
-    glMatrixMode(GL_MODELVIEW);
 
     float c[4]; 
     c[0] = .1;

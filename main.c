@@ -4,6 +4,8 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include <GLUT/glut.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
@@ -22,6 +24,11 @@
 #define GAMEOVER 3
 #define USERSELECT 4
 
+
+int windowWidth = 1024;
+int windowHeight = 728;
+static SDL_Surface *gScreen;
+
 int lastFrameTime = 0;
 
 int game_mode = USERSELECT;
@@ -33,7 +40,6 @@ int total_deaths = 0;
 GLuint lives_tex;
 GLuint extra_tex;
 game gm;
-
 
 char * argv1;
 
@@ -48,6 +54,63 @@ rat_font * sfont;
 rat_font * ssfont;
 
 data_record stats;
+
+void processNormalKeys(unsigned char key);
+void releaseNormalKeys(unsigned char key);
+void pressKey(int key);
+void releaseKey(int key);
+
+static void initAttributes ()
+{
+    int value;
+    value = 16;
+    SDL_GL_SetAttribute (SDL_GL_DEPTH_SIZE, value);
+    
+	value = 1;
+    SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, value);
+}
+
+static void printAttributes ()
+{
+    int nAttr;
+    int i;
+    
+    int  attr[] = { SDL_GL_RED_SIZE, SDL_GL_BLUE_SIZE, SDL_GL_GREEN_SIZE,
+	SDL_GL_ALPHA_SIZE, SDL_GL_BUFFER_SIZE, SDL_GL_DEPTH_SIZE };
+	
+    char *desc[] = { "Red size: %d bits\n", "Blue size: %d bits\n", "Green size: %d bits\n",
+		"Alpha size: %d bits\n", "Color buffer size: %d bits\n", 
+	"Depth bufer size: %d bits\n" };
+	
+    nAttr = sizeof(attr) / sizeof(int);
+    
+    for (i = 0; i < nAttr; i++) {
+		
+        int value;
+        SDL_GL_GetAttribute (attr[i], &value);
+        printf (desc[i], value);
+    } 
+}
+
+static void createSurface (int fullscreen)
+{
+    Uint32 flags = 0;
+    
+    flags = SDL_OPENGL;
+    if (fullscreen)
+        flags |= SDL_FULLSCREEN;
+	
+    
+    gScreen = SDL_SetVideoMode (windowWidth, windowHeight, 0, flags);
+	
+    if (gScreen == NULL) {
+		
+        fprintf (stderr, "Couldn't set 640x480 OpenGL video mode: %s\n",
+                 SDL_GetError());
+		SDL_Quit();
+		exit(2);
+	}
+}
 
 void cleanup (void) {
 	gm_free(gm);
@@ -99,8 +162,11 @@ void init(int argc, char** argv){
 		gm_load_level(gm, argv1);
 	}
 	
+	gm_set_view(gScreen->w, gScreen->h,gm);
+	gm_update_view(gm);
+	gm_update(gm,gScreen->w, gScreen->h,0.0001);
 	
-	gm_update(gm,0.0001);
+	gm_update(gm, gScreen->w, gScreen->h, 0.0001);
 	
 	atexit(cleanup);
 	
@@ -108,7 +174,7 @@ void init(int argc, char** argv){
 	glShadeModel(GL_FLAT);
 }
 
-void processNormalKeys(unsigned char key, int xx, int yy) {
+void processNormalKeys(unsigned char key) {
 	if (key == 27) {
         if(game_mode == PREGAME || game_mode == GAME || game_mode == POSTGAME){
                 game_finish_session(stats, total_deaths);
@@ -136,7 +202,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
             char level[30];
             sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
             gm_load_level(gm, level);
-            gm_update(gm,.01);
+            gm_update(gm,gScreen->w, gScreen->h,.01);
             game_mode = USERSELECT;
             prepare_user_list(stats);
             prepare_game_list(stats);
@@ -151,28 +217,25 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
     }
 }
 
-void releaseNormalKeys(unsigned char key, int xx, int yy) {
+void releaseNormalKeys(unsigned char key) {
 	gm_nkey_up(gm, key);	
 }
 
 
-void pressKey(int key, int xx, int yy) {
+void pressKey(int key) {
 	if(game_mode == GAME || game_mode == POSTGAME){
 		gm_skey_down(gm, key);	
 	}
-
     user_skey_down(stats, key);
 }
 
-void releaseKey(int key, int xx, int yy) {
+void releaseKey(int key) {
 		gm_skey_up(gm, key);
 }
 
-void numbers(int value)
+void numbers(void)
 {
-	glutTimerFunc(TIMERMSECS, numbers, 0);
-	
-	int now = glutGet(GLUT_ELAPSED_TIME);
+	int now =  SDL_GetTicks ();	
     int elapsedMilliseconds = now - lastFrameTime;
     float elapsedTime = elapsedMilliseconds / 1000.0f;
     lastFrameTime = now;
@@ -189,7 +252,7 @@ void numbers(int value)
 			}
 			break;
 		case GAME:
-			gm_update(gm,h);
+			gm_update(gm,gScreen->w, gScreen->h,h);
 			
 			int state = gm_progress(gm);
             if(state > 0){
@@ -223,7 +286,7 @@ void numbers(int value)
 
 			break;
 		case POSTGAME:
-			gm_update(gm,h);
+			gm_update(gm,gScreen->w, gScreen->h, h);
 			if (gm_timer > 4){
 				gm_timer = 0;
 				game_mode = PREGAME;
@@ -233,19 +296,17 @@ void numbers(int value)
 				if(gm_load_level(gm, level) == 0){
                     game_mode = GAMEOVER;
                 }
-				gm_update(gm,h);
+				gm_update(gm,gScreen->w, gScreen->h, h);
 			}
 			break;
         case GAMEOVER:
-			gm_update(gm,h);
+			gm_update(gm,gScreen->w, gScreen->h,h);
             break;
 	}
-	
-	glutPostRedisplay();
 }
 
 void showhud(void){
-    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    float ratio = (double)gScreen->w/(double)gScreen->h;
     int height = 600;
     int width = height*ratio;
     int i;
@@ -287,20 +348,20 @@ void showhud(void){
     }
 }
 
-void display(void) {
-	//-----This is the stuff involved with drawing the screen----//	
+static void drawGL ()
+{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    float ratio = glutGet(GLUT_WINDOW_WIDTH)/(float)glutGet(GLUT_WINDOW_HEIGHT);
+    float ratio = (double)gScreen->w/(double)gScreen->h;   
     int height = 600;
     int width = height*ratio;
 
     switch(game_mode){
         case USERSELECT:
-            stats_render(stats);
+            stats_render(stats, gScreen->w, gScreen->h);
             break;
         case PREGAME:
             gm_render(gm);
-            gm_message_render(gm);
+            gm_message_render(gm, gScreen->w, gScreen->h);
             showhud();
             float c[4] = {0,0,0,.1};
             rat_set_text_color(font, c);
@@ -323,17 +384,17 @@ void display(void) {
             break;
         case GAME:
             gm_render(gm);
-            gm_message_render(gm);
+            gm_message_render(gm, gScreen->w, gScreen->h);
             showhud();
             break;
         case POSTGAME:
             gm_render(gm);
-            gm_message_render(gm);
+            gm_message_render(gm, gScreen->w, gScreen->h);
             showhud();
             break;
         case GAMEOVER:
             gm_render(gm);
-            gm_message_render(gm);
+            gm_message_render(gm, gScreen->w, gScreen->h);
             c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
             rat_set_text_color(font, c);
             sprintf(buf, "Game Over!");
@@ -351,45 +412,71 @@ void display(void) {
             showhud();
             break;
     }
-    glutSwapBuffers();
-	
 }
 
-void reshape(int width, int height)
+static void mainLoop ()
 {
-	gm_reshape(gm, width, height);
+    SDL_Event event;
+    int done = 0;
+    int fps = 157;
+    int delay = 1000/fps;
+    int thenTicks = -1;
+    int nowTicks;
+	
+	
+    while ( !done ) {
+	
+		while ( SDL_PollEvent (&event) ) {
+			switch (event.type) {
+				case SDL_KEYDOWN:
+                    processNormalKeys(event.key.keysym.sym);
+                    pressKey(event.key.keysym.sym);
+					break;
+				case SDL_KEYUP:
+                    releaseNormalKeys(event.key.keysym.sym);
+                    releaseKey(event.key.keysym.sym);
+					break;
+				default:
+					break;
+			}
+		}
+
+		numbers();
+		drawGL ();
+        SDL_GL_SwapBuffers (); 
+		
+		
+		if (thenTicks > 0) {
+            nowTicks = SDL_GetTicks ();
+            delay += (1000/fps - (nowTicks-thenTicks));
+            thenTicks = nowTicks;
+            if (delay < 0)
+                delay = 1000/fps;
+        }
+        else {
+            thenTicks = SDL_GetTicks ();
+        }
+		
+		SDL_Delay (delay);
+	}
 }
 
-void idle(void)
+
+int main(int argc, char *argv[])
 {
-    glutPostRedisplay();
+	if ( SDL_Init (SDL_INIT_VIDEO) < 0 ) {
+		
+        fprintf(stderr, "Couldn't initialize SDL: %s\n",
+				SDL_GetError());
+		exit(1);
+	}
+	
+    initAttributes ();
+    createSurface (0);
+    printAttributes ();
+    init(argc, argv);
+    mainLoop ();
+    SDL_Quit();
+	
+    return 0;
 }
-
-int main(int argc, char** argv)
-{
-    glutInit(&argc, argv);
-    
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    
-    glutCreateWindow("Zombies!");
-	
-	init(argc, argv);
-   
-	glutIgnoreKeyRepeat(1);
-	glutSpecialFunc(pressKey);
-	glutSpecialUpFunc(releaseKey); 
-	glutKeyboardFunc(processNormalKeys);
-	glutKeyboardUpFunc(releaseNormalKeys);
-	
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-	glutPostRedisplay();
-	
-	glutTimerFunc(TIMERMSECS, numbers, 0);
-    glutMainLoop();
-
-
-    return EXIT_SUCCESS;
-}
-

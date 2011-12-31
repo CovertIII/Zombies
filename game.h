@@ -9,7 +9,7 @@ int gm_load_level(game gm, char * lvl);
 
 //void gm_free_level(game gm);
 
-void gm_update(game gm, double dt);
+void gm_update(game gm, int height, int width, double dt);
 
 int gm_progress(game gm);
 
