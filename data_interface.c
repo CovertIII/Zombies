@@ -71,6 +71,9 @@ typedef struct data_record_type{
 
 
 int ck_create_tables(data_record db);
+void prepare_user_list(data_record db);
+void prepare_game_list(data_record db);
+void prepare_level_scores(data_record db);
 
 data_record init_data_record(char * file_name){
     data_record_type * db;
@@ -191,6 +194,20 @@ int ck_create_tables(data_record db){
 
     sqlite3_close(sdb);
 }
+
+void stats_list_prep(data_record db){
+    db->h_cursor = 0;
+    db->disp = 0;
+    db->tmp_name[0] = '|';
+    db->tmp_name[1] = '\0';
+    db->v_cursor = 0;
+    db->show_level = 1;
+
+    prepare_user_list(db);
+    prepare_game_list(db);
+    prepare_level_scores(db);
+}
+
 
 void prepare_user_list(data_record db){
     printf("Caching user list...\n");
@@ -591,13 +608,13 @@ int user_nkey_down(data_record db, unsigned char key){
             }
             return 1;
         }
-        else if(key>=1 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
+        else if(key >= 32 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
             db->tmp_name[db->h_cursor]=key;
             db->h_cursor++;
             db->tmp_name[db->h_cursor+1] = '\0';
             return 0;
         }
-        else if (key == 127 && db->h_cursor > 0 && db->v_cursor == -1) {
+        else if ((key == SDLK_DELETE || key == 8) && db->h_cursor > 0 && db->v_cursor == -1) {
             db->h_cursor--;
             db->tmp_name[db->h_cursor+1] = '\0';
             return 0;

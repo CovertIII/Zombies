@@ -78,6 +78,7 @@ typedef struct gametype {
 	line walls[100];
 	int wall_num;
 
+    int gm_state;
 
 	ALuint saved_buf;
     s_list saved_src;
@@ -221,10 +222,10 @@ void gm_update_sound(game gm){
 	
 }
 
-void gm_update(game gm, int height, int width, double dt){
+void gm_update(game gm, int width, int height, double dt){
 	int i, k;
 	/*Timers */
-	if(gm->hero.state != DONE){
+	if(gm->gm_state == 0){
 		gm->timer += dt;
 	}
 	
@@ -706,16 +707,19 @@ void gm_message_render(game gm, int width, int height){
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(gm->hero.state == DONE){
+        gm->gm_state = 1;
         sprintf(buf, "Level Complete");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
+        gm->gm_state = 1;
         sprintf(buf, "Infected! You loose!");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(check < gm->save_count){
+        gm->gm_state = 1;
         sprintf(buf, "Too many Zombies! You loose!");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
@@ -775,8 +779,12 @@ int gm_progress(game gm){
         }
 	}
 	if(gm->hero.state == ZOMBIE || check < gm->save_count){
+        gm->gm_state = 1;
 		return -1;
 	}
+	if(gm->hero.state == P_Z || check < gm->save_count){
+        gm->gm_state = 1;
+    }
 	if((add >= gm->save_count && gm->hero.state == SAFE && gm->c == 1) ||
         (person == 0 && add >= gm->save_count && gm->hero.state == SAFE)){
 		gm->hero.state = DONE;
@@ -984,6 +992,8 @@ int load_level_file(game gm, char * file){
 				}
 			}
 		}
+        gm->gm_state = 0;
+
 		fclose(loadFile);
 		printf("Level file %s loaded.\n", file);
 		return 1;

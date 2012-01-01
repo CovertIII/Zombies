@@ -1,6 +1,4 @@
 Mmain	main.c	/^int main(int argc, char *argv[])$/
-Mmainglut	mainglut.c	/^int main(int argc, char** argv)$/
-Mmainsdl	mainsdl.c	/^int main(int argc, char *argv[])$/
 _hero	game.c	/^} _hero;$/
 _pow2	freetype_imp.c	/^inline static unsigned int _pow2(unsigned int i)$/
 bounce	physics.c	/^int bounce(object * obj, int x, int y){$/
@@ -11,7 +9,6 @@ collision_test	physics.c	/^int collision_test(object ta, object tb){$/
 createSurface	main.c	/^static void createSurface (int fullscreen)$/
 data_record	data_interface.h	/^typedef struct data_record_type * data_record;$/
 data_record_type	data_interface.c	/^} data_record_type;$/
-display	mainglut.c	/^void display(void) {$/
 drawGL	main.c	/^static void drawGL ()$/
 game	game.h	/^typedef struct gametype *game;$/
 game_finish_session	data_interface.c	/^void game_finish_session(data_record db, int death/
@@ -35,10 +32,9 @@ gm_set_view	game.c	/^void gm_set_view(int width, int height, game gm){$/
 gm_skey_down	game.c	/^void gm_skey_down(game gm, int key){$/
 gm_skey_up	game.c	/^void gm_skey_up(game gm, int key){$/
 gm_stats	game.c	/^void gm_stats(game gm, double * time, int * people/
-gm_update	game.c	/^void gm_update(game gm, int height, int width, dou/
+gm_update	game.c	/^void gm_update(game gm, int width, int height, dou/
 gm_update_sound	game.c	/^void gm_update_sound(game gm){$/
 gm_update_view	game.c	/^void gm_update_view(game gm){$/
-idle	mainglut.c	/^void idle(void)$/
 init	main.c	/^void init(int argc, char** argv){$/
 initAttributes	main.c	/^static void initAttributes ()$/
 init_data_record	data_interface.c	/^data_record init_data_record(char * file_name){$/
@@ -85,7 +81,6 @@ releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key) {$/
 render_game_list	data_interface.c	/^void render_game_list(data_record db, int width, i/
 render_level_scores	data_interface.c	/^void render_level_scores(data_record db, int width/
 render_user_list	data_interface.c	/^void render_user_list(data_record db, int width, i/
-reshape	mainglut.c	/^void reshape(int width, int height)$/
 s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, vector2 p){$/
 s_free	sound_list.c	/^void s_free(s_list sl){$/
 s_init	sound_list.c	/^s_list s_init(ALuint buffer){$/
@@ -102,6 +97,7 @@ sf_type	sound_list_follow.c	/^} sf_type;$/
 sf_update	sound_list_follow.c	/^void sf_update(sf_list sl){$/
 showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
+stats_list_prep	data_interface.c	/^void stats_list_prep(data_record db){$/
 stats_render	data_interface.c	/^void stats_render(data_record db, int width, int h/
 user_list	data_interface.c	/^} user_list;$/
 user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/

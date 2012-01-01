@@ -23,6 +23,7 @@
 #define POSTGAME 2
 #define GAMEOVER 3
 #define USERSELECT 4
+#define WIN 5
 
 
 int windowWidth = 1024;
@@ -34,7 +35,7 @@ int lastFrameTime = 0;
 int game_mode = USERSELECT;
 double gm_timer = 0.0f;
 int gm_lvl = 1;
-int lives = 0;
+int lives = 3;
 int extra_ppl = 0;
 int total_deaths = 0;
 GLuint lives_tex;
@@ -134,9 +135,7 @@ void init(int argc, char** argv){
 	alcMakeContextCurrent(context);
 
     stats = init_data_record(".zombie_stats.db");
-    prepare_user_list(stats);
-    prepare_game_list(stats);
-    prepare_level_scores(stats);
+    stats_list_prep(stats);
 
     font = rat_init();
     rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);
@@ -192,7 +191,7 @@ void processNormalKeys(unsigned char key) {
             game_mode = PREGAME;
         }
     }
-    else if(game_mode == GAMEOVER){
+    else if(game_mode == GAMEOVER || game_mode == WIN){ 
         if(key == ' '){
             gm_timer = 0;
             total_deaths = 0;
@@ -204,9 +203,7 @@ void processNormalKeys(unsigned char key) {
             gm_load_level(gm, level);
             gm_update(gm,gScreen->w, gScreen->h,.01);
             game_mode = USERSELECT;
-            prepare_user_list(stats);
-            prepare_game_list(stats);
-            prepare_level_scores(stats);
+            stats_list_prep(stats);
         }
     }
     else{
@@ -294,12 +291,16 @@ void numbers(void)
 				char level[30];
 				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
 				if(gm_load_level(gm, level) == 0){
-                    game_mode = GAMEOVER;
+                    game_mode = WIN;
+                    game_finish_session(stats, total_deaths);
                 }
 				gm_update(gm,gScreen->w, gScreen->h, h);
 			}
 			break;
         case GAMEOVER:
+			gm_update(gm,gScreen->w, gScreen->h,h);
+            break;
+        case WIN:
 			gm_update(gm,gScreen->w, gScreen->h,h);
             break;
 	}
@@ -394,18 +395,55 @@ static void drawGL ()
             break;
         case GAMEOVER:
             gm_render(gm);
-            gm_message_render(gm, gScreen->w, gScreen->h);
+
+            glPushMatrix();
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            float ratio = (double)gScreen->w/(double)gScreen->h;
+            height = 600;
+            width = height*ratio;
+           
+            gluOrtho2D(0, width, 0, height);
+            glMatrixMode(GL_MODELVIEW);
+
             c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
             rat_set_text_color(font, c);
             sprintf(buf, "Game Over!");
-
             top = rat_font_height(font);
             len = rat_font_text_length(font, buf);
-            rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
+            rat_font_render_text(font,(width-len)/2,(height+top)/2 + 100, buf);
+
             c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
             rat_set_text_color(ssfont, c);
             sprintf(buf, "Push space to continue or esc to exit.");
+            top = rat_font_height(ssfont);
+            len = rat_font_text_length(ssfont, buf);
+            rat_font_render_text(ssfont,(width-len)/2,(height+top)/2 - 100, buf);
+            showhud();
+            break;
+        case WIN:
+            gm_render(gm);
 
+            glPushMatrix();
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            ratio = (double)gScreen->w/(double)gScreen->h;
+            height = 600;
+            width = height*ratio;
+           
+            gluOrtho2D(0, width, 0, height);
+            glMatrixMode(GL_MODELVIEW);
+
+            c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
+            rat_set_text_color(font, c);
+            sprintf(buf, "You Win!");
+            top = rat_font_height(font);
+            len = rat_font_text_length(font, buf);
+            rat_font_render_text(font,(width-len)/2,(height+top)/2 + 100, buf);
+
+            c[0] = 0; c[1] = 0; c[2] =0; c[3]= .1;
+            rat_set_text_color(ssfont, c);
+            sprintf(buf, "Push space to continue or esc to exit.");
             top = rat_font_height(ssfont);
             len = rat_font_text_length(ssfont, buf);
             rat_font_render_text(ssfont,(width-len)/2,(height+top)/2 - 100, buf);

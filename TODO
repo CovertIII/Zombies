@@ -1,15 +1,19 @@
 My Random TODO list for the zombie game.
 ========================================
 
-make better levels
+Insert uppercase letters in SDL
 
-Load a different background for each level.  
+Load splash logo in data_interface render and directions
 
 Use the mouse to move the Zombie, not just keyboard.
 
 Add AI to the game to make it more interesting.  
 
 Add sound!!
+
+make better levels
+
+Load a different background for each level.  
 
 DONE Add walls??  Some how make the game interesting and more playable.
 
