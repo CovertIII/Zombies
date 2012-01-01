@@ -123,21 +123,54 @@ game gm_init(void){
 }
 
 int gm_init_textures(game gm){
+    //NSString * path;
+    //path = [[NSBundle mainBundle] pathForResource: @"zombie" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->zombie_tex);
     load_texture("imgs/zombie.png", &gm->zombie_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"person_s" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->person_s_tex);
     load_texture("imgs/person_s.png", &gm->person_s_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"person" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->person_tex);
     load_texture("imgs/person.png", &gm->person_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"safe" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->safe_tex);
     load_texture("imgs/safe.png",   &gm->safe_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"eye" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->eye_tex);
     load_texture("imgs/eye.png",    &gm->eye_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"safezone" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->safezone_tex);
     load_texture("imgs/safezone.png",   &gm->safezone_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"hero" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->hero_tex);
     load_texture("imgs/hero.png",   &gm->hero_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"p_z" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->p_z_tex);
     load_texture("imgs/p_z.png",   &gm->p_z_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"h_z" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->h_z_tex);
     load_texture("imgs/h_z.png",   &gm->h_z_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"hzombie" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->hzombie_tex);
     load_texture("imgs/hzombie.png",   &gm->hzombie_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"heroattached" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->heroattached_tex);
     load_texture("imgs/heroattached.png",   &gm->heroattached_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"herosafe" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->herosafe_tex);
     load_texture("imgs/herosafe.png",   &gm->herosafe_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"rope" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->rope_tex);
     load_texture("imgs/rope.png",   &gm->rope_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"blank" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->blank_tex);
     load_texture("imgs/blank.png",   &gm->blank_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"bk" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->bk_tex);
     load_texture("imgs/bk.png",   &gm->bk);
+    //path = [[NSBundle mainBundle] pathForResource: @"extra" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1], &gm->extra_tex);
     load_texture("imgs/extra.png",   &gm->extra_tex);
 }	
 

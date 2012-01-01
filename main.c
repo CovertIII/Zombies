@@ -138,14 +138,19 @@ void init(int argc, char** argv){
     stats_list_prep(stats);
 
     font = rat_init();
-    rat_load_font(font, "imgs/MarkerFelt.ttc", 72*2);
+    rat_load_font(font, "/Library/Fonts/MarkerFelt.ttc", 72*2);
     sfont = rat_init();
-    rat_load_font(sfont, "imgs/MarkerFelt.ttc", 100);
+    rat_load_font(sfont, "/Library/Fonts/MarkerFelt.ttc", 100);
     ssfont = rat_init();
-    rat_load_font(ssfont, "imgs/MarkerFelt.ttc", 30);
+    rat_load_font(ssfont, "/Library/Fonts/MarkerFelt.ttc", 30);
 	
 
+    //NSString * path;
+    //path = [[NSBundle mainBundle] pathForResource: @"hero" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1],   &lives_tex);
     load_texture("imgs/hero.png",   &lives_tex);
+    //path = [[NSBundle mainBundle] pathForResource: @"extra" ofType: @"png"];
+    //load_texture([path cStringUsingEncoding:1],   &lives_tex);
     load_texture("imgs/extra.png",   &extra_tex);
 
 	gm = gm_init();	
@@ -155,6 +160,9 @@ void init(int argc, char** argv){
 	if(argc == 1){
 		sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
 		gm_load_level(gm, level);
+		//sprintf(level, "lvl%d", gm_lvl);
+        //path = [[NSBundle mainBundle] pathForResource: [NSString stringWithFormat:@"%s", level] ofType: @"txt"];
+		//gm_load_level(gm, [path cStringUsingEncoding:1]);
 	}
 	if(argc == 2){
 		argv1 = argv[1];
@@ -199,6 +207,9 @@ void processNormalKeys(unsigned char key) {
             lives = 3;
             //gm_free_level(gm);
             char level[30];
+            //sprintf(level, "lvl%d", gm_lvl);
+            //path = [[NSBundle mainBundle] pathForResource: [NSString stringWithFormat:@"%s", level] ofType: @"txt"];
+            //gm_load_level(gm, [path cStringUsingEncoding:1]);
             sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
             gm_load_level(gm, level);
             gm_update(gm,gScreen->w, gScreen->h,.01);
@@ -289,6 +300,9 @@ void numbers(void)
 				game_mode = PREGAME;
 				//gm_free_level(gm);
 				char level[30];
+                //sprintf(level, "lvl%d", gm_lvl);
+                //path = [[NSBundle mainBundle] pathForResource: [NSString stringWithFormat:@"%s", level] ofType: @"txt"];
+                //gm_load_level(gm, [path cStringUsingEncoding:1]);
 				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
 				if(gm_load_level(gm, level) == 0){
                     game_mode = WIN;

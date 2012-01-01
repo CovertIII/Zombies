@@ -608,7 +608,7 @@ int user_nkey_down(data_record db, unsigned char key){
             }
             return 1;
         }
-        else if(key >= 32 && key < 127 && db->h_cursor < 500 && db->v_cursor == -1){
+        else if(((key >= 97 && key < 127) || key == 32) && db->h_cursor < 500 && db->v_cursor == -1){
             db->tmp_name[db->h_cursor]=key;
             db->h_cursor++;
             db->tmp_name[db->h_cursor+1] = '\0';
