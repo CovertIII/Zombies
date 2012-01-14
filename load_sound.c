@@ -16,8 +16,10 @@ int snd_load_file(char const * file, ALuint buffer){
 
 	int result;
 
-	if(!(oggFile = fopen(file, "rb")))
-		printf("Could not open Ogg file.\n");
+	if(!(oggFile = fopen(file, "rb"))){
+		printf("Could not open Ogg file %s.", file);
+        return 1;
+    }
 
 	if((result = ov_open(oggFile, &oggStream, NULL, 0)) < 0)
 	{
@@ -79,6 +81,7 @@ int snd_load_file(char const * file, ALuint buffer){
 	alBufferData(buffer, format, dyn_data, size, vorbisInfo->rate);
 	free(dyn_data);
 	ov_clear(&oggStream);
+    fclose(oggFile);
 	return 0;
 }
 

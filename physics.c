@@ -140,6 +140,7 @@ int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us){
 		if((v2Len(v2Sub(ct, pt4))<c->r+.3) && (v2Len(vn) < 5) && v2Dot(c->f, n) < 0){	
 			c->f = ft;
 			c->v = vt;
+            return 0;
 		}
 		
 		

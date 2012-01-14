@@ -81,9 +81,9 @@ releaseNormalKeys	main.c	/^void releaseNormalKeys(unsigned char key) {$/
 render_game_list	data_interface.c	/^void render_game_list(data_record db, int width, i/
 render_level_scores	data_interface.c	/^void render_level_scores(data_record db, int width/
 render_user_list	data_interface.c	/^void render_user_list(data_record db, int width, i/
-s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, vector2 p){$/
+s_add_snd	sound_list.c	/^void s_add_snd(s_list sl, ALuint buf, object * o, /
 s_free	sound_list.c	/^void s_free(s_list sl){$/
-s_init	sound_list.c	/^s_list s_init(ALuint buffer){$/
+s_init	sound_list.c	/^s_list s_init(void){$/
 s_list	sound_list.h	/^typedef struct s_type * s_list;$/
 s_node	sound_list.c	/^} s_node;$/
 s_type	sound_list.c	/^} s_type;$/

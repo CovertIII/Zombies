@@ -6,6 +6,7 @@ typedef struct {
 	double r;
 	double th;
 	double w; 
+    int snd;
 } object;
 
 typedef struct {

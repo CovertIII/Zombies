@@ -14,6 +14,8 @@
 #include "data_interface.h"
 #include "freetype_imp.h"
 #include "vector2.h"
+#include "physics.h"
+#include "sound_list.h"
 #include "game.h"
 
 #define TIMERMSECS 17
@@ -25,6 +27,20 @@
 #define USERSELECT 4
 #define WIN 5
 
+
+enum{
+    al_game_over_buf,
+    al_lvl_complete_buf,
+    al_win_buf,
+    al_count_buf,
+    al_buf_num
+};
+
+ALuint al_buf[al_buf_num];
+s_list src_list;
+
+object snd_obj;
+double cnt_down = 0;
 
 int windowWidth = 1024;
 int windowHeight = 728;
@@ -134,6 +150,13 @@ void init(int argc, char** argv){
 	}
 	alcMakeContextCurrent(context);
 
+	alGenBuffers(al_buf_num, al_buf);
+	snd_load_file("./snd/game_over.ogg", al_buf[al_game_over_buf]);
+	snd_load_file("./snd/win.ogg", al_buf[al_win_buf]);
+	snd_load_file("./snd/lvl_complete.ogg", al_buf[al_lvl_complete_buf]);
+	snd_load_file("./snd/wall2.ogg", al_buf[al_count_buf]);
+	src_list = s_init();
+
     stats = init_data_record(".zombie_stats.db");
     stats_list_prep(stats);
 
@@ -197,6 +220,7 @@ void processNormalKeys(unsigned char key) {
             game_start_session(stats);
             gm_timer = 0.0f;
             game_mode = PREGAME;
+            s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 0);
         }
     }
     else if(game_mode == GAMEOVER || game_mode == WIN){ 
@@ -254,6 +278,11 @@ void numbers(void)
         case USERSELECT:
             break;
 		case PREGAME:
+            cnt_down += h;
+            if(cnt_down > 1){
+                cnt_down = 0;
+                s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 0);
+            }
 			if(gm_timer >= 4){
 				gm_timer = 0;
 				game_mode = GAME;
@@ -264,6 +293,7 @@ void numbers(void)
 			
 			int state = gm_progress(gm);
             if(state > 0){
+                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj, 0);
                 int ppl;
                 double tmp_time;
                 gm_stats(gm, &tmp_time, &ppl);
@@ -285,6 +315,7 @@ void numbers(void)
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
                 if(lives < 0 ){
                     game_mode = GAMEOVER;
+                    s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj, 0);
                     game_finish_session(stats, total_deaths);
                 }else
                 {
@@ -306,6 +337,7 @@ void numbers(void)
 				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
 				if(gm_load_level(gm, level) == 0){
                     game_mode = WIN;
+                    s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 0);
                     game_finish_session(stats, total_deaths);
                 }
 				gm_update(gm,gScreen->w, gScreen->h, h);
