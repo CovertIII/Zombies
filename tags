@@ -1,6 +1,14 @@
 Mmain	main.c	/^int main(int argc, char *argv[])$/
 _hero	game.c	/^} _hero;$/
 _pow2	freetype_imp.c	/^inline static unsigned int _pow2(unsigned int i)$/
+al_stream	stream_sound.h	/^typedef struct al_stream_type * al_stream;$/
+al_stream_free_file	stream_sound.c	/^int al_stream_free_file(al_stream als){$/
+al_stream_init	stream_sound.c	/^al_stream al_stream_init(void){$/
+al_stream_load_file	stream_sound.c	/^int al_stream_load_file(al_stream als, const char /
+al_stream_play	stream_sound.c	/^int al_stream_play(al_stream als){$/
+al_stream_transition	stream_sound.c	/^int al_stream_transition(al_stream als, double sec/
+al_stream_type	stream_sound.c	/^} al_stream_type;$/
+al_stream_update	stream_sound.c	/^int al_stream_update(al_stream als){$/
 bounce	physics.c	/^int bounce(object * obj, int x, int y){$/
 ck_create_tables	data_interface.c	/^int ck_create_tables(data_record db){$/
 cleanup	main.c	/^void cleanup (void) {$/
@@ -42,6 +50,7 @@ level_list	data_interface.c	/^} level_list;$/
 line	physics.h	/^} line;$/
 line_collision	physics.c	/^int line_collision(vector2 pt1, vector2 pt2, objec/
 line_line	physics.c	/^int line_line(vector2 p, vector2 bp, vector2 q, ve/
+load_buffer	stream_sound.c	/^int load_buffer(al_stream als, ALuint buf){$/
 load_level_file	game.c	/^int load_level_file(game gm, char * file){$/
 load_png	load_png.c	/^int load_png(char *name, int *outWidth, int *outHe/
 load_texture	load_png.c	/^int load_texture(char * file, GLuint * texture){$/

@@ -16,6 +16,7 @@
 #include "vector2.h"
 #include "physics.h"
 #include "sound_list.h"
+#include "stream_sound.h"
 #include "game.h"
 
 #define TIMERMSECS 17
@@ -38,6 +39,7 @@ enum{
 
 ALuint al_buf[al_buf_num];
 s_list src_list;
+al_stream als;
 
 object snd_obj;
 double cnt_down = 0;
@@ -202,6 +204,10 @@ void init(int argc, char** argv){
 	
 	glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_FLAT);
+
+    als = al_stream_init();
+    al_stream_load_file(als, "./snd/track1.ogg");
+    al_stream_play(als);
 }
 
 void processNormalKeys(unsigned char key) {
@@ -274,6 +280,14 @@ void numbers(void)
 	float h = elapsedTime;
 	gm_timer += h;
 	
+    ALint state;
+    state = al_stream_update(als);
+    if(state == AL_STOPPED){
+        al_stream_free_file(als);    
+        al_stream_load_file(als, "./snd/track1.ogg");
+        al_stream_play(als);
+    }
+
 	switch(game_mode){
         case USERSELECT:
             break;

@@ -6,8 +6,8 @@ CC=gcc
 
 all: Zombies CTags
 
-Zombies: freetype_imp.o data_interface.o main.o physics.o load_sound.o game.o vector2.o load_png.o sound_list.o
-	$(CC) $(CFLAGS) $(STATIC) $(MACFLAGS) data_interface.o freetype_imp.o physics.o vector2.o sound_list.o load_png.o game.o load_sound.o main.o -o Zombies
+Zombies: freetype_imp.o data_interface.o main.o physics.o load_sound.o game.o vector2.o load_png.o sound_list.o stream_sound.o
+	$(CC) $(CFLAGS) $(STATIC) $(MACFLAGS)  stream_sound.o data_interface.o freetype_imp.o physics.o vector2.o sound_list.o load_png.o game.o load_sound.o main.o -o Zombies
 
 CTags: main.o
 	ctags *.c *.h
@@ -23,6 +23,9 @@ vector2.o: vector2.c vector2.h
 
 freetype_imp.o: freetype_imp.c freetype_imp.h
 	$(CC) $(CFLAGS) -c freetype_imp.c
+
+stream_sound.o: stream_sound.c stream_sound.h
+	$(CC) $(CFLAGS) -c stream_sound.c
 
 data_interface.o: data_interface.c data_interface.h freetype_imp.h
 	$(CC) $(CFLAGS) -c data_interface.c
