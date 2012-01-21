@@ -48,6 +48,7 @@ void s_add_snd(s_list sl, ALuint buf, object * o, int following){
             alDeleteSources(1, &cycle->src);
             alGenSources(1, &cycle->src);
             alSourcei(cycle->src, AL_BUFFER, buf);
+            alSourcei(cycle->src, AL_REFERENCE_DISTANCE, 30);
             alSource3f(cycle->src, AL_POSITION, o->p.x, o->p.y, 0);
             alSourcePlay(cycle->src);
             return;

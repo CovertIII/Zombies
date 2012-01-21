@@ -152,6 +152,7 @@ void init(int argc, char** argv){
 	}
 	alcMakeContextCurrent(context);
 
+    alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 	alGenBuffers(al_buf_num, al_buf);
 	snd_load_file("./snd/game_over.ogg", al_buf[al_game_over_buf]);
 	snd_load_file("./snd/win.ogg", al_buf[al_win_buf]);

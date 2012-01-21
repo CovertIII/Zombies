@@ -42,6 +42,7 @@
 enum{
     al_saved_buf,
     al_wall_buf,
+    al_pwall_buf,
     al_scared_buf,
     al_pdeath_buf,
     al_attached_buf,
@@ -194,12 +195,13 @@ void gm_init_sounds(game gm){
 	snd_load_file("./snd/scared.ogg", gm->buf[al_scared_buf]);
 	snd_load_file("./snd/p_z.ogg", gm->buf[al_p_z_buf]);
 	snd_load_file("./snd/hdeath.ogg", gm->buf[al_hdeath_buf]);
+	snd_load_file("./snd/pwall.ogg", gm->buf[al_pwall_buf]);
 	gm->saved_src = s_init();
 
 	ALfloat	listenerOri[]={0.0,1.0,0.0, 0.0,0.0,1.0};
 	alListenerfv(AL_ORIENTATION,listenerOri);
 	alListenerf(AL_GAIN,12);
-	alListener3f(AL_POSITION, gm->hero.o.p.x, 0, gm->hero.o.p.y);
+	alListener3f(AL_POSITION, gm->hero.o.p.x, 20, gm->hero.o.p.y);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 }
 
@@ -305,8 +307,9 @@ void gm_update(game gm, int width, int height, double dt){
 	
 	/*Wall Colisions*/
 	for(i = 0; i < gm->person_num; i++){
-		if(bounce(&gm->person[i].o, gm->w, gm->h)){
+		if(bounce(&gm->person[i].o, gm->w, gm->h) && gm->person[i].state == PERSON){
 			gm->person[i].ready = 0;
+            s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o, 0);
 		}
 	}	
 	if(bounce(&gm->hero.o, gm->w, gm->h)){
@@ -316,7 +319,10 @@ void gm_update(game gm, int width, int height, double dt){
 	/*Line collisions*/
 	for(i =0; i < gm->person_num; i++){
 		for(k=0; k < gm->wall_num; k++){
-			line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->person[i].o, 0.2, 0.3);
+			if(line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->person[i].o, 0.2, 0.3) && gm->person[i].state == PERSON){
+                s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o, 0);
+                gm->person[i].ready = 0;
+            }
 		}
 	}
 
