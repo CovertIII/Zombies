@@ -285,7 +285,7 @@ void gm_update(game gm, int width, int height, double dt){
 		gm->person[i].timer -= dt;
 		if(gm->person[i].state == P_Z && gm->person[i].timer <= 0.0f){
 			gm->person[i].state = ZOMBIE;
-            s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->person[i].o, 1);
+            s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->person[i].o, 1, 1);
 			gm->person[i].o.v.x = rand()%50 - 25;
 			gm->person[i].o.v.y = rand()%50 - 25;
 		}
@@ -293,7 +293,7 @@ void gm_update(game gm, int width, int height, double dt){
 	gm->hero.timer -= dt;
 	if(gm->hero.state == P_Z && gm->hero.timer <= 0.0f){
 		gm->hero.state = ZOMBIE;
-        s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->hero.o, 1);
+        s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->hero.o, 0.1, 1);
 	}
 	
 	
@@ -305,22 +305,55 @@ void gm_update(game gm, int width, int height, double dt){
 	gm->hero.o.f.x=0;
 	gm->hero.o.f.y=0;
 	
+	/*Add forces*/
+
+	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
+	//gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y - 30;
+	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
+	
+	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
+	for(i = 0; i < gm->person_num; i++){
+			//gm->person[i].o.f.y += -30;
+		if(gm->person[i].state == SAFE ||gm->person[i].state == P_Z){
+			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
+			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+		}
+	}
+	
+	/*Spring force between hero and person*/
+	if(gm->hero.spring_state == ATTACHED){
+		float ks = 50, r = 5, kd=1;
+		i = gm->hero.person_id;
+		vector2 l = v2Sub(gm->hero.o.p, gm->person[i].o.p);
+		vector2 dl = v2Sub(gm->hero.o.v, gm->person[i].o.v);
+		
+		vector2 fa, fb;
+		fa = v2sMul(-ks*(v2Len(l)-r) - kd * v2Dot(dl, l)/v2Len(l) , v2Unit(l));
+		fb = v2sMul(-1,fa);
+    	
+		gm->hero.o.f = v2Add(gm->hero.o.f, fa);
+		gm->person[i].o.f = v2Add(gm->person[i].o.f, fb);
+		
+		gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
+		gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+	}
+
 	/*Wall Colisions*/
 	for(i = 0; i < gm->person_num; i++){
 		if(bounce(&gm->person[i].o, gm->w, gm->h) && gm->person[i].state == PERSON){
 			gm->person[i].ready = 0;
-            s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o, 0);
+            s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o,0.2, 0);
 		}
 	}	
 	if(bounce(&gm->hero.o, gm->w, gm->h)){
-        s_add_snd(gm->saved_src, gm->buf[al_wall_buf], &gm->hero.o, 0);
+        s_add_snd(gm->saved_src, gm->buf[al_wall_buf], &gm->hero.o, 0.2, 0);
     }
 
 	/*Line collisions*/
 	for(i =0; i < gm->person_num; i++){
 		for(k=0; k < gm->wall_num; k++){
 			if(line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->person[i].o, 0.2, 0.3) && gm->person[i].state == PERSON){
-                s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o, 0);
+                s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o,0.2, 0);
                 gm->person[i].ready = 0;
             }
 		}
@@ -329,7 +362,7 @@ void gm_update(game gm, int width, int height, double dt){
 	for(k=0; k < gm->wall_num; k++){
 		if(line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->hero.o, 0.2, 0.3))
         {
-			s_add_snd(gm->saved_src, gm->buf[al_wall_buf], &gm->hero.o, 0);
+			s_add_snd(gm->saved_src, gm->buf[al_wall_buf], &gm->hero.o,0.2, 0);
         }
 	}
 
@@ -369,7 +402,7 @@ void gm_update(game gm, int width, int height, double dt){
 			if(gm->hero.state == PERSON && gm->hero.spring_state == NOT_ATTACHED && gm->person[i].state == PERSON)
 			{
 			gm->hero.spring_state = ATTACHED;
-            s_add_snd(gm->saved_src, gm->buf[al_attached_buf], &gm->hero.o, 0);
+            s_add_snd(gm->saved_src, gm->buf[al_attached_buf], &gm->person[i].o,1, 0);
 			gm->hero.person_id = i;
 			gm->person[i].ready = 1;
 			}
@@ -377,12 +410,12 @@ void gm_update(game gm, int width, int height, double dt){
 				gm->hero.spring_state = NOT_ATTACHED;
 				gm->hero.timer = MAX_TIME;
 				gm->hero.state = P_Z;
-                s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o, 1);
+                s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
 			}
 			else if(gm->person[i].state == PERSON && gm->hero.state == ZOMBIE){
 				gm->person[i].timer = MAX_TIME;
 				gm->person[i].state = P_Z;
-                s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o, 1);
+                s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 1);
 			}
 		}
 		
@@ -398,7 +431,7 @@ void gm_update(game gm, int width, int height, double dt){
 		else if (safe_zone_test(gm->safe_zone, gm->person[i].o)){
 			gm->hero.spring_state = NOT_ATTACHED;
 			gm->person[i].state = SAFE;
-			s_add_snd(gm->saved_src, gm->buf[al_saved_buf], &gm->person[i].o, 1);
+			s_add_snd(gm->saved_src, gm->buf[al_saved_buf], &gm->person[i].o,1, 1);
 		}
 		gm->safe_zone.p = p;
 		
@@ -428,12 +461,12 @@ void gm_update(game gm, int width, int height, double dt){
 				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){					
 					gm->person[i].timer = MAX_TIME;
 					gm->person[i].state = P_Z;
-                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o, 1);
+                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 1);
 				}
 				if(gm->person[i].state == ZOMBIE && gm->person[k].state == PERSON){
 					gm->person[k].timer = MAX_TIME;
 					gm->person[k].state = P_Z;
-                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[k].o, 1);
+                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 1);
 				}
 				if((i == gm->hero.person_id &&
 					gm->person[i].state == P_Z &&
@@ -446,38 +479,6 @@ void gm_update(game gm, int width, int height, double dt){
 			}
 		}
 	}	
-
-	/*Add forces*/
-	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
-	//gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y - 30;
-	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
-	
-	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
-	for(i = 0; i < gm->person_num; i++){
-			//gm->person[i].o.f.y += -30;
-		if(gm->person[i].state == SAFE ||gm->person[i].state == P_Z){
-			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
-			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
-		}
-	}
-	
-	/*Spring force between hero and person*/
-	if(gm->hero.spring_state == ATTACHED){
-		float ks = 50, r = 5, kd=1;
-		i = gm->hero.person_id;
-		vector2 l = v2Sub(gm->hero.o.p, gm->person[i].o.p);
-		vector2 dl = v2Sub(gm->hero.o.v, gm->person[i].o.v);
-		
-		vector2 fa, fb;
-		fa = v2sMul(-ks*(v2Len(l)-r) - kd * v2Dot(dl, l)/v2Len(l) , v2Unit(l));
-		fb = v2sMul(-1,fa);
-    	
-		gm->hero.o.f = v2Add(gm->hero.o.f, fa);
-		gm->person[i].o.f = v2Add(gm->person[i].o.f, fb);
-		
-		gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
-		gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
-	}
 
 	/*Integrate*/
 	gm->hero.o.v.x += gm->hero.o.f.x/gm->hero.o.m*dt;

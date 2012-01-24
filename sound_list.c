@@ -9,7 +9,7 @@
 
 typedef struct s_node {
 	ALuint src;
-    int following;
+    int priority;
     object * o;
 	struct s_node * next;
 } s_node;
@@ -31,10 +31,10 @@ s_list s_init(void){
 }
 
 
-void s_add_snd(s_list sl, ALuint buf, object * o, int following){
+void s_add_snd(s_list sl, ALuint buf, object * o, double gain, int priority){
     //Checks to see if the object is already making a sound
     //If it is, it deletes the source and adds a new one
-    if(following == 1){
+    if(priority >= 1){
         int chk = 0;
         s_node * cycle;
         for(cycle = sl->head; cycle != NULL; cycle = cycle->next)
@@ -44,13 +44,19 @@ void s_add_snd(s_list sl, ALuint buf, object * o, int following){
                 break;
             }
         }
-        if(chk == 1 && cycle->following == 1){
+        if(chk == 1 && cycle->priority > priority){
             alDeleteSources(1, &cycle->src);
             alGenSources(1, &cycle->src);
             alSourcei(cycle->src, AL_BUFFER, buf);
             alSourcei(cycle->src, AL_REFERENCE_DISTANCE, 30);
             alSource3f(cycle->src, AL_POSITION, o->p.x, o->p.y, 0);
+            alSourcef (cycle->src, AL_GAIN,  gain );
             alSourcePlay(cycle->src);
+            cycle->priority = priority;
+            return;
+        }
+        else if(chk == 1 && cycle->priority <= priority)
+        {
             return;
         }
     }
@@ -60,11 +66,12 @@ void s_add_snd(s_list sl, ALuint buf, object * o, int following){
 	if(!new){return;}
     
     new->o = o;
-    o->snd = following;
-    new->following = following;
+    o->snd = priority;
+    new->priority = priority;
 	alGenSources(1, &new->src);
 	alSourcei(new->src, AL_BUFFER, buf);
 	alSource3f(new->src, AL_POSITION, o->p.x, o->p.y, 0);
+    alSourcef (new->src, AL_GAIN,  gain );
 	alSourcePlay(new->src);
 
 	new->next = NULL;
@@ -85,7 +92,7 @@ void s_update(s_list sl){
 	s_node * prev = NULL;
 	while(cycle != NULL){
 		int state;
-        if(cycle->following == 1){
+        if(cycle->priority > 0){
             alSource3f(cycle->src, AL_POSITION, cycle->o->p.x, cycle->o->p.y, 0);
             //alSource3f(cycle->src, AL_VELOCITY, cycle->o->v.x, cycle->o->v.y, 0);
         }

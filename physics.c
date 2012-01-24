@@ -34,13 +34,38 @@ int r_collision(object *ta, object *tb){
 }
 
 int bounce(object * obj, int x, int y){
+    vector2 p1 = {0,0};
+    vector2 p2 = {0,y};
+    vector2 p3 = {x,y};
+    vector2 p4 = {x,0};
+    int state = 0;
+    if(line_collision(p1 ,p2, obj, 0.2, 0.3)){
+        state = 1;
+    }
+    if(line_collision(p2 ,p3, obj, 0.2, 0.3)){
+        state = 1;
+    }
+    if(line_collision(p3 ,p4, obj, 0.2, 0.3)){
+        state = 1;
+    }
+    if(line_collision(p4 ,p1, obj, 0.2, 0.3)){
+        state = 1;
+    }
+    return state;
+    /*
 	int state = 0;
-	if(obj->p.x < obj->r){
+	if(obj->p.x < obj->r + 0.1 && obj->v.x > -1){
+        obj->v.x = 0;
+    }
+    else if(obj->p.x < obj->r){
 		obj->p.x = obj->r;
 		obj->v.x *= -1;
 		state = 1;
 	}
-	if(obj->p.x > x - obj->r){
+	if(obj->p.x > x - obj->r - 0.1 && obj->v.x < 1 ){
+        obj->v.x = 0;
+    }
+    else if(obj->p.x > x - obj->r){
 		obj->p.x = x - obj->r;
 		obj->v.x *= -1;
 		state = 1;
@@ -56,6 +81,7 @@ int bounce(object * obj, int x, int y){
 		state = 1;
 	}
 	return state;
+    */
 }
 
 int collision(object *ta, object *tb){
@@ -117,7 +143,7 @@ int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us){
 		vector2 fn = v2sMul(-v2Dot(c->f, n), n);
 		vector2 ft = v2Add(c->f, fn);
 		
-		if((v2Len(v2Sub(ct, pt4))<c->r+.3) && v2Dot(c->f, n) < 0){
+		if((v2Len(v2Sub(ct, pt4)) < c->r + 0.3) && v2Dot(c->f, n) < 0){
 			//Fricational Forces
 			if(v2Dot(pt4, c->v) < 0 && v2Len(c->v) > 1){
 				ft = v2Add(v2sMul(-v2Len(v2sMul(uk, fn)),v2Unit(vt)),ft);
@@ -137,7 +163,7 @@ int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us){
 		}
 		
 		//Contact Force
-		if((v2Len(v2Sub(ct, pt4))<c->r+.3) && (v2Len(vn) < 5) && v2Dot(c->f, n) < 0){	
+		if((v2Len(v2Sub(ct, pt4)) < c->r + 0.3) && (v2Len(vn) < 1) && v2Dot(c->f, n) < 0){	
 			c->f = ft;
 			c->v = vt;
             return 0;
@@ -145,16 +171,18 @@ int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us){
 		
 		
 		//Bounce
-		if(v2Len(v2Sub(ct, pt4))<c->r){
+		if(v2Len(v2Sub(ct, pt4)) < c->r){
 			c->p = v2Add(c->p, v2sMul(c->r - v2Len(v2Sub(ct, pt4)), v2Unit(n)));
 			vector2 vnf = v2sMul(-1, vn); 
 			c->v = v2Add(vnf, vt);
 			return 1;
 		}
 	}
+
 	if(point_collision(pt1, c) || point_collision(pt2, c)){
 		return 1;
 	}
+
 	return 0;
 }
 

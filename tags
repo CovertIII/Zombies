@@ -98,6 +98,7 @@ s_node	sound_list.c	/^} s_node;$/
 s_type	sound_list.c	/^} s_type;$/
 s_update	sound_list.c	/^void s_update(s_list sl){$/
 safe_zone_test	physics.c	/^int safe_zone_test(object ta, object tb){$/
+save_lvl_stats	main.c	/^void *save_lvl_stats(void *threadarg)$/
 sf_add_snd	sound_list_follow.c	/^void sf_add_snd(sf_list sl, object * o){$/
 sf_free	sound_list_follow.c	/^void sf_free(sf_list sl){$/
 sf_init	sound_list_follow.c	/^sf_list sf_init(ALuint buffer){$/
@@ -108,6 +109,7 @@ showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
 stats_list_prep	data_interface.c	/^void stats_list_prep(data_record db){$/
 stats_render	data_interface.c	/^void stats_render(data_record db, int width, int h/
+thread_dat	main.c	/^struct thread_data{$/
 user_list	data_interface.c	/^} user_list;$/
 user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/
 user_skey_down	data_interface.c	/^void user_skey_down(data_record db, int key){$/

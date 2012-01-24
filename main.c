@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -78,6 +79,27 @@ void processNormalKeys(unsigned char key);
 void releaseNormalKeys(unsigned char key);
 void pressKey(int key);
 void releaseKey(int key);
+
+/*Put the recording of the stats on a different thread
+ * so there is not a glitch in the game
+ */
+struct thread_data{
+    data_record stats;
+    int gm_lvl;
+    double tmp_time;
+    int ppl;
+};
+
+struct thread_data threadData;
+
+void *save_lvl_stats(void *threadarg)
+{
+    struct thread_data *my_data;
+    my_data = (struct thread_data *) threadarg;
+    game_record_lvl_stats(my_data->stats, my_data->gm_lvl, my_data->tmp_time, my_data->ppl);
+}
+/* done with threading stuff */
+
 
 static void initAttributes ()
 {
@@ -227,7 +249,7 @@ void processNormalKeys(unsigned char key) {
             game_start_session(stats);
             gm_timer = 0.0f;
             game_mode = PREGAME;
-            s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 0);
+            s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
         }
     }
     else if(game_mode == GAMEOVER || game_mode == WIN){ 
@@ -296,7 +318,7 @@ void numbers(void)
             cnt_down += h;
             if(cnt_down > 1){
                 cnt_down = 0;
-                s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 0);
+                s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
             }
 			if(gm_timer >= 4){
 				gm_timer = 0;
@@ -308,11 +330,23 @@ void numbers(void)
 			
 			int state = gm_progress(gm);
             if(state > 0){
-                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj, 0);
+                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj,1, 0);
                 int ppl;
                 double tmp_time;
                 gm_stats(gm, &tmp_time, &ppl);
-                game_record_lvl_stats(stats, gm_lvl, tmp_time, ppl);
+
+                threadData.stats = stats;
+                threadData.gm_lvl = gm_lvl;
+                threadData.tmp_time = tmp_time;
+                threadData.ppl = ppl;
+                pthread_t thread;
+
+                int rc = pthread_create(&thread, NULL, save_lvl_stats, (void *) &threadData);
+                if (rc){
+                    printf("ERROR; return code from pthread_create() is %d\n", rc);
+                }
+                //game_record_lvl_stats(stats, gm_lvl, tmp_time, ppl);
+
 				gm_timer = 0;
 				game_mode = POSTGAME;
 				gm_lvl++;	
@@ -330,7 +364,7 @@ void numbers(void)
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
                 if(lives < 0 ){
                     game_mode = GAMEOVER;
-                    s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj, 0);
+                    s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,1, 0);
                     game_finish_session(stats, total_deaths);
                 }else
                 {
@@ -352,7 +386,7 @@ void numbers(void)
 				sprintf(level, "./lvl/lvl%d.txt", gm_lvl);
 				if(gm_load_level(gm, level) == 0){
                     game_mode = WIN;
-                    s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 0);
+                    s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
                     game_finish_session(stats, total_deaths);
                 }
 				gm_update(gm,gScreen->w, gScreen->h, h);
