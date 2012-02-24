@@ -15,6 +15,7 @@ int gm_progress(game gm);
 
 void gm_free(game gm);
 
+void gm_mouse(game gm, int x, int y);
 
 void gm_skey_down(game gm, int key);
 

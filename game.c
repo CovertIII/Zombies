@@ -71,11 +71,15 @@ typedef struct {
 
 typedef struct gametype {
 	vector2 ak;  /*arrow key presses*/
+	vector2 ms;  /*mouse location*/
 	vector2 vmin; /*sceen size */
 	vector2 vmax; /*sceen size */
 	double viewratio;
 	int zoom;
 	
+    int screenx;
+    int screeny;
+
 	double timer;
 	double total_time;
 
@@ -213,6 +217,8 @@ void gm_set_view(int width, int height, game gm){
 	gm->vmin.y = gm->hero.o.p.y - w.y/2.0f;
 	gm->vmax.x = gm->hero.o.p.x + w.x/2.0f;
 	gm->vmax.y = gm->hero.o.p.y + w.y/2.0f;
+    gm->screenx = width;
+    gm->screeny = height;
 	
 }
 
@@ -307,9 +313,18 @@ void gm_update(game gm, int width, int height, double dt){
 	
 	/*Add forces*/
 
-	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x;
+
+    double msd = v2Len(v2Sub(gm->hero.o.p, gm->ms));
+    vector2 msu = v2Unit(v2Sub(gm->hero.o.p, gm->ms));
+
+    if(msd < gm->hero.o.r){msd = 0;}
+
+    vector2 msf = v2sMul(-5*msd, msu);
+
+
+	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x + msf.x;
 	//gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y - 30;
-	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y;
+	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y + msf.y;
 	
 	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
 	for(i = 0; i < gm->person_num; i++){
@@ -511,6 +526,14 @@ void gm_update(game gm, int width, int height, double dt){
     s_update(gm->saved_src);
 }
 
+void gm_mouse(game gm, int x, int y){
+	double vdiffy = gm->vmax.y - gm->vmin.y;
+	double vdiffx = gm->vmax.x - gm->vmin.x;
+    
+    gm->ms.x = vdiffx / (double)gm->screenx * x + gm->vmin.x;
+    gm->ms.y = vdiffy / (double)gm->screeny * y + gm->vmin.y;
+}
+
 void gm_render(game gm){
     gm_update_view(gm);
 	int i;
@@ -531,6 +554,22 @@ void gm_render(game gm){
 	glPushMatrix();
 	glTranslatef(gm->safe_zone.p.x, gm->safe_zone.p.y, 0);
 	glScalef(gm->safe_zone.r, gm->safe_zone.r,0);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(-1.0, -1.0, 0.0);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(-1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(1.0, -1.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(gm->ms.x, gm->ms.y, 0);
+	glScalef(1, 1,0);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0, 0.0);
 	glVertex3f(-1.0, -1.0, 0.0);

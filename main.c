@@ -561,6 +561,11 @@ static void mainLoop ()
 	
 		while ( SDL_PollEvent (&event) ) {
 			switch (event.type) {
+				case SDL_MOUSEMOTION:
+                    gm_mouse(gm, event.button.x, windowHeight - event.button.y);
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+                    gm_mouse(gm, event.button.x, windowHeight - event.button.y);
 				case SDL_KEYDOWN:
                     processNormalKeys(event.key.keysym.sym);
                     pressKey(event.key.keysym.sym);

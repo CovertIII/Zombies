@@ -175,6 +175,7 @@ int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us){
 			c->p = v2Add(c->p, v2sMul(c->r - v2Len(v2Sub(ct, pt4)), v2Unit(n)));
 			vector2 vnf = v2sMul(-1, vn); 
 			c->v = v2Add(vnf, vt);
+			c->f = ft;
 			return 1;
 		}
 	}

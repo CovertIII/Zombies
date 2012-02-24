@@ -31,6 +31,7 @@ gm_init_sounds	game.c	/^void gm_init_sounds(game gm){$/
 gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
 gm_load_level	game.c	/^int gm_load_level(game gm, char * lvl){$/
 gm_message_render	game.c	/^void gm_message_render(game gm, int width, int hei/
+gm_mouse	game.c	/^void gm_mouse(game gm, int x, int y){$/
 gm_nkey_down	game.c	/^void gm_nkey_down(game gm, unsigned char key){$/
 gm_nkey_up	game.c	/^void gm_nkey_up(game gm, unsigned char key){$/
 gm_progress	game.c	/^int gm_progress(game gm){$/
