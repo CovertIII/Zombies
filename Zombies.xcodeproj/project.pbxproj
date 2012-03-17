@@ -1,0 +1,460 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		002F39FA09D0881F00EBEB88 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F39F909D0881F00EBEB88 /* SDL.framework */; };
+		002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 002F39F909D0881F00EBEB88 /* SDL.framework */; };
+		002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 002F3A2C09D0888800EBEB88 /* SDLMain.m */; };
+		002F3A3F09D088BA00EBEB88 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 002F3A3E09D088BA00EBEB88 /* main.m */; };
+		002F3C0109D093BD00EBEB88 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F3C0009D093BD00EBEB88 /* OpenGL.framework */; };
+		002F3C6109D0951E00EBEB88 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F3C6009D0951E00EBEB88 /* GLUT.framework */; };
+		7A0D1212150FE19D0052F781 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D1211150FE19D0052F781 /* game.c */; };
+		7A266D1B1470A5C2000B3C77 /* freetype_imp.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A266D191470A5C2000B3C77 /* freetype_imp.c */; };
+		7A31986414DE1E460059FF6A /* stream_sound.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A31986214DE1E460059FF6A /* stream_sound.c */; };
+		7A5AAB4B14533CB100BE4B3C /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */; };
+		7A5AAB4C14533CB100BE4B3C /* libpng15.15.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */; };
+		7A5AAB4D14533CB100BE4B3C /* libvorbis.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */; };
+		7A5AAB4E14533CB100BE4B3C /* libvorbisfile.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */; };
+		7A5AAC1814533CE700BE4B3C /* libogg.0.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */; };
+		7A5AAC1914533CE700BE4B3C /* libpng15.15.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */; };
+		7A5AAC1A14533CE700BE4B3C /* libvorbis.0.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */; };
+		7A5AAC1B14533CE700BE4B3C /* libvorbisfile.3.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */; };
+		7A5AAC241453437C00BE4B3C /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAC231453437C00BE4B3C /* libz.1.dylib */; };
+		7A5AAC251453438300BE4B3C /* libz.1.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAC231453437C00BE4B3C /* libz.1.dylib */; };
+		7AA1AE3B14191CA10016FDA7 /* physics.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1AE3914191CA10016FDA7 /* physics.c */; };
+		7AA33AF614146C1300C09ED8 /* Zombie.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7AA33AF514146C1300C09ED8 /* Zombie.icns */; };
+		7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */; };
+		7AA9A38C14811C0B0075F1FB /* libfreetype.6.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */; };
+		7AB7CE8814B1399800C200EB /* data_interface.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AB7CE8614B1399800C200EB /* data_interface.c */; };
+		7AC1F36B1412FF8E0086E03C /* load_png.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AC1F3621412FF8E0086E03C /* load_png.c */; };
+		7AC1F36C1412FF8E0086E03C /* load_sound.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AC1F3641412FF8E0086E03C /* load_sound.c */; };
+		7AC1F36D1412FF8E0086E03C /* sound_list.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AC1F3661412FF8E0086E03C /* sound_list.c */; };
+		7AC1F36E1412FF8E0086E03C /* vector2.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AC1F3681412FF8E0086E03C /* vector2.c */; };
+		7AC1F3A71413002A0086E03C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC1F3A61413002A0086E03C /* OpenAL.framework */; };
+		7ADD8752150F86CE002E49AB /* snd in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD873B150F86CE002E49AB /* snd */; };
+		7ADD877B150F86EF002E49AB /* imgs in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD8753150F86EF002E49AB /* imgs */; };
+		7ADD877C150F86EF002E49AB /* lvl in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD8769150F86EF002E49AB /* lvl */; };
+		7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */; };
+		7AF6D09214B7D909002D630A /* libsqlite3.0.8.6.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7AA9A38C14811C0B0075F1FB /* libfreetype.6.dylib in Copy Frameworks into .app bundle */,
+				7A5AAC251453438300BE4B3C /* libz.1.dylib in Copy Frameworks into .app bundle */,
+				7A5AAC1814533CE700BE4B3C /* libogg.0.dylib in Copy Frameworks into .app bundle */,
+				7AF6D09214B7D909002D630A /* libsqlite3.0.8.6.dylib in Copy Frameworks into .app bundle */,
+				7A5AAC1914533CE700BE4B3C /* libpng15.15.dylib in Copy Frameworks into .app bundle */,
+				7A5AAC1A14533CE700BE4B3C /* libvorbis.0.dylib in Copy Frameworks into .app bundle */,
+				7A5AAC1B14533CE700BE4B3C /* libvorbisfile.3.dylib in Copy Frameworks into .app bundle */,
+				002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */,
+			);
+			name = "Copy Frameworks into .app bundle";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		002F39F909D0881F00EBEB88 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
+		002F3A2B09D0888800EBEB88 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = SOURCE_ROOT; };
+		002F3A2C09D0888800EBEB88 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = SOURCE_ROOT; };
+		002F3A3E09D088BA00EBEB88 /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		002F3C0009D093BD00EBEB88 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		002F3C6009D0951E00EBEB88 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../../../../../../System/Library/Frameworks/GLUT.framework; sourceTree = SOURCE_ROOT; };
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* Zombies_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zombies_Prefix.pch; sourceTree = "<group>"; };
+		7A0D1211150FE19D0052F781 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
+		7A266D191470A5C2000B3C77 /* freetype_imp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = freetype_imp.c; sourceTree = "<group>"; };
+		7A266D1A1470A5C2000B3C77 /* freetype_imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = freetype_imp.h; sourceTree = "<group>"; };
+		7A31986214DE1E460059FF6A /* stream_sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream_sound.c; sourceTree = "<group>"; };
+		7A31986314DE1E460059FF6A /* stream_sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream_sound.h; sourceTree = "<group>"; };
+		7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = libs/libogg.0.dylib; sourceTree = "<group>"; };
+		7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng15.15.dylib; path = libs/libpng15.15.dylib; sourceTree = "<group>"; };
+		7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = libs/libvorbis.0.dylib; sourceTree = "<group>"; };
+		7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = libs/libvorbisfile.3.dylib; sourceTree = "<group>"; };
+		7A5AAC231453437C00BE4B3C /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = libs/libz.1.dylib; sourceTree = "<group>"; };
+		7AA1AE3914191CA10016FDA7 /* physics.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = physics.c; sourceTree = "<group>"; };
+		7AA1AE3A14191CA10016FDA7 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
+		7AA33AF514146C1300C09ED8 /* Zombie.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Zombie.icns; sourceTree = "<group>"; };
+		7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = libs/libfreetype.6.dylib; sourceTree = "<group>"; };
+		7AB7CE8614B1399800C200EB /* data_interface.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = data_interface.c; sourceTree = "<group>"; };
+		7AB7CE8714B1399800C200EB /* data_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_interface.h; sourceTree = "<group>"; };
+		7AC1F3611412FF8E0086E03C /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
+		7AC1F3621412FF8E0086E03C /* load_png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = load_png.c; sourceTree = "<group>"; };
+		7AC1F3631412FF8E0086E03C /* load_png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = load_png.h; sourceTree = "<group>"; };
+		7AC1F3641412FF8E0086E03C /* load_sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = load_sound.c; sourceTree = "<group>"; };
+		7AC1F3651412FF8E0086E03C /* load_sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = load_sound.h; sourceTree = "<group>"; };
+		7AC1F3661412FF8E0086E03C /* sound_list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sound_list.c; sourceTree = "<group>"; };
+		7AC1F3671412FF8E0086E03C /* sound_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sound_list.h; sourceTree = "<group>"; };
+		7AC1F3681412FF8E0086E03C /* vector2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vector2.c; sourceTree = "<group>"; };
+		7AC1F3691412FF8E0086E03C /* vector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector2.h; sourceTree = "<group>"; };
+		7AC1F3A61413002A0086E03C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		7ADD873B150F86CE002E49AB /* snd */ = {isa = PBXFileReference; lastKnownFileType = folder; path = snd; sourceTree = "<group>"; };
+		7ADD8753150F86EF002E49AB /* imgs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = imgs; sourceTree = "<group>"; };
+		7ADD8769150F86EF002E49AB /* lvl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lvl; sourceTree = "<group>"; };
+		7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.8.6.dylib; path = libs/libsqlite3.0.8.6.dylib; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Zombies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zombies.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002F39FA09D0881F00EBEB88 /* SDL.framework in Frameworks */,
+				002F3C6109D0951E00EBEB88 /* GLUT.framework in Frameworks */,
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				002F3C0109D093BD00EBEB88 /* OpenGL.framework in Frameworks */,
+				7AC1F3A71413002A0086E03C /* OpenAL.framework in Frameworks */,
+				7A5AAB4B14533CB100BE4B3C /* libogg.0.dylib in Frameworks */,
+				7A5AAB4C14533CB100BE4B3C /* libpng15.15.dylib in Frameworks */,
+				7A5AAB4D14533CB100BE4B3C /* libvorbis.0.dylib in Frameworks */,
+				7A5AAB4E14533CB100BE4B3C /* libvorbisfile.3.dylib in Frameworks */,
+				7A5AAC241453437C00BE4B3C /* libz.1.dylib in Frameworks */,
+				7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */,
+				7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				002F3A2B09D0888800EBEB88 /* SDLMain.h */,
+				002F3A2C09D0888800EBEB88 /* SDLMain.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				002F39F909D0881F00EBEB88 /* SDL.framework */,
+				002F3C6009D0951E00EBEB88 /* GLUT.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				002F3C0009D093BD00EBEB88 /* OpenGL.framework */,
+				7AC1F3A61413002A0086E03C /* OpenAL.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */,
+				7A5AAC231453437C00BE4B3C /* libz.1.dylib */,
+				7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */,
+				7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */,
+				7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */,
+				7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */,
+				7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* Zombies.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* Zombies */ = {
+			isa = PBXGroup;
+			children = (
+				7AA33AF514146C1300C09ED8 /* Zombie.icns */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = Zombies;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7AB7CE8614B1399800C200EB /* data_interface.c */,
+				7AB7CE8714B1399800C200EB /* data_interface.h */,
+				7A266D191470A5C2000B3C77 /* freetype_imp.c */,
+				7A266D1A1470A5C2000B3C77 /* freetype_imp.h */,
+				7A0D1211150FE19D0052F781 /* game.c */,
+				7AC1F3611412FF8E0086E03C /* game.h */,
+				7AC1F3621412FF8E0086E03C /* load_png.c */,
+				7A31986214DE1E460059FF6A /* stream_sound.c */,
+				7A31986314DE1E460059FF6A /* stream_sound.h */,
+				7AC1F3631412FF8E0086E03C /* load_png.h */,
+				7AC1F3641412FF8E0086E03C /* load_sound.c */,
+				7AC1F3651412FF8E0086E03C /* load_sound.h */,
+				7AA1AE3914191CA10016FDA7 /* physics.c */,
+				7AA1AE3A14191CA10016FDA7 /* physics.h */,
+				7AC1F3661412FF8E0086E03C /* sound_list.c */,
+				7AC1F3671412FF8E0086E03C /* sound_list.h */,
+				7AC1F3681412FF8E0086E03C /* vector2.c */,
+				7AC1F3691412FF8E0086E03C /* vector2.h */,
+				32CA4F630368D1EE00C91783 /* Zombies_Prefix.pch */,
+				002F3A3E09D088BA00EBEB88 /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7ADD873B150F86CE002E49AB /* snd */,
+				7ADD8753150F86EF002E49AB /* imgs */,
+				7ADD8769150F86EF002E49AB /* lvl */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* Zombies */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Zombies" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Zombies;
+			productInstallPath = "$(HOME)/Applications";
+			productName = Zombies;
+			productReference = 8D1107320486CEB800E47090 /* Zombies.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Zombies" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Zombies */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* Zombies */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				7AA33AF614146C1300C09ED8 /* Zombie.icns in Resources */,
+				7ADD8752150F86CE002E49AB /* snd in Resources */,
+				7ADD877B150F86EF002E49AB /* imgs in Resources */,
+				7ADD877C150F86EF002E49AB /* lvl in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */,
+				002F3A3F09D088BA00EBEB88 /* main.m in Sources */,
+				7AC1F36B1412FF8E0086E03C /* load_png.c in Sources */,
+				7AC1F36C1412FF8E0086E03C /* load_sound.c in Sources */,
+				7AC1F36D1412FF8E0086E03C /* sound_list.c in Sources */,
+				7AC1F36E1412FF8E0086E03C /* vector2.c in Sources */,
+				7AA1AE3B14191CA10016FDA7 /* physics.c in Sources */,
+				7A266D1B1470A5C2000B3C77 /* freetype_imp.c in Sources */,
+				7AB7CE8814B1399800C200EB /* data_interface.c in Sources */,
+				7A31986414DE1E460059FF6A /* stream_sound.c in Sources */,
+				7A0D1212150FE19D0052F781 /* game.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Zombies_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(CONTENTS_FOLDER_PATH)/**",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/libs\"",
+				);
+				PRODUCT_NAME = Zombies;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Zombies_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/libs\"",
+				);
+				PRODUCT_NAME = Zombies;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks",
+					/Library/Frameworks,
+					"$(FRAMEWORK_SEARCH_PATHS)",
+				);
+				GCC_VERSION = 4.0;
+				"GCC_VERSION[arch=x86_64]" = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
+					/Library/Frameworks/SDL.framework/Headers,
+					"$(HEADER_SEARCH_PATHS)",
+				);
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+				"SDKROOT[arch=x86_64]" = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				USER_HEADER_SEARCH_PATHS = "/usr/local/include//**";
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks",
+					/Library/Frameworks,
+					"$(FRAMEWORK_SEARCH_PATHS)",
+				);
+				GCC_VERSION = 4.0;
+				"GCC_VERSION[arch=x86_64]" = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
+					/Library/Frameworks/SDL.framework/Headers,
+					"$(HEADER_SEARCH_PATHS)",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+				"SDKROOT[arch=x86_64]" = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				USER_HEADER_SEARCH_PATHS = "/usr/local/include//**";
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Zombies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Zombies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

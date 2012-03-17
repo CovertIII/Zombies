@@ -1,12 +1,12 @@
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include <sqlite3.h>
 #include <GLUT/GLUT.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include <string.h>
-#include <math.h>
-#include <time.h>
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
@@ -49,6 +49,9 @@ typedef struct game_list{
 
 typedef struct data_record_type{
     char * file_name;
+		
+	char * res_path;
+	char * res_buf;		
     
     int disp;
     int h_cursor;
@@ -75,7 +78,7 @@ void prepare_user_list(data_record db);
 void prepare_game_list(data_record db);
 void prepare_level_scores(data_record db);
 
-data_record init_data_record(char * file_name){
+data_record init_data_record(char * file_name, char * resource_path){
     data_record_type * db;
     db = (data_record)malloc(sizeof(data_record_type));
     if(!db){return NULL;}
@@ -84,16 +87,24 @@ data_record init_data_record(char * file_name){
     db->disp = 0;
     db->tmp_name[0] = '|';
     db->tmp_name[1] = '\0';
-    db->v_cursor = 0;
+    db->v_cursor = -1;
     db->user_l = NULL;
     db->level_l = NULL;
     db->game_l = NULL;
     db->show_level = 1;
 
-    db->font = rat_init();
-    rat_load_font(db->font, "/Library/Fonts/Impact.ttf", 28);
+    db->res_path = (char*)malloc(strlen(resource_path)*sizeof(char)+sizeof(char)*50);
+    db->res_buf  = (char*)malloc(strlen(resource_path)*sizeof(char)+sizeof(char)*50);
+    strcpy(db->res_path, resource_path);
+	printf("data_interfae.c - path mem: %ld\n", strlen(resource_path)*sizeof(char)+sizeof(char)*50);
 
-    db->file_name = (char*)malloc(sizeof(file_name) + 1); 
+	
+    db->font = rat_init();
+    strcpy(db->res_buf, db->res_path);
+    strcat(db->res_buf, "/imgs/FreeUniversal.ttf");
+    rat_load_font(db->font, db->res_buf, 28);
+
+    db->file_name = (char*)malloc(sizeof(file_name) + 2); 
     strcpy(db->file_name, file_name);
 
     ck_create_tables(db);
@@ -111,6 +122,7 @@ int ck_create_tables(data_record db){
             "SELECT COUNT(name) as cnt FROM sqlite_master;"
            );
     int result; 
+    printf("Opening database file %s\n", db->file_name);
     result = sqlite3_open(db->file_name, &sdb);
     printf("Open result: %d; ", result);
     if(result != 0 ){return 1;}
@@ -156,17 +168,17 @@ int ck_create_tables(data_record db){
     printf("Step result: %d\n", result);
     sqlite3_finalize(sql);
 
-    sprintf(stmt, "CREATE VIEW game_view AS SELECT user.name,"
-	"game_session.date_time_start,"
-	"datetime(game_session.date_time_start, 'unixepoch', 'localtime') as time,"
-        "MAX(level_stats.level_id) AS hlvl,"
+    sprintf(stmt, "CREATE VIEW game_view AS SELECT user.name, "
+	"game_session.date_time_start, "
+	"datetime(game_session.date_time_start, 'unixepoch', 'localtime') as time, "
+        "MAX(level_stats.level_id) AS hlvl, "
 	"game_session.date_time_end - game_session.date_time_start AS elapsed, "
-        "SUM(level_stats.people_saved) as people_saved,"
-	"game_session.deaths"
-    "FROM game_session"
-    "JOIN user ON (game_session.user_id = user.id)"
-    "JOIN level_stats ON (level_stats.game_session_id = game_session.id)"
-    "GROUP BY level_stats.game_session_id"
+        "SUM(level_stats.people_saved) as people_saved, "
+	"game_session.deaths "
+    "FROM game_session "
+    "JOIN user ON (game_session.user_id = user.id) "
+    "JOIN level_stats ON (level_stats.game_session_id = game_session.id) "
+    "GROUP BY level_stats.game_session_id "
     "ORDER BY hlvl DESC, elapsed;");
     printf("%s\n", stmt);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
@@ -200,7 +212,7 @@ void stats_list_prep(data_record db){
     db->disp = 0;
     db->tmp_name[0] = '|';
     db->tmp_name[1] = '\0';
-    db->v_cursor = 0;
+    db->v_cursor = -1;
     db->show_level = 1;
 
     prepare_user_list(db);
@@ -225,7 +237,7 @@ void prepare_user_list(data_record db){
     sqlite3 * sdb;
     sqlite3_stmt * sql;
     const char * extra;
-    char stmt[] = "SELECT id, name FROM user ORDER BY name;";
+    char stmt[] = "SELECT id, name FROM user ORDER BY name COLLATE NOCASE DESC;";
     int result; 
     result = sqlite3_open(db->file_name, &sdb);
     printf("Open result: %d; ", result);
@@ -262,16 +274,21 @@ void render_user_list(data_record db, int width, int height){
             db->user_id = node->id;
         }
         else{
-            c[0] = .1;
-            c[1] = .1;
-            c[2] = .1;
-            c[3] = .1;
+            c[0] = 0;
+            c[1] = 0;
+            c[2] = 0;
+            c[3] = 0;
         }
         rat_set_text_color(db->font, c);
         float len;
-        sprintf(buf, "%s", node->name);	
-        len = rat_font_text_length(db->font, buf);
-        rat_font_render_text(db->font,width/2 - 50,height-40-30*i, buf);
+				if(i < 10){
+					rat_font_render_text(db->font,width/2 - 250,height-180-30*i, node->name);	
+				}
+				else{
+					rat_font_render_text(db->font,width/2  + 150,height-180-30*(i-10), node->name);
+				}
+        
+
         i++;
     }
 
@@ -287,15 +304,30 @@ void render_user_list(data_record db, int width, int height){
     }
     else{
         db->tmp_name[db->h_cursor] = ' ';
-        c[0] = .1;
-        c[1] = .1;
-        c[2] = .1;
-        c[3] = .1;
+        c[0] = 0;
+        c[1] = 0;
+        c[2] = 0;
+        c[3] = 0;
     }
     rat_set_text_color(db->font, c);
-    float len;
-    len = rat_font_text_length(db->font, db->tmp_name);
-    rat_font_render_text(db->font,width/2 - 50,height-4, db->tmp_name);
+ 		float len;
+		len = rat_font_text_length(db->font, db->tmp_name);
+    rat_font_render_text(db->font,(width - len)/2,height-140, db->tmp_name);
+
+		c[0] = 0;
+    c[1] = 0;
+    c[2] = 0;
+    c[3] = 0;
+		rat_set_text_color(db->font, c);
+		
+		if(db->user_l == NULL){
+			sprintf(buf, "Type in your name");	
+		}
+		else{
+			sprintf(buf, "Type in your name or select it below");	
+		}
+		len = rat_font_text_length(db->font, buf);
+		rat_font_render_text(db->font,(width - len)/2 ,height-104, buf);
 }
 
 
@@ -330,7 +362,6 @@ void prepare_game_list(data_record db){
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
     printf("prepare result: %d\n", result);
     int max = 0;
-    char buf[100];
     while((result = sqlite3_step(sql)) == SQLITE_ROW){
         node = (game_list*)malloc(sizeof(game_list));
         if(db->game_l == NULL){
@@ -353,13 +384,14 @@ void prepare_game_list(data_record db){
         strcpy(node->name, sqlite3_column_text(sql, 1));
 
         node->date = sqlite3_column_int(sql, 2);
-
+/*
+		char buf[200];
         time_t stamp = (time_t)node->date;
-        void * tm = gmtime(&stamp);
-        strftime(buf, 100, "%b %d, %Y", tm);
+		struct tm * tmptr = gmtime(&stamp);
+        strftime(buf, 200, "%b %d, %Y", tmptr);
         node->date_string = (char*)malloc(sizeof(buf)+1);
         strcpy(node->date_string, buf);
-        
+  */      
         node->max_level = sqlite3_column_int(sql, 3);
         node->elapsed_time = sqlite3_column_int(sql, 4);
         node->people_saved = sqlite3_column_int(sql, 5);
@@ -415,7 +447,7 @@ void render_game_list(data_record db, int width, int height){
         float len;
         
         //sprintf(buf, "%ld", node->date);
-        rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
+//        rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
 
         sprintf(buf, "%s", node->name);
         len = rat_font_text_length(db->font, buf);
@@ -443,7 +475,7 @@ void render_game_list(data_record db, int width, int height){
     }
 }
 
-void stats_render(data_record db, int width, int height){
+int stats_render(data_record db, int width, int height){
 
 	glPushMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -459,12 +491,15 @@ void stats_render(data_record db, int width, int height){
     switch(db->disp){
         case 0:
             render_user_list(db, width, height);
+						return 0;
             break;
         case 1:
             render_game_list(db, width, height);
+						return 1;
             break;
         case 2:
             render_level_scores(db, width, height);
+						return 2;
             break;
     }
 }
@@ -653,7 +688,7 @@ void prepare_level_scores(data_record db){
     printf("Open result: %d; ", result);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
     printf("prepare result: %d\n", result);
-    char buf[100];
+    
     while((result = sqlite3_step(sql)) == SQLITE_ROW){
         node = (level_list*)malloc(sizeof(level_list));
         if(db->level_l == NULL){
@@ -673,13 +708,14 @@ void prepare_level_scores(data_record db){
         //Fill up the structure with data
         node->name = (char*)malloc(sizeof(sqlite3_column_text(sql, 0)));
         strcpy(node->name, sqlite3_column_text(sql, 0));
-
+/*
         time_t stamp = sqlite3_column_int(sql, 5);
-        void * tm = gmtime(&stamp);
-        strftime(buf, 100, "%b %d, %Y", tm);
-        node->date_string = (char*)malloc(sizeof(buf)+1);
-        strcpy(node->date_string, buf);
-
+        const struct tm * timeptr = gmtime(&stamp);
+		char nbuf[100];
+        strftime(nbuf, 100, "%b %d, %Y", timeptr);
+        node->date_string = (char*)malloc(sizeof(nbuf)+1);
+        strcpy(node->date_string, nbuf);
+*/
         node->level_id = sqlite3_column_int(sql, 1);
         node->time = sqlite3_column_double(sql, 2);
         node->num_saved = sqlite3_column_int(sql, 3);
@@ -737,7 +773,7 @@ void render_level_scores(data_record db, int width, int height)
         if(node->level_id == db->show_level){
             float len;
 
-            rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
+//            rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
 
             sprintf(buf, "%s", node->name);
             len = rat_font_text_length(db->font, buf);

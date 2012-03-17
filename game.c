@@ -40,12 +40,15 @@
 #define MAX_TIME 3
 
 enum{
-    al_saved_buf,
+    al_saved1_buf,
+	al_saved2_buf,
     al_wall_buf,
     al_pwall_buf,
     al_scared_buf,
     al_pdeath_buf,
-    al_attached_buf,
+    al_attached1_buf,
+	al_attached2_buf,
+	al_attached3_buf,
     al_hdeath_buf,
     al_p_z_buf,
     al_buf_num
@@ -70,16 +73,21 @@ typedef struct {
 } _hero;
 
 typedef struct gametype {
+	char * res_path;
+	char * res_buf;
+	
+    vector2 ms;  /*mouse location*/
+	int m;		 /*Whether to use mouse or not */
 	vector2 ak;  /*arrow key presses*/
-	vector2 ms;  /*mouse location*/
+	
 	vector2 vmin; /*sceen size */
 	vector2 vmax; /*sceen size */
+	int screenx;
+    int screeny;
 	double viewratio;
 	int zoom;
 	
-    int screenx;
-    int screeny;
-
+	
 	double timer;
 	double total_time;
 
@@ -89,6 +97,8 @@ typedef struct gametype {
 	ppl person[100]; //Zombies and people array
 	int person_num; //How many there are
 	_hero hero;
+	int ppl_chain[100];
+	int chain_num;
 	object safe_zone;
 	int save_count;  //How many people you have to save to win the level
 	line walls[100];
@@ -121,91 +131,153 @@ typedef struct gametype {
 } gametype;
 
 int load_level_file(game gm, char * file);
+void chain_remove(game gm, int index);
+void chain_ready_zero(game gm);
+void chain_cut(game gm, int index);
 
-game gm_init(void){
-	gametype * gm;
-	gm = (game)malloc(sizeof(gametype));
-	if(!gm) {return NULL;}
+game gm_init(char * res_path){
+  gametype * gm;
+  gm = (game)malloc(sizeof(gametype));
+  if(!gm) {return NULL;}
 
-    gm->font = rat_init();
-    rat_load_font(gm->font, "/Library/Fonts/Impact.ttf", 28);
+  gm->res_path = (char*)malloc(strlen(res_path)*sizeof(char)+sizeof(char)*50);
+  gm->res_buf  = (char*)malloc(strlen(res_path)*sizeof(char)+sizeof(char)*50);
+  strcpy(gm->res_path, res_path);
+  printf("game.c - path mem: %ld\n", strlen(res_path)*sizeof(char)+sizeof(char)*50);
 	
-	gm->viewratio = VIEWRATIO;
-	gm->zoom = 0;
-	gm->timer = 0;
-    gm->c=0;
+  gm->font = rat_init();
+  strcpy(gm->res_buf, gm->res_path);
+  strcat(gm->res_buf, "/imgs/FreeUniversal.ttf");
+  rat_load_font(gm->font, gm->res_buf, 28);
+	
+  gm->viewratio = VIEWRATIO;
+  gm->zoom = 0;
+  gm->timer = 0;
+  gm->c=0;
+  gm->m=1;
 
-	return gm;
+  return gm;
 }
 
 int gm_init_textures(game gm){
-    //NSString * path;
-    //path = [[NSBundle mainBundle] pathForResource: @"zombie" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->zombie_tex);
-    load_texture("imgs/zombie.png", &gm->zombie_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"person_s" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->person_s_tex);
-    load_texture("imgs/person_s.png", &gm->person_s_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"person" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->person_tex);
-    load_texture("imgs/person.png", &gm->person_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"safe" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->safe_tex);
-    load_texture("imgs/safe.png",   &gm->safe_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"eye" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->eye_tex);
-    load_texture("imgs/eye.png",    &gm->eye_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"safezone" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->safezone_tex);
-    load_texture("imgs/safezone.png",   &gm->safezone_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"hero" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->hero_tex);
-    load_texture("imgs/hero.png",   &gm->hero_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"p_z" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->p_z_tex);
-    load_texture("imgs/p_z.png",   &gm->p_z_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"h_z" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->h_z_tex);
-    load_texture("imgs/h_z.png",   &gm->h_z_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"hzombie" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->hzombie_tex);
-    load_texture("imgs/hzombie.png",   &gm->hzombie_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"heroattached" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->heroattached_tex);
-    load_texture("imgs/heroattached.png",   &gm->heroattached_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"herosafe" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->herosafe_tex);
-    load_texture("imgs/herosafe.png",   &gm->herosafe_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"rope" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->rope_tex);
-    load_texture("imgs/rope.png",   &gm->rope_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"blank" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->blank_tex);
-    load_texture("imgs/blank.png",   &gm->blank_tex);
-    //path = [[NSBundle mainBundle] pathForResource: @"bk" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->bk_tex);
-    load_texture("imgs/bk.png",   &gm->bk);
-    //path = [[NSBundle mainBundle] pathForResource: @"extra" ofType: @"png"];
-    //load_texture([path cStringUsingEncoding:1], &gm->extra_tex);
-    load_texture("imgs/extra.png",   &gm->extra_tex);
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/zombie.png");
+    load_texture(gm->res_buf, &gm->zombie_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/person_s.png");
+    load_texture(gm->res_buf, &gm->person_s_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/person.png");
+    load_texture(gm->res_buf, &gm->person_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/safe.png");
+    load_texture(gm->res_buf, &gm->safe_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/eye.png");
+    load_texture(gm->res_buf, &gm->eye_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/safezone.png");
+    load_texture(gm->res_buf, &gm->safezone_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/hero.png");
+    load_texture(gm->res_buf, &gm->hero_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/p_z.png");
+    load_texture(gm->res_buf, &gm->p_z_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/h_z.png");
+    load_texture(gm->res_buf, &gm->h_z_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/hzombie.png");
+    load_texture(gm->res_buf, &gm->hzombie_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/heroattached.png");
+    load_texture(gm->res_buf, &gm->heroattached_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/herosafe.png");
+    load_texture(gm->res_buf, &gm->herosafe_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/rope.png");
+    load_texture(gm->res_buf, &gm->rope_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/blank.png");
+    load_texture(gm->res_buf, &gm->blank_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/bk.png");
+    load_texture(gm->res_buf, &gm->bk);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/extra.png");
+    load_texture(gm->res_buf, &gm->extra_tex);
 }	
 
 void gm_init_sounds(game gm){
 	alGenBuffers(al_buf_num, gm->buf);
-	snd_load_file("./snd/saved.ogg", gm->buf[al_saved_buf]);
-	snd_load_file("./snd/wall.ogg", gm->buf[al_wall_buf]);
-	snd_load_file("./snd/pdeath.ogg", gm->buf[al_pdeath_buf]);
-	snd_load_file("./snd/attached.ogg", gm->buf[al_attached_buf]);
-	snd_load_file("./snd/scared.ogg", gm->buf[al_scared_buf]);
-	snd_load_file("./snd/p_z.ogg", gm->buf[al_p_z_buf]);
-	snd_load_file("./snd/hdeath.ogg", gm->buf[al_hdeath_buf]);
-	snd_load_file("./snd/pwall.ogg", gm->buf[al_pwall_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf,"/snd/saved1.ogg"); 
+	  snd_load_file(gm->res_buf, gm->buf[al_saved1_buf]);
+	
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/saved2.ogg");
+	  snd_load_file(gm->res_buf, gm->buf[al_saved2_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/wall.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_wall_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/pdeath.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_pdeath_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/attached1.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_attached1_buf]);
+	
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/attached2.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_attached2_buf]);
+	
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/attached3.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_attached3_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/scared.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_scared_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/p_z.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_p_z_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/hdeath.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_hdeath_buf]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/snd/pwall.ogg");
+    snd_load_file(gm->res_buf, gm->buf[al_pwall_buf]);
+
 	gm->saved_src = s_init();
 
 	ALfloat	listenerOri[]={0.0,1.0,0.0, 0.0,0.0,1.0};
 	alListenerfv(AL_ORIENTATION,listenerOri);
 	alListenerf(AL_GAIN,12);
-	alListener3f(AL_POSITION, gm->hero.o.p.x, 20, gm->hero.o.p.y);
+	alListener3f(AL_POSITION, gm->hero.o.p.x, 0, gm->hero.o.p.y);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 }
 
@@ -217,9 +289,9 @@ void gm_set_view(int width, int height, game gm){
 	gm->vmin.y = gm->hero.o.p.y - w.y/2.0f;
 	gm->vmax.x = gm->hero.o.p.x + w.x/2.0f;
 	gm->vmax.y = gm->hero.o.p.y + w.y/2.0f;
-    gm->screenx = width;
-    gm->screeny = height;
 	
+	gm->screenx = width;
+    gm->screeny = height;
 }
 
 void gm_update_view(game gm){
@@ -269,7 +341,6 @@ void gm_reshape(game gm, int width, int height){
 }
 
 int gm_load_level(game gm, char * lvl){
-	int i;
 	gm->ak.x =0;
 	gm->ak.y = 0;
 
@@ -283,6 +354,8 @@ void gm_update_sound(game gm){
 void gm_update(game gm, int width, int height, double dt){
 	int i, k;
 	/*Timers */
+	if (dt > 0.1f){dt = 0.01;}
+	
 	if(gm->gm_state == 0){
 		gm->timer += dt;
 	}
@@ -312,18 +385,17 @@ void gm_update(game gm, int width, int height, double dt){
 	gm->hero.o.f.y=0;
 	
 	/*Add forces*/
-
-
-    double msd = v2Len(v2Sub(gm->hero.o.p, gm->ms));
+	double msd = v2Len(v2Sub(gm->hero.o.p, gm->ms));
     vector2 msu = v2Unit(v2Sub(gm->hero.o.p, gm->ms));
-
     if(msd < gm->hero.o.r){msd = 0;}
-
     vector2 msf = v2sMul(-5*msd, msu);
-
+	
+	if(!gm->m){
+		msf.x = 0;
+		msf.y = 0;	
+	}
 
 	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x + msf.x;
-	//gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y - 30;
 	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y + msf.y;
 	
 	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
@@ -335,10 +407,10 @@ void gm_update(game gm, int width, int height, double dt){
 		}
 	}
 	
-	/*Spring force between hero and person*/
-	if(gm->hero.spring_state == ATTACHED){
+	/*Spring force in the people chain*/
+	if(gm->chain_num > 0){
 		float ks = 50, r = 5, kd=1;
-		i = gm->hero.person_id;
+		i = gm->ppl_chain[gm->chain_num-1];
 		vector2 l = v2Sub(gm->hero.o.p, gm->person[i].o.p);
 		vector2 dl = v2Sub(gm->hero.o.v, gm->person[i].o.v);
 		
@@ -351,12 +423,29 @@ void gm_update(game gm, int width, int height, double dt){
 		
 		gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
 		gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+
+		int k;
+		for(k = gm->chain_num-1; k > 0; k--){
+			i = gm->ppl_chain[k-1];
+			int h = gm->ppl_chain[k];
+			vector2 l = v2Sub(gm->person[h].o.p, gm->person[i].o.p);
+			vector2 dl = v2Sub(gm->person[h].o.v, gm->person[i].o.v);
+
+			vector2 fa, fb;
+			fa = v2sMul(-ks*(v2Len(l)-r) - kd * v2Dot(dl, l)/v2Len(l) , v2Unit(l));
+			fb = v2sMul(-1,fa);
+
+			gm->person[h].o.f = v2Add(gm->person[h].o.f, fa);
+			gm->person[i].o.f = v2Add(gm->person[i].o.f, fb);
+
+			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
+			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+		}
 	}
 
 	/*Wall Colisions*/
 	for(i = 0; i < gm->person_num; i++){
 		if(bounce(&gm->person[i].o, gm->w, gm->h) && gm->person[i].state == PERSON){
-			gm->person[i].ready = 0;
             s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o,0.2, 0);
 		}
 	}	
@@ -369,7 +458,6 @@ void gm_update(game gm, int width, int height, double dt){
 		for(k=0; k < gm->wall_num; k++){
 			if(line_collision(gm->walls[k].p1, gm->walls[k].p2, &gm->person[i].o, 0.2, 0.3) && gm->person[i].state == PERSON){
                 s_add_snd(gm->saved_src, gm->buf[al_pwall_buf], &gm->person[i].o,0.2, 0);
-                gm->person[i].ready = 0;
             }
 		}
 	}
@@ -414,17 +502,43 @@ void gm_update(game gm, int width, int height, double dt){
 	
 	for(i = 0; i < gm->person_num; i++){
 		if(collision(&gm->person[i].o, &gm->hero.o)){
-			if(gm->hero.state == PERSON && gm->hero.spring_state == NOT_ATTACHED && gm->person[i].state == PERSON)
-			{
-			gm->hero.spring_state = ATTACHED;
-            s_add_snd(gm->saved_src, gm->buf[al_attached_buf], &gm->person[i].o,1, 0);
-			gm->hero.person_id = i;
-			gm->person[i].ready = 1;
+			if(gm->hero.state == PERSON && gm->person[i].state == PERSON)
+			{				
+				int k = 0;
+				int leave = 0;
+				for(k=0; k<gm->chain_num; k++){
+					if(i == gm->ppl_chain[k]){
+						leave = 1;
+					}
+				}
+				
+				if(leave == 0){
+					gm->hero.spring_state = ATTACHED;
+					gm->ppl_chain[gm->chain_num] = i;
+					gm->chain_num++;
+					
+					int rand_num = rand()%3;
+					switch (rand_num) {
+						case 0:
+							s_add_snd(gm->saved_src, gm->buf[al_attached1_buf], &gm->person[i].o,1, 1);
+							break;
+						case 1:
+							s_add_snd(gm->saved_src, gm->buf[al_attached2_buf], &gm->person[i].o,1, 1);
+							break;
+						case 2:
+							s_add_snd(gm->saved_src, gm->buf[al_attached3_buf], &gm->person[i].o,1, 1);
+							break;
+					}
+					gm->hero.person_id = i;
+					gm->person[i].ready = 1;
+				}
 			}
 			else if(gm->person[i].state == ZOMBIE && gm->hero.state == PERSON){
 				gm->hero.spring_state = NOT_ATTACHED;
 				gm->hero.timer = MAX_TIME;
 				gm->hero.state = P_Z;
+				chain_ready_zero(gm);
+				gm->chain_num = 0;
                 s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
 			}
 			else if(gm->person[i].state == PERSON && gm->hero.state == ZOMBIE){
@@ -436,8 +550,9 @@ void gm_update(game gm, int width, int height, double dt){
 		
 		/*This bit of magic lets the hero take a person info a circle and save them.*/
 		vector2 p = gm->safe_zone.p;
-		int hpid = gm->hero.person_id;
-		if((i != hpid || gm->hero.spring_state == NOT_ATTACHED) && gm->person[i].state != SAFE && gm->person[i].ready == 0){
+		if((gm->person[i].state == PERSON && gm->person[i].ready == 0) || 
+			gm->person[i].state == ZOMBIE ||
+			gm->person[i].state == P_Z){
 			collision(&gm->person[i].o, &gm->safe_zone); 	
 		}
 		else if(gm->person[i].state == SAFE){
@@ -446,7 +561,14 @@ void gm_update(game gm, int width, int height, double dt){
 		else if (safe_zone_test(gm->safe_zone, gm->person[i].o)){
 			gm->hero.spring_state = NOT_ATTACHED;
 			gm->person[i].state = SAFE;
-			s_add_snd(gm->saved_src, gm->buf[al_saved_buf], &gm->person[i].o,1, 1);
+			int rand_num = rand()%2;
+			if (rand_num == 0) {
+				s_add_snd(gm->saved_src, gm->buf[al_saved1_buf], &gm->person[i].o,1, 1);
+			}
+			else {
+				s_add_snd(gm->saved_src, gm->buf[al_saved2_buf], &gm->person[i].o,1, 1);
+			}
+			chain_remove(gm, i);
 		}
 		gm->safe_zone.p = p;
 		
@@ -467,30 +589,18 @@ void gm_update(game gm, int width, int height, double dt){
 		/*This deals with collisions between people*/	
 		for(k = 1+i; k < gm->person_num; k++){
 			if(collision(&gm->person[i].o, &gm->person[k].o)){
-				if(gm->person[i].state != SAFE && gm->person[k].state == PERSON){
-					gm->person[k].ready = 0;
-				}
-				if(gm->person[k].state != SAFE && gm->person[i].state == PERSON){
-					gm->person[i].ready = 0;
-				}
 				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){					
 					gm->person[i].timer = MAX_TIME;
 					gm->person[i].state = P_Z;
-                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 1);
+					chain_cut(gm, i);
+                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 4);
 				}
 				if(gm->person[i].state == ZOMBIE && gm->person[k].state == PERSON){
 					gm->person[k].timer = MAX_TIME;
 					gm->person[k].state = P_Z;
-                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 1);
+					chain_cut(gm, k);
+                    s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 4);
 				}
-				if((i == gm->hero.person_id &&
-					gm->person[i].state == P_Z &&
-					gm->hero.spring_state == ATTACHED) ||
-					(k == gm->hero.person_id &&
-					gm->person[k].state == P_Z &&
-					gm->hero.spring_state == ATTACHED)){
-						gm->hero.spring_state = NOT_ATTACHED;
-					}
 			}
 		}
 	}	
@@ -526,14 +636,6 @@ void gm_update(game gm, int width, int height, double dt){
     s_update(gm->saved_src);
 }
 
-void gm_mouse(game gm, int x, int y){
-	double vdiffy = gm->vmax.y - gm->vmin.y;
-	double vdiffx = gm->vmax.x - gm->vmin.x;
-    
-    gm->ms.x = vdiffx / (double)gm->screenx * x + gm->vmin.x;
-    gm->ms.y = vdiffy / (double)gm->screeny * y + gm->vmin.y;
-}
-
 void gm_render(game gm){
     gm_update_view(gm);
 	int i;
@@ -554,22 +656,6 @@ void gm_render(game gm){
 	glPushMatrix();
 	glTranslatef(gm->safe_zone.p.x, gm->safe_zone.p.y, 0);
 	glScalef(gm->safe_zone.r, gm->safe_zone.r,0);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glEnd();
-	glPopMatrix();
-
-
-	glPushMatrix();
-	glTranslatef(gm->ms.x, gm->ms.y, 0);
-	glScalef(1, 1,0);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0, 0.0);
 	glVertex3f(-1.0, -1.0, 0.0);
@@ -612,8 +698,8 @@ void gm_render(game gm){
 		glPopMatrix();
 	}
 	
-	if(gm->hero.spring_state == ATTACHED){
-		i = gm->hero.person_id;
+	if(gm->chain_num > 0){
+		i = gm->ppl_chain[gm->chain_num-1];
 		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
 		glPushMatrix();
 		glBegin(GL_QUADS);
@@ -640,6 +726,36 @@ void gm_render(game gm){
 
 		glEnd();
 		glPopMatrix();
+		int k;
+		for(k = gm->chain_num-1; k > 0; k--){
+			i = gm->ppl_chain[k];
+			int h = gm->ppl_chain[k-1];
+			glPushMatrix();
+			glBegin(GL_QUADS);
+
+			vector2 p1,p2;
+			p1 = v2Add(gm->person[i].o.p, v2sMul(gm->person[i].o.r, v2Unit(v2Sub(gm->person[h].o.p, gm->person[i].o.p))));
+			p2 = v2Add(gm->person[h].o.p, v2sMul(gm->person[h].o.r, v2Unit(v2Sub(gm->person[i].o.p, gm->person[h].o.p))));
+
+			glTexCoord2f(1.0, 0.0);
+			vector2 temp = v2Add(p1, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->person[h].o.p)))));
+			glVertex3f(temp.x, temp.y, 0.0);
+
+			glTexCoord2f(0.0, 0.0);
+			temp = v2Add(p1, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->person[h].o.p)))));
+			glVertex3f(temp.x, temp.y, 0.0);
+
+			glTexCoord2f(0.0, 1.0);
+			temp = v2Add(p2, v2sMul(2.0, v2Unit(v2Rotate(-M_PI/2, v2Sub(gm->person[i].o.p, gm->person[h].o.p)))));
+			glVertex3f(temp.x, temp.y, 0.0);
+
+			glTexCoord2f(1.0, 1.0);
+			temp = v2Add(p2, v2sMul(2.0, v2Unit(v2Rotate(M_PI/2, v2Sub(gm->person[i].o.p, gm->person[h].o.p)))));
+			glVertex3f(temp.x, temp.y, 0.0);
+
+			glEnd();
+			glPopMatrix();
+		}
 	}
 	
 	switch(gm->hero.state){
@@ -794,8 +910,9 @@ void gm_message_render(game gm, int width, int height){
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
 
+	/*
     float c[4] = {1,.5,.4,.4};
-    /*rat_set_text_color(gm->font, c);
+    rat_set_text_color(gm->font, c);
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
     float len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,20,height-4, buf);*/
@@ -805,9 +922,9 @@ void gm_message_render(game gm, int width, int height){
     rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
 	
 
-    sprintf(buf, "Score: %.0lf", ((float)add) / gm->timer * 1000 );	
+    sprintf(buf, "Chain Num: %d", gm->chain_num);	
     len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font, width - 150,height-4, buf);
+    rat_font_render_text(gm->font, width - 250,height-4, buf);
 
 
     float co[4] = {0,0,0,0};
@@ -826,13 +943,13 @@ void gm_message_render(game gm, int width, int height){
     }
     else if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
         gm->gm_state = 1;
-        sprintf(buf, "Infected! You loose!");	
+        sprintf(buf, "Infected!");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
     else if(check < gm->save_count){
         gm->gm_state = 1;
-        sprintf(buf, "Too many Zombies! You loose!");	
+        sprintf(buf, "Too many Zombies!");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
 	}
@@ -910,6 +1027,14 @@ void gm_free(game gm){
 	free(gm);
 }
 
+void gm_mouse(game gm, int x, int y){
+	double vdiffy = gm->vmax.y - gm->vmin.y;
+	double vdiffx = gm->vmax.x - gm->vmin.x;
+    
+    gm->ms.x = vdiffx / (double)gm->screenx * x + gm->vmin.x;
+    gm->ms.y = vdiffy / (double)gm->screeny * y + gm->vmin.y;
+}
+
 void gm_nkey_down(game gm, unsigned char key){
 	switch(key) {
 		case 'z':
@@ -921,11 +1046,17 @@ void gm_nkey_down(game gm, unsigned char key){
 			break;
 			
 		case ' ':
-			gm->hero.spring_state = NOT_ATTACHED;
+			chain_ready_zero(gm);
+			gm->chain_num = 0;
 			break;
 
         case 'c':
             gm->c = 1;
+			break;
+			
+        case 'm':
+		    gm->m = gm->m ? 0 : 1;
+			break;
 	}
 }
 
@@ -986,7 +1117,7 @@ vector2 gm_dim(game gm){
 }
 
 int load_level_file(game gm, char * file){
-		int i,j;
+		int i;
 		FILE *loadFile;
 
 		loadFile = fopen(file, "r");
@@ -999,6 +1130,8 @@ int load_level_file(game gm, char * file){
 		
 		char type[5];
 		int result;
+		
+		gm->chain_num = 0;
 		
 		gm->safe_zone.m = 1000;
 		gm->safe_zone.v.x = 0;
@@ -1112,4 +1245,41 @@ int load_level_file(game gm, char * file){
 		fclose(loadFile);
 		printf("Level file %s loaded.\n", file);
 		return 1;
+}
+
+void chain_remove(game gm, int index){
+	int k;
+	int match;
+	for(k = 0; k < gm->chain_num; k++){
+		if(gm->ppl_chain[k] == index){
+			match = k;
+			break;
+		}
+	}
+	for(k = match; k < gm->chain_num; k++){
+		gm->ppl_chain[k] = gm->ppl_chain[k+1];
+	}
+	gm->chain_num--;
+}
+
+void chain_cut(game gm, int index){
+	int k;
+	int match = -1;
+	for(k = 0; k < gm->chain_num; k++){
+		if(gm->ppl_chain[k] == index){
+			match = k;
+			break;
+		}
+	}
+	if(match == -1){return;}
+	chain_ready_zero(gm);
+	gm->chain_num = 0;
+}
+
+void chain_ready_zero(game gm){
+	int k;
+	for(k = 0; k < gm->chain_num; k++){
+		int h = gm->ppl_chain[k];
+		gm->person[h].ready = 0;
+	}
 }

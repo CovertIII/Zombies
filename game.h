@@ -1,6 +1,6 @@
 typedef struct gametype *game;
 
-game gm_init(void);
+game gm_init(char * res_path);
 
 int gm_init_textures(game gm);
 void gm_init_sounds(game gm);

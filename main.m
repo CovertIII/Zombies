@@ -187,11 +187,11 @@ void init(int argc, char** argv){
 	alGenBuffers(al_buf_num, al_buf);
 
 /*Getting Resource path*/	
-  //NSString *respath = [[NSBundle mainBundle] resourcePath];
-  res_path = (char*)malloc(strlen(".")*sizeof(char)+sizeof(char)*50);
-  res_buf = (char*)malloc(strlen(".")*sizeof(char)+sizeof(char)*50);
-  printf("Memsize = %ld\n", strlen(".")*sizeof(char)+sizeof(char)*50);
-  strcpy(res_path, ".");
+  NSString *respath = [[NSBundle mainBundle] resourcePath];
+  res_path = (char*)malloc(strlen([respath cStringUsingEncoding:1])*sizeof(char)+sizeof(char)*50);
+  res_buf = (char*)malloc(strlen([respath cStringUsingEncoding:1])*sizeof(char)+sizeof(char)*50);
+  printf("Memsize = %ld\n", strlen([respath cStringUsingEncoding:1])*sizeof(char)+sizeof(char)*50);
+  strcpy(res_path, [respath cStringUsingEncoding:1]);
   printf("Resource Location: %s\n", res_path);
 	
 //Loading HUD sounds
@@ -222,11 +222,11 @@ void init(int argc, char** argv){
 	src_list = s_init();
 
 // Init Database 
-  //NSString * path;
-  //path = NSHomeDirectory ();
-  //path = [path stringByAppendingString:@"/.zombie.db"];
-  printf("Database path: %s\n", "./.zombie_stats.db");
-  stats = init_data_record("./.zombie_stats.db", res_path);
+  NSString * path;
+  path = NSHomeDirectory ();
+  path = [path stringByAppendingString:@"/.zombie.db"];
+  printf("Database path: %s\n", [path cStringUsingEncoding:1]);
+  stats = init_data_record([path cStringUsingEncoding:1], res_path);
   stats_list_prep(stats);
 
 // Loads Fonts for HUD

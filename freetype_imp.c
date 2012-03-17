@@ -31,6 +31,10 @@ rat_font * rat_init()
 
 void rat_load_font(rat_font * font, char * file, int pt){
     font->gfont = rat_glyph_font_load(font->ftlib, file, pt);
+	if (font->gfont == NULL) {
+		printf("Font %s failed to load.\n", file);
+		return;
+	}
     font->tfont = rat_texture_font_from_glyph_font(font->gfont);
 }
 

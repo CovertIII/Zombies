@@ -10,6 +10,9 @@ al_stream_transition	stream_sound.c	/^int al_stream_transition(al_stream als, do
 al_stream_type	stream_sound.c	/^} al_stream_type;$/
 al_stream_update	stream_sound.c	/^int al_stream_update(al_stream als){$/
 bounce	physics.c	/^int bounce(object * obj, int x, int y){$/
+chain_cut	game.c	/^void chain_cut(game gm, int index){$/
+chain_ready_zero	game.c	/^void chain_ready_zero(game gm){$/
+chain_remove	game.c	/^void chain_remove(game gm, int index){$/
 ck_create_tables	data_interface.c	/^int ck_create_tables(data_record db){$/
 cleanup	main.c	/^void cleanup (void) {$/
 collision	physics.c	/^int collision(object *ta, object *tb){$/
@@ -26,7 +29,7 @@ game_start_session	data_interface.c	/^void game_start_session(data_record db){$/
 gametype	game.c	/^} gametype;$/
 gm_dim	game.c	/^vector2 gm_dim(game gm){$/
 gm_free	game.c	/^void gm_free(game gm){$/
-gm_init	game.c	/^game gm_init(void){$/
+gm_init	game.c	/^game gm_init(char * res_path){$/
 gm_init_sounds	game.c	/^void gm_init_sounds(game gm){$/
 gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
 gm_load_level	game.c	/^int gm_load_level(game gm, char * lvl){$/
@@ -46,7 +49,7 @@ gm_update_sound	game.c	/^void gm_update_sound(game gm){$/
 gm_update_view	game.c	/^void gm_update_view(game gm){$/
 init	main.c	/^void init(int argc, char** argv){$/
 initAttributes	main.c	/^static void initAttributes ()$/
-init_data_record	data_interface.c	/^data_record init_data_record(char * file_name){$/
+init_data_record	data_interface.c	/^data_record init_data_record(char * file_name, cha/
 level_list	data_interface.c	/^} level_list;$/
 line	physics.h	/^} line;$/
 line_collision	physics.c	/^int line_collision(vector2 pt1, vector2 pt2, objec/
@@ -109,7 +112,7 @@ sf_update	sound_list_follow.c	/^void sf_update(sf_list sl){$/
 showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
 stats_list_prep	data_interface.c	/^void stats_list_prep(data_record db){$/
-stats_render	data_interface.c	/^void stats_render(data_record db, int width, int h/
+stats_render	data_interface.c	/^int stats_render(data_record db, int width, int he/
 thread_dat	main.c	/^struct thread_data{$/
 user_list	data_interface.c	/^} user_list;$/
 user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/

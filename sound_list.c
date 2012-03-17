@@ -50,7 +50,7 @@ void s_add_snd(s_list sl, ALuint buf, object * o, double gain, int priority){
             alSourcei(cycle->src, AL_BUFFER, buf);
             alSourcei(cycle->src, AL_REFERENCE_DISTANCE, 30);
             alSource3f(cycle->src, AL_POSITION, o->p.x, o->p.y, 0);
-            alSourcef (cycle->src, AL_GAIN,  gain );
+            alSourcef (cycle->src, AL_GAIN,  gain*2 );
             alSourcePlay(cycle->src);
             cycle->priority = priority;
             return;
@@ -71,7 +71,7 @@ void s_add_snd(s_list sl, ALuint buf, object * o, double gain, int priority){
 	alGenSources(1, &new->src);
 	alSourcei(new->src, AL_BUFFER, buf);
 	alSource3f(new->src, AL_POSITION, o->p.x, o->p.y, 0);
-    alSourcef (new->src, AL_GAIN,  gain );
+    alSourcef (new->src, AL_GAIN,  gain*2 );
 	alSourcePlay(new->src);
 
 	new->next = NULL;

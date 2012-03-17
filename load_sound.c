@@ -5,7 +5,7 @@
 #include <OpenAL/alc.h>
 #include <vorbis/vorbisfile.h>
 
-#define BUFFER_SIZE (48000)
+#define BUFFER_SIZE (4096)
 
 int snd_load_file(char const * file, ALuint buffer){
 	FILE*           oggFile;
@@ -16,10 +16,8 @@ int snd_load_file(char const * file, ALuint buffer){
 
 	int result;
 
-	if(!(oggFile = fopen(file, "rb"))){
-		printf("Could not open Ogg file %s.", file);
-        return 1;
-    }
+	if(!(oggFile = fopen(file, "rb")))
+		printf("Could not open Ogg file: %s\n", file);
 
 	if((result = ov_open(oggFile, &oggStream, NULL, 0)) < 0)
 	{
@@ -46,9 +44,18 @@ int snd_load_file(char const * file, ALuint buffer){
 		char data[BUFFER_SIZE];
 		result = ov_read(&oggStream, data, BUFFER_SIZE, 0, 2, 1, & section);
 		if(result > 0){
+			char * tmp;
 			size += result;
-			dyn_data = (char*)realloc(dyn_data, sizeof(char)*(size));
-			memcpy(dyn_data+size-result, data, result);
+
+			tmp = (char*)malloc(sizeof(char)*(size));
+			if(dyn_data != NULL){
+				memcpy(tmp, dyn_data, sizeof(char)*(size-result));
+				free(dyn_data);
+			}
+			dyn_data = tmp;
+			tmp += size-result;
+			memcpy(tmp, data, result);
+
 		} else if(result < 0){
 			switch(result){
 				case OV_HOLE:
@@ -72,7 +79,6 @@ int snd_load_file(char const * file, ALuint buffer){
 	alBufferData(buffer, format, dyn_data, size, vorbisInfo->rate);
 	free(dyn_data);
 	ov_clear(&oggStream);
-    fclose(oggFile);
 	return 0;
 }
 
