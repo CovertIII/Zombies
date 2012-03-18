@@ -113,6 +113,10 @@ showhud	main.c	/^void showhud(void){$/
 snd_load_file	load_sound.c	/^int snd_load_file(char const * file, ALuint buffer/
 stats_list_prep	data_interface.c	/^void stats_list_prep(data_record db){$/
 stats_render	data_interface.c	/^int stats_render(data_record db, int width, int he/
+stink_add	game.c	/^void stink_add(game gm, int id){$/
+stink_render	game.c	/^void stink_render(game gm){$/
+stink_step	game.c	/^void stink_step(game gm, double dt){$/
+stink_struct	game.c	/^} stink_struct;$/
 thread_dat	main.c	/^struct thread_data{$/
 user_list	data_interface.c	/^} user_list;$/
 user_nkey_down	data_interface.c	/^int user_nkey_down(data_record db, unsigned char k/

@@ -26,6 +26,8 @@
 #define SAFE 4
 #define DONE 5
 
+#define STINK_PARTICLE_NUM 6 
+
 //Different Emotional states
 #define NORMAL 0
 #define SCARED 1
@@ -72,6 +74,12 @@ typedef struct {
 	int person_id;
 } _hero;
 
+typedef struct {
+    object n[STINK_PARTICLE_NUM];
+    double time[STINK_PARTICLE_NUM];
+    int id;
+} stink_struct;
+
 typedef struct gametype {
 	char * res_path;
 	char * res_buf;
@@ -104,6 +112,10 @@ typedef struct gametype {
 	line walls[100];
 	int wall_num;
 
+    //Experiental Particle thiny for zombies
+    stink_struct stnk[100];
+    int stnk_num;
+
     int gm_state;
 
 	ALuint buf[al_buf_num];
@@ -125,6 +137,7 @@ typedef struct gametype {
 	GLuint rope_tex;
 	GLuint blank_tex;
     GLuint extra_tex;
+    GLuint stink_tex;
 
     rat_font * font;
 	
@@ -134,6 +147,10 @@ int load_level_file(game gm, char * file);
 void chain_remove(game gm, int index);
 void chain_ready_zero(game gm);
 void chain_cut(game gm, int index);
+void stink_add(game gm, int id);
+void stink_step(game gm, double dt);
+void stink_render(game gm);
+
 
 game gm_init(char * res_path){
   gametype * gm;
@@ -223,6 +240,10 @@ int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/extra.png");
     load_texture(gm->res_buf, &gm->extra_tex);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/stink.png");
+    load_texture(gm->res_buf, &gm->stink_tex);
 }	
 
 void gm_init_sounds(game gm){
@@ -355,7 +376,9 @@ void gm_update(game gm, int width, int height, double dt){
 	int i, k;
 	/*Timers */
 	if (dt > 0.1f){dt = 0.01;}
-	
+
+    stink_step(gm, dt);	
+
 	if(gm->gm_state == 0){
 		gm->timer += dt;
 	}
@@ -364,6 +387,7 @@ void gm_update(game gm, int width, int height, double dt){
 		gm->person[i].timer -= dt;
 		if(gm->person[i].state == P_Z && gm->person[i].timer <= 0.0f){
 			gm->person[i].state = ZOMBIE;
+            stink_add(gm, i);
             s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->person[i].o, 1, 1);
 			gm->person[i].o.v.x = rand()%50 - 25;
 			gm->person[i].o.v.y = rand()%50 - 25;
@@ -757,6 +781,8 @@ void gm_render(game gm){
 			glPopMatrix();
 		}
 	}
+
+    stink_render(gm);
 	
 	switch(gm->hero.state){
 		case PERSON:
@@ -931,7 +957,7 @@ void gm_message_render(game gm, int width, int height){
     rat_set_text_color(gm->font, co);
 
 	if(add >= gm->save_count && gm->hero.state == SAFE){
-        sprintf(buf, "Press 'c' to continue.");	
+        sprintf(buf, "Press space to continue.");	
         len = rat_font_text_length(gm->font, buf);
         rat_font_render_text(gm->font,(width-len)/2,height/2, buf);
     }
@@ -1048,6 +1074,7 @@ void gm_nkey_down(game gm, unsigned char key){
 		case ' ':
 			chain_ready_zero(gm);
 			gm->chain_num = 0;
+            gm->c = 1;
 			break;
 
         case 'c':
@@ -1070,6 +1097,9 @@ void gm_nkey_up(game gm, unsigned char key){
 			gm->zoom = 0;
 			break;
 		case 'c':
+			gm->c = 0;
+			break;
+		case ' ':
 			gm->c = 0;
 			break;
 	}
@@ -1141,6 +1171,7 @@ int load_level_file(game gm, char * file){
         gm->save_count = 1;
 		gm->timer = 0;
 		i = 1;
+        gm->stnk_num = 0;
 		while( (result = fscanf(loadFile, "%s", type)) != EOF){
 			if(!strncmp(type, "hw", 2)){
 				result = fscanf(loadFile, "%f %f", &gm->h, &gm->w);
@@ -1204,6 +1235,7 @@ int load_level_file(game gm, char * file){
 					printf("Error: A zombie was not loaded.\n");
 				}
 				else{
+                    stink_add(gm, gm->person_num);
                     gm->person[num].o.snd = 0;
 					gm->person_num++;
 				}
@@ -1283,3 +1315,72 @@ void chain_ready_zero(game gm){
 		gm->person[h].ready = 0;
 	}
 }
+
+
+void stink_add(game gm, int id){
+    int k;
+    int num = gm->stnk_num;
+    gm->stnk[num].id = id;    
+
+    for(k = 0; k < STINK_PARTICLE_NUM; k++){
+        gm->stnk[num].time[k] = (rand()%100 + 50)/100.0f;
+        gm->stnk[num].n[k].p.x = gm->person[id].o.p.x + 2*cos((M_PI*2)/360.0f*(float)(rand()%360));
+        gm->stnk[num].n[k].p.y = gm->person[id].o.p.y + 2*sin((M_PI*2)/360.0f*(float)(rand()%360));
+        gm->stnk[num].n[k].v.x += rand()%4 - 2;
+        gm->stnk[num].n[k].v.y += rand()%4 - 2;
+    }
+    gm->stnk_num++;
+}
+
+void stink_step(game gm, double dt){
+    int k;
+    int num;
+
+    for(num = 0; num < gm->stnk_num; num++){
+        int id = gm->stnk[num].id;
+        for(k = 0; k < STINK_PARTICLE_NUM; k++){
+            if(gm->stnk[num].time[k] <=0){
+                gm->stnk[num].time[k] = (rand()%100 + 50)/100.0f;
+        gm->stnk[num].n[k].p.x = gm->person[id].o.p.x + 2*cos((M_PI*2)/360.0f*(float)(rand()%360));
+        gm->stnk[num].n[k].p.y = gm->person[id].o.p.y + 2*sin((M_PI*2)/360.0f*(float)(rand()%360));
+                gm->stnk[num].n[k].v.x = gm->person[id].o.v.x/2.0f + rand()%6 - 3;
+                gm->stnk[num].n[k].v.y = gm->person[id].o.v.y/2.0f +rand()%6 - 3;
+                gm->stnk[num].n[k].th = rand()%360;
+            }
+            else{
+                gm->stnk[num].time[k] -= dt;
+                gm->stnk[num].n[k].p.x += gm->stnk[num].n[k].v.x*dt;
+                gm->stnk[num].n[k].p.y += gm->stnk[num].n[k].v.y*dt;
+            }
+        }
+    }
+}
+
+void stink_render(game gm){
+    int k;
+    int num;
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    for(num = 0; num < gm->stnk_num; num++){
+        for(k = 0; k < STINK_PARTICLE_NUM; k++){
+            glColor4f(1,1,1, gm->stnk[num].time[k]*4);
+            glBindTexture( GL_TEXTURE_2D, gm->stink_tex);
+            glPushMatrix();
+            glTranslatef(gm->stnk[num].n[k].p.x, gm->stnk[num].n[k].p.y, 0);
+            glRotatef(gm->stnk[num].n[k].th, 0, 0, 1);
+            glScalef(8,8,0);
+            glBegin(GL_QUADS);
+            glTexCoord2f(0.0, 0.0);
+            glVertex3f(-1.0, -1.0, 0.0);
+            glTexCoord2f(0.0, 1.0);
+            glVertex3f(-1.0, 1.0, 0.0);
+            glTexCoord2f(1.0, 1.0);
+            glVertex3f(1.0, 1.0, 0.0);
+            glTexCoord2f(1.0, 0.0);
+            glVertex3f(1.0, -1.0, 0.0);
+            glEnd();
+            glPopMatrix();
+        }
+    }
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+}
+
