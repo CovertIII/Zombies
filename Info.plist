@@ -16,6 +16,25 @@
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>txt.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>NSStringPboardType</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>Document</string>
+		</dict>
+	</array>
 	<key>CFBundleSignature</key>
 	<string>BILL</string>
 	<key>CFBundleVersion</key>

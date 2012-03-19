@@ -171,7 +171,7 @@ game gm_init(char * res_path){
   gm->zoom = 0;
   gm->timer = 0;
   gm->c=0;
-  gm->m=1;
+  gm->m=0;
 
   return gm;
 }

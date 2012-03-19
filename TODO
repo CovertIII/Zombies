@@ -1,15 +1,15 @@
 My Random TODO list for the zombie game.
 ========================================
 
+When open level to test it, skip all the database stuff.
+
 Insert uppercase letters in SDL
 
 Load splash logo in data_interface render and directions and credits
 
-Add AI to the game to make it more interesting.  
-
-make better levels
-
 Load a different background for each level. -- Think of a png file that can be generated for each level.
+
+
 
 DONE Use the mouse to move the hero, not just keyboard.
 
@@ -27,12 +27,15 @@ count.
 
 DONE Have a message saying, if you wish to continue type ' '.
 
-DONE Add difference accounts.  Look into sqlite3 to do this.
+DONE Add different accounts.  Look into sqlite3 to do this.
 
 # Ideas #
-go once through the levels trying to rescue the peoplein the middle you have
-to find a zombie antidote.  after the antidote has been retrieved you must
-rescue all the zombies in the levels you already played by turning them into
-people and bringing them into the safezone.  at the end of the game you will
-have saved mankind.
-
+Power-ups:
+	antidote
+	invincibility
+	
+AI
+	crowd stuff
+	path following
+	guarding
+	
