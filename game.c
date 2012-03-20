@@ -493,17 +493,38 @@ void gm_update(game gm, int width, int height, double dt){
         }
 	}
 
+
     if(gm->hero.spring_state == ATTACHED)
     {
         vector2 p = gm->hero.o.p;
-        vector2 bp = gm->person[gm->hero.person_id].o.p;
+        vector2 bp = gm->person[gm->ppl_chain[gm->chain_num-1]].o.p;
         for(i = 0; i < gm->wall_num; i++){
            if(line_line(p, bp, gm->walls[i].p1, gm->walls[i].p2)){
-                gm->hero.spring_state = NOT_ATTACHED;
+                chain_ready_zero(gm);
+				gm->chain_num = 0;
+	            gm->c = 1;
+				gm->hero.spring_state = NOT_ATTACHED;
                 i = gm->wall_num;
            } 
         }
+		int k;
+		for(k = gm->chain_num-1; k > 0; k--){
+            int j = gm->ppl_chain[k-1];
+            int h = gm->ppl_chain[k];
+            vector2 p = gm->person[j].o.p;
+            vector2 bp = gm->person[h].o.p;
+			for(i = 0; i < gm->wall_num; i++){
+	           if(line_line(p, bp, gm->walls[i].p1, gm->walls[i].p2)){
+	                chain_ready_zero(gm);
+					gm->chain_num = 0;
+		            gm->c = 1;
+					gm->hero.spring_state = NOT_ATTACHED;
+	                i = gm->wall_num;
+	           } 
+	        }	
+		}
     }
+
 	/*Circle Collisons*/
 	
 	if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE){
@@ -1075,6 +1096,7 @@ void gm_nkey_down(game gm, unsigned char key){
 			chain_ready_zero(gm);
 			gm->chain_num = 0;
             gm->c = 1;
+			gm->hero.spring_state = NOT_ATTACHED;
 			break;
 
         case 'c':

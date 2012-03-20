@@ -29,7 +29,6 @@
 #define USERSELECT 4
 #define WIN 5
 
-
 enum{
     al_game_over_buf,
     al_lvl_complete_buf,
@@ -67,6 +66,7 @@ GLuint extra_tex;
 game gm;
 
 char * argv1;
+int level_test = 0;
 
 ALCdevice * device;
 ALCcontext * context;
@@ -259,10 +259,13 @@ void init(int argc, char** argv){
 		sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
 		strcat(res_buf, level);
 		gm_load_level(gm, res_buf);
+		level_test = 0;
 	}
 	if(argc == 2){
 		argv1 = argv[1];
 		gm_load_level(gm, argv1);
+		game_mode = GAME;
+		level_test = 1;
 	}
 	
 	gm_set_view(gScreen->w, gScreen->h, gm);
@@ -290,7 +293,7 @@ void processNormalKeys(unsigned char key) {
 
 
 	
-	gm_nkey_down(gm, key);	
+	  gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
             game_start_session(stats);
@@ -382,22 +385,22 @@ void numbers(void)
 			
 			int state = gm_progress(gm);
             if(state > 0){
-                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj,1, 0);
+                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj, 0.5, 0);
                 int ppl;
                 double tmp_time;
                 gm_stats(gm, &tmp_time, &ppl);
-
-                threadData.stats = stats;
-                threadData.gm_lvl = gm_lvl;
-                threadData.tmp_time = tmp_time;
-                threadData.ppl = ppl;
-                pthread_t thread;
-
-                int rc = pthread_create(&thread, NULL, save_lvl_stats, (void *) &threadData);
-                if (rc){
-                    printf("ERROR; return code from pthread_create() is %d\n", rc);
+                if(!level_test){
+                	threadData.stats = stats;
+                	threadData.gm_lvl = gm_lvl;
+                	threadData.tmp_time = tmp_time;
+                	threadData.ppl = ppl;
+                	pthread_t thread;
+                	
+                	int rc = pthread_create(&thread, NULL, save_lvl_stats, (void *) &threadData);
+                	if (rc){
+                	    printf("ERROR; return code from pthread_create() is %d\n", rc);
+                	}
                 }
-                //game_record_lvl_stats(stats, gm_lvl, tmp_time, ppl);
 
 				gm_timer = 0;
 				game_mode = POSTGAME;
@@ -414,7 +417,7 @@ void numbers(void)
                 lives--;
                 total_deaths++;
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
-                if(lives < 0 ){
+                if(lives < 0 && level_test == 0 ){
                     game_mode = GAMEOVER;
                     s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,1, 0);
                     game_finish_session(stats, total_deaths);
@@ -437,17 +440,23 @@ void numbers(void)
 			gm_update(gm,gScreen->w, gScreen->h, h);
 			if (gm_timer > 4){				
 				gm_timer = 0;
-				game_mode = PREGAME;
-				//gm_free_level(gm);
-				char level[30];
-				strcpy(res_buf, res_path);
-				sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
-				strcat(res_buf, level);
-				gm_load_level(gm, res_buf);
-				if(gm_load_level(gm, res_buf) == 0){
-                    game_mode = WIN;
-                    s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
-                    game_finish_session(stats, total_deaths);
+                if(!level_test){
+                    game_mode = PREGAME;
+                    //gm_free_level(gm);
+                    char level[30];
+                    strcpy(res_buf, res_path);
+                    sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
+                    strcat(res_buf, level);
+                    gm_load_level(gm, res_buf);
+                    if(gm_load_level(gm, res_buf) == 0 && level_test == 0){
+                        game_mode = WIN;
+                        s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
+                        game_finish_session(stats, total_deaths);
+                    }
+                }
+                else{
+                    gm_load_level(gm, argv1);
+                    game_mode = GAME;
                 }
 				gm_update(gm,gScreen->w, gScreen->h, h);
 			}
