@@ -74,6 +74,7 @@ Credits
    draw to make better zombies and people and such)
 
 *Fonts*
+
  - MedievalSharp
    * By wmk69 on openfontlibrary.org
    * License: OFL (SIL Open Font License)
