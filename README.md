@@ -7,10 +7,6 @@ thirsty Zombies.
 Installation 
 -----------
 
-Eventually the plan is to port this from GLUT to SDL so that it will be much
-easier to make this a mac app.  Right now, I made mac app out of this, but it is
-of a much earlier version.  So for the time being, you have to compile this.
-
 There's the required libs:
  
  * libpng
@@ -19,21 +15,29 @@ There's the required libs:
  * libvorbis
  * libogg
  * libvorbisfile
+ * sqlite3
  * OpenGL
  * GLUT
+ * SDL
  * OpenAL
 
-On a mac OpenGL, OpenAL, GLUT, and sqlite3 are preinstalled.  You only have to
-get libpng, and the sound libraries.  Also, if you are not on a mac you will
-have to change the make file suitable to your system (sorry no ./configure!)
+On a mac OpenGL, OpenAL and GLUT are preinstalled.  You only
+have to get libpng, SDL, and the sound libraries.  Also, if you
+are not on a mac you will have to change the make file suitable
+to your system (sorry no ./configure!)
+
+Also, there is an xcode project that you can compile.  You'll
+have to get SDL though.  I have the dynamic libraries included
+so you don't have to compile them.  Also their install name is
+corrected so the game finds them in the app.  See this:
+http://www.cocoadev.com/index.pl?ApplicationLinking
 
 Game play
 --------
 
-Upon start up, either select you name from the list with the arrow keys, or push
-the up arrow key until you see the '|' character, type in your name and hit
-enter.  After you play a few times, you can use the left and right arrow to view
-the high scores for the game and level.
+Upon start up, type in you name or use the arrow keys to select
+it.  Or you can push the left and right arrow keys to see the
+high scores.
  
 You play as the circle hero with red pants.  You job is to rescue the yellow
 people from the green zombies.  To do this you must bring a certain amount of
@@ -54,5 +58,26 @@ three then you get an extra life and the extra people disappear.
 Winning
 -------
 
-Once you beat nine levels than you win... I'll add more as I get time.
+Once you beat 12 levels than you win... I'll add more as I get time.
 
+Credits
+-------
+
+*Progamming*
+ - Bill Covert
+
+*Music and SFX*
+ - Matthew Parker
+
+*Graphics*
+ - Bill Covert (Yeah I know they suck, I'll get someone who can
+   draw to make better zombies and people and such)
+
+*Fonts*
+ - MedievalSharp
+   * By wmk69 on openfontlibrary.org
+   * License: OFL (SIL Open Font License)
+
+- FreeUniversal
+  * By: narrowhouse on openfontlibrary.org
+  * License: OFL (SIL Open Font License)

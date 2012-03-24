@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include </usr/include/time.h>
 #include <math.h>
 #include <sqlite3.h>
 #include <GLUT/GLUT.h>
@@ -27,7 +27,7 @@ typedef struct user_list{
 
 typedef struct level_list{
     int id;
-    char * name;
+    unsigned char * name;
     int level_id;
     char * date_string;
     double time;
@@ -280,7 +280,6 @@ void render_user_list(data_record db, int width, int height){
             c[3] = 0;
         }
         rat_set_text_color(db->font, c);
-        float len;
 				if(i < 10){
 					rat_font_render_text(db->font,width/2 - 250,height-180-30*i, node->name);	
 				}
@@ -384,14 +383,14 @@ void prepare_game_list(data_record db){
         strcpy(node->name, sqlite3_column_text(sql, 1));
 
         node->date = sqlite3_column_int(sql, 2);
-/*
+
 		char buf[200];
         time_t stamp = (time_t)node->date;
 		struct tm * tmptr = gmtime(&stamp);
         strftime(buf, 200, "%b %d, %Y", tmptr);
-        node->date_string = (char*)malloc(sizeof(buf)+1);
+        node->date_string = (char*)malloc(strlen(buf)*sizeof(char)+1);
         strcpy(node->date_string, buf);
-  */      
+      
         node->max_level = sqlite3_column_int(sql, 3);
         node->elapsed_time = sqlite3_column_int(sql, 4);
         node->people_saved = sqlite3_column_int(sql, 5);
@@ -447,7 +446,7 @@ void render_game_list(data_record db, int width, int height){
         float len;
         
         //sprintf(buf, "%ld", node->date);
-//        rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
+        rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
 
         sprintf(buf, "%s", node->name);
         len = rat_font_text_length(db->font, buf);
@@ -705,17 +704,18 @@ void prepare_level_scores(data_record db){
         }
         node->next = NULL;
 
+		
         //Fill up the structure with data
-        node->name = (char*)malloc(sizeof(sqlite3_column_text(sql, 0)));
+        node->name = (char*)malloc(sizeof(char)*strlen(sqlite3_column_text(sql, 0)));
         strcpy(node->name, sqlite3_column_text(sql, 0));
-/*
-        time_t stamp = sqlite3_column_int(sql, 5);
-        const struct tm * timeptr = gmtime(&stamp);
-		char nbuf[100];
+        
+		time_t stamp = sqlite3_column_int(sql, 5);
+        const struct tm * timeptr = localtime(&stamp);
+		unsigned char nbuf[100];		
         strftime(nbuf, 100, "%b %d, %Y", timeptr);
-        node->date_string = (char*)malloc(sizeof(nbuf)+1);
+        node->date_string = (char*)malloc(sizeof(char)*strlen(nbuf)+1);
         strcpy(node->date_string, nbuf);
-*/
+
         node->level_id = sqlite3_column_int(sql, 1);
         node->time = sqlite3_column_double(sql, 2);
         node->num_saved = sqlite3_column_int(sql, 3);
@@ -773,7 +773,7 @@ void render_level_scores(data_record db, int width, int height)
         if(node->level_id == db->show_level){
             float len;
 
-//            rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
+            rat_font_render_text(db->font,10,height-80-30*i, node->date_string);
 
             sprintf(buf, "%s", node->name);
             len = rat_font_text_length(db->font, buf);

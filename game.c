@@ -962,17 +962,19 @@ void gm_message_render(game gm, int width, int height){
     rat_set_text_color(gm->font, c);
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
     float len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,20,height-4, buf);*/
+    rat_font_render_text(gm->font,20,height-4, buf);
+    */
+
     float len;
-	sprintf(buf, "Time: %.1lf", gm->timer);	
+	sprintf(buf, "%.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
 	
-
+	/*
     sprintf(buf, "Chain Num: %d", gm->chain_num);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font, width - 250,height-4, buf);
-
+	*/
 
     float co[4] = {0,0,0,0};
     rat_set_text_color(gm->font, co);
