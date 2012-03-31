@@ -26,6 +26,7 @@
 		7A5AAC1B14533CE700BE4B3C /* libvorbisfile.3.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */; };
 		7A5AAC241453437C00BE4B3C /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAC231453437C00BE4B3C /* libz.1.dylib */; };
 		7A5AAC251453438300BE4B3C /* libz.1.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAC231453437C00BE4B3C /* libz.1.dylib */; };
+		7A814AD0151FEAEE00F06108 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A814ACF151FEAEE00F06108 /* libcurl.4.dylib */; };
 		7AA1AE3B14191CA10016FDA7 /* physics.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1AE3914191CA10016FDA7 /* physics.c */; };
 		7AA33AF614146C1300C09ED8 /* Zombie.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7AA33AF514146C1300C09ED8 /* Zombie.icns */; };
 		7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */; };
@@ -88,6 +89,7 @@
 		7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = libs/libvorbis.0.dylib; sourceTree = "<group>"; };
 		7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisfile.3.dylib; path = libs/libvorbisfile.3.dylib; sourceTree = "<group>"; };
 		7A5AAC231453437C00BE4B3C /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = libs/libz.1.dylib; sourceTree = "<group>"; };
+		7A814ACF151FEAEE00F06108 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = libs/libcurl.4.dylib; sourceTree = "<group>"; };
 		7AA1AE3914191CA10016FDA7 /* physics.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = physics.c; sourceTree = "<group>"; };
 		7AA1AE3A14191CA10016FDA7 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
 		7AA33AF514146C1300C09ED8 /* Zombie.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Zombie.icns; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				7A5AAC241453437C00BE4B3C /* libz.1.dylib in Frameworks */,
 				7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */,
 				7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */,
+				7A814AD0151FEAEE00F06108 /* libcurl.4.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +162,7 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7A814ACF151FEAEE00F06108 /* libcurl.4.dylib */,
 				7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */,
 				7A5AAC231453437C00BE4B3C /* libz.1.dylib */,
 				7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */,

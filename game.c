@@ -101,7 +101,7 @@ typedef struct gametype {
 
     int c; //Varibale to keep track if the c key is being pressed down.
 	
-	float h,w; //Height and width of the level
+	double h,w; //Height and width of the level
 	ppl person[100]; //Zombies and people array
 	int person_num; //How many there are
 	_hero hero;
@@ -111,6 +111,7 @@ typedef struct gametype {
 	int save_count;  //How many people you have to save to win the level
 	line walls[100];
 	int wall_num;
+	
 
     //Experiental Particle thiny for zombies
     stink_struct stnk[100];
@@ -233,9 +234,6 @@ int gm_init_textures(game gm){
     strcat(gm->res_buf, "/imgs/blank.png");
     load_texture(gm->res_buf, &gm->blank_tex);
 
-    strcpy(gm->res_buf, gm->res_path);
-    strcat(gm->res_buf, "/imgs/bk.png");
-    load_texture(gm->res_buf, &gm->bk);
 
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/extra.png");
@@ -255,7 +253,7 @@ void gm_init_sounds(game gm){
 	
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/snd/saved2.ogg");
-	  snd_load_file(gm->res_buf, gm->buf[al_saved2_buf]);
+    snd_load_file(gm->res_buf, gm->buf[al_saved2_buf]);
 
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/snd/wall.ogg");
@@ -429,6 +427,15 @@ void gm_update(game gm, int width, int height, double dt){
 			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
 			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
 		}
+        /* An Idea I might get back to - a shield power-up
+        if(gm->person[i].state == ZOMBIE && gm->shield == 1 &&
+           v2SPow(v2Sub(gm->person[i].o.p, gm->hero.o.p)) < (gm->hero.o.r*3 + gm->person[i].o.r)*(gm->hero.o.r*3 + gm->person[i].o.r)){
+            object * a = &gm->person[i].o;
+            object * b = &gm->hero.o;
+            a->f.x += 20500*a->m*b->m*(a->p.x - b->p.x)/(v2SPow(v2Sub(a->p, b->p)) * v2Len(v2Sub(a->p, b->p)));
+            a->f.y += 20500*a->m*b->m*(a->p.y - b->p.y)/(v2SPow(v2Sub(a->p, b->p)) * v2Len(v2Sub(a->p, b->p)));
+        }
+        */
 	}
 	
 	/*Spring force in the people chain*/
@@ -840,6 +847,7 @@ void gm_render(game gm){
 	glEnd();
 	glPopMatrix();
 
+
 	for(i=0; i<gm->person_num; i++){
 		if(gm->person[i].state == PERSON && gm->person[i].emo == NORMAL){
 			glBindTexture( GL_TEXTURE_2D, gm->person_tex);
@@ -1170,6 +1178,18 @@ vector2 gm_dim(game gm){
 	return dim;
 }
 
+void gm_free_level(game gm){
+	glDeleteTextures(1, &gm->bk);
+}
+
+int gm_load_bk(game gm, char * file){
+        if(!load_texture(file, &gm->bk)){
+            strcpy(gm->res_buf, gm->res_path);
+            strcat(gm->res_buf, "/imgs/bk.png");
+            load_texture(gm->res_buf, &gm->bk);
+        }
+}
+
 int load_level_file(game gm, char * file){
 		int i;
 		FILE *loadFile;
@@ -1182,6 +1202,7 @@ int load_level_file(game gm, char * file){
 			return 0;
 		}
 		
+
 		char type[5];
 		int result;
 		
@@ -1198,7 +1219,7 @@ int load_level_file(game gm, char * file){
         gm->stnk_num = 0;
 		while( (result = fscanf(loadFile, "%s", type)) != EOF){
 			if(!strncmp(type, "hw", 2)){
-				result = fscanf(loadFile, "%f %f", &gm->h, &gm->w);
+				result = fscanf(loadFile, "%lf %lf", &gm->h, &gm->w);
 				if(result != 2){
 					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
 					printf("Error: Height and width.\n");

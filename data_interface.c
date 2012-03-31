@@ -4,6 +4,7 @@
 #include </usr/include/time.h>
 #include <math.h>
 #include <sqlite3.h>
+#include <curl/curl.h>
 #include <GLUT/GLUT.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
@@ -277,7 +278,7 @@ void render_user_list(data_record db, int width, int height){
             c[0] = 0;
             c[1] = 0;
             c[2] = 0;
-            c[3] = 0;
+            c[3] = 1;
         }
         rat_set_text_color(db->font, c);
 				if(i < 10){
@@ -306,7 +307,7 @@ void render_user_list(data_record db, int width, int height){
         c[0] = 0;
         c[1] = 0;
         c[2] = 0;
-        c[3] = 0;
+        c[3] = 1;
     }
     rat_set_text_color(db->font, c);
  		float len;
@@ -316,7 +317,7 @@ void render_user_list(data_record db, int width, int height){
 		c[0] = 0;
     c[1] = 0;
     c[2] = 0;
-    c[3] = 0;
+    c[3] = 1;
 		rat_set_text_color(db->font, c);
 		
 		if(db->user_l == NULL){
@@ -411,7 +412,7 @@ void render_game_list(data_record db, int width, int height){
     c[0] = .1;
     c[1] = .1;
     c[2] = .1;
-    c[3] = .1;
+    c[3] = 1;
     rat_set_text_color(db->font, c);
 
     //Prints the header
@@ -438,7 +439,7 @@ void render_game_list(data_record db, int width, int height){
     c[0] = .8;
     c[1] = .8;
     c[2] = .8;
-    c[3] = .1;
+    c[3] = 1;
     rat_set_text_color(db->font, c);
     game_list * node;
     int i = 0;
@@ -551,7 +552,7 @@ void game_finish_session(data_record db, int deaths){
     sqlite3_close(sdb);
 }
 
-void game_record_lvl_stats(data_record db, int lvl, double time, int extra_ppl){
+void game_record_lvl_stats(data_record db, int lvl, double time_lvl, int extra_ppl){
     sqlite3 * sdb;
     sqlite3_stmt * sql;
     const char * extra;
@@ -563,7 +564,7 @@ void game_record_lvl_stats(data_record db, int lvl, double time, int extra_ppl){
                  "people_saved) VALUES ('%d', '%d', '%f','%d');",
             db->game_id,
             lvl,
-            time,
+            time_lvl,
             extra_ppl
            );
     printf("%s\n", stmt);
@@ -575,7 +576,79 @@ void game_record_lvl_stats(data_record db, int lvl, double time, int extra_ppl){
     result = sqlite3_step(sql);
     printf("Step result: %d\n", result);
     sqlite3_finalize(sql);
+
+    sprintf(stmt, "SELECT name FROM user WHERE id = %d;", db->user_id);
+    printf("%s\n", stmt);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1, &sql, &extra);
+    printf("prepare result: %d  ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    char * tmp_name = (char*)malloc(sizeof(char)*strlen(sqlite3_column_text(sql, 0)));
+    strcpy(tmp_name, sqlite3_column_text(sql, 0));
+    printf("Current Name: %s\n", tmp_name);
+    sqlite3_finalize(sql);
+
     sqlite3_close(sdb);
+
+    //This will push the stats to a server
+    CURL *curl;
+    CURLcode res;
+     
+     struct curl_httppost *formpost=NULL;
+     struct curl_httppost *lastptr=NULL;
+     
+     curl_global_init(CURL_GLOBAL_ALL);
+
+     int current_time = (int)time(NULL);
+     char str_buf[100];
+     
+     // Fill in the filename field 
+     sprintf(str_buf, "%d\0", lvl);
+     curl_formadd(&formpost,
+                  &lastptr,
+                  CURLFORM_COPYNAME, "level_id",
+                  CURLFORM_COPYCONTENTS, str_buf,
+                  CURLFORM_END);
+     
+     curl_formadd(&formpost,
+                  &lastptr,
+                  CURLFORM_COPYNAME, "name",
+                  CURLFORM_COPYCONTENTS, tmp_name,
+                  CURLFORM_END);
+
+     sprintf(str_buf, "%d\0", current_time);
+     curl_formadd(&formpost,
+                 &lastptr,
+                 CURLFORM_COPYNAME, "date_time",
+                 CURLFORM_COPYCONTENTS, str_buf,
+                 CURLFORM_END);
+    
+     sprintf(str_buf, "%d\0", extra_ppl);
+     curl_formadd(&formpost,
+                 &lastptr,
+                 CURLFORM_COPYNAME, "save_count",
+                 CURLFORM_COPYCONTENTS, str_buf,
+                 CURLFORM_END);
+
+     sprintf(str_buf, "%f\0", time_lvl);
+     curl_formadd(&formpost,
+                 &lastptr,
+                 CURLFORM_COPYNAME, "time",
+                 CURLFORM_COPYCONTENTS, str_buf,
+                 CURLFORM_END);
+     curl = curl_easy_init();
+     if(curl) {
+       // what URL that receives this POST  
+       curl_easy_setopt(curl, CURLOPT_URL, "http://thewordandprayer.com/Zombies/level_insert.php");
+       curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+       res = curl_easy_perform(curl);
+    
+        // always cleanup  
+        curl_easy_cleanup(curl);
+     
+        // then cleanup the formpost chain  
+        curl_formfree(formpost);
+      }
 }
 
 void user_skey_down(data_record db, int key){
@@ -745,7 +818,7 @@ void render_level_scores(data_record db, int width, int height)
     c[0] = .1;
     c[1] = .1;
     c[2] = .1;
-    c[3] = .1;
+    c[3] = 1;
     rat_set_text_color(db->font, c);
 
     //Prints the header
@@ -765,7 +838,7 @@ void render_level_scores(data_record db, int width, int height)
     c[0] = .8;
     c[1] = .8;
     c[2] = .8;
-    c[3] = .1;
+    c[3] = 1;
     rat_set_text_color(db->font, c);
     level_list * node;
     int i = 0;

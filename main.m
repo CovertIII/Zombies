@@ -222,12 +222,14 @@ void init(int argc, char** argv){
 	src_list = s_init();
 
 // Init Database 
+if(argc == 1){
   NSString * path;
   path = NSHomeDirectory ();
   path = [path stringByAppendingString:@"/.zombie.db"];
   printf("Database path: %s\n", [path cStringUsingEncoding:1]);
   stats = init_data_record([path cStringUsingEncoding:1], res_path);
   stats_list_prep(stats);
+}
 
 // Loads Fonts for HUD
   font = rat_init();
@@ -255,6 +257,11 @@ void init(int argc, char** argv){
 
 	char level[30];
 	if(argc == 1){
+        gm_free_level(gm);
+        strcpy(res_buf, res_path);
+        sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+        strcat(res_buf, level);
+        gm_load_bk(gm, res_buf);
 		strcpy(res_buf, res_path);
 		sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
 		strcat(res_buf, level);
@@ -263,6 +270,11 @@ void init(int argc, char** argv){
 	}
 	if(argc == 2){
 		argv1 = argv[1];
+        gm_free_level(gm);
+        char bk[400];
+        strcpy(bk, argv1);
+        strcat(bk, ".png");
+        gm_load_bk(gm, bk);
 		gm_load_level(gm, argv1);
 		game_mode = GAME;
 		level_test = 1;
@@ -276,7 +288,7 @@ void init(int argc, char** argv){
 /*Load backgourd music and start playing*/
   als = al_stream_init();
 	strcpy(res_buf, res_path);
-	strcat(res_buf, "/snd/track1.ogg");
+	strcat(res_buf, "/snd/track2.ogg");
   al_stream_load_file(als, res_buf);
   al_stream_play(als);
 
@@ -285,8 +297,8 @@ void init(int argc, char** argv){
 
 void processNormalKeys(unsigned char key) {
 	if (key == 27) {
-        if(game_mode == PREGAME || game_mode == GAME || game_mode == POSTGAME){
-                game_finish_session(stats, total_deaths);
+        if((game_mode == PREGAME || game_mode == GAME || game_mode == POSTGAME) && !level_test){
+            game_finish_session(stats, total_deaths);
         }
 		exit(0);
     }
@@ -323,8 +335,13 @@ void processNormalKeys(unsigned char key) {
         }
     }
     else{
-        if(key == 'r'){
+        if(key == 'r' && level_test){
             game_mode = GAME;
+            gm_free_level(gm);
+            char bk[400];
+            strcpy(bk, argv1);
+            strcat(bk, ".png");
+            gm_load_bk(gm, bk);
             gm_load_level(gm, argv1);
         }
     }
@@ -339,7 +356,9 @@ void pressKey(int key) {
 	if(game_mode == GAME || game_mode == POSTGAME){
 		gm_skey_down(gm, key);	
 	}
-    user_skey_down(stats, key);
+    if(level_test == 0){
+        user_skey_down(stats, key);
+    }
 }
 
 void releaseKey(int key) {
@@ -361,7 +380,7 @@ void numbers(void)
         al_stream_free_file(als);    
        
 		strcpy(res_buf, res_path);
-		strcat(res_buf, "/snd/track1.ogg");
+		strcat(res_buf, "/snd/track2.ogg");
         al_stream_load_file(als, res_buf);
         al_stream_play(als);
     }
@@ -385,7 +404,7 @@ void numbers(void)
 			
 			int state = gm_progress(gm);
             if(state > 0){
-                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj, 0.5, 0);
+                s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj, 0.05, 0);
                 int ppl;
                 double tmp_time;
                 gm_stats(gm, &tmp_time, &ppl);
@@ -419,16 +438,16 @@ void numbers(void)
                 extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
                 if(lives < 0 && level_test == 0 ){
                     game_mode = GAMEOVER;
-                    s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,1, 0);
+                    s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,0.1, 0);
                     game_finish_session(stats, total_deaths);
                 }else
                 {
 					int rand_num = rand()%2;	
 					if (rand_num == 0) {
-						s_add_snd(src_list, al_buf[al_loose1_buf], &snd_obj,1, 0);
+						s_add_snd(src_list, al_buf[al_loose1_buf], &snd_obj,0.1, 0);
 					}
 					else{
-						s_add_snd(src_list, al_buf[al_loose2_buf], &snd_obj,1, 0);
+						s_add_snd(src_list, al_buf[al_loose2_buf], &snd_obj,0.1, 0);
 					}
 					
                     game_mode = POSTGAME;
@@ -442,12 +461,16 @@ void numbers(void)
 				gm_timer = 0;
                 if(!level_test){
                     game_mode = PREGAME;
-                    //gm_free_level(gm);
+                    gm_free_level(gm);
                     char level[30];
+                    strcpy(res_buf, res_path);
+                    sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+                    strcat(res_buf, level);
+                    gm_load_bk(gm, res_buf);
+
                     strcpy(res_buf, res_path);
                     sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
                     strcat(res_buf, level);
-                    gm_load_level(gm, res_buf);
                     if(gm_load_level(gm, res_buf) == 0 && level_test == 0){
                         game_mode = WIN;
                         s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
@@ -525,7 +548,7 @@ static void drawGL ()
 
             if(stats_render(stats, gScreen->w, gScreen->h)==0){
 				      char buf[180];
-							float c[4] = {.1,.4,.15,.1};
+							float c[4] = {.1,.4,.15,1};
 	            rat_set_text_color(sfont, c);
 							sprintf(buf, "Zombies!");	
 	            float len = rat_font_text_length(sfont, buf);
@@ -660,9 +683,10 @@ static void mainLoop ()
 
 		numbers();
 		drawGL ();
+		
         SDL_GL_SwapBuffers (); 
 		
-		
+		/*
 		if (thenTicks > 0) {
             nowTicks = SDL_GetTicks ();
             delay += (1000/fps - (nowTicks-thenTicks));
@@ -675,6 +699,7 @@ static void mainLoop ()
         }
 		
 		SDL_Delay (delay);
+		*/
 	}
 }
 

@@ -5,9 +5,9 @@ Insert uppercase letters in SDL
 
 Load splash logo in data_interface render and directions and credits
 
-Load a different background for each level. -- Think of a png file that can be generated for each level.
+String length check on USERDATA to start gane
 
-
+DONE Load a different background for each level. -- Think of a png file that can be generated for each level.
 DONE When open level to test it, skip all the database stuff.
 
 DONE Use the mouse to move the hero, not just keyboard.

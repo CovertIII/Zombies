@@ -77,15 +77,6 @@ void rat_font_render_text(rat_font *font,float x,float y,char *text)
 	char *ch;
     rat_texture_font * tfont = font->tfont;
 
-	glPushAttrib(GL_LIST_BIT|GL_CURRENT_BIT|GL_ENABLE_BIT|GL_TRANSFORM_BIT);
-		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_LIGHTING);
-		glEnable(GL_TEXTURE_2D);
-		glDisable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
 		glPushMatrix();
 		glColor4fv(font->c);
 			for (ch=text; *ch; ch++)
@@ -110,7 +101,6 @@ void rat_font_render_text(rat_font *font,float x,float y,char *text)
 				glTranslatef(tfont->wids[*ch],0,0);
 			}
 		glPopMatrix();
-	glPopAttrib();
 }
 
 // upper left corner is always zero
