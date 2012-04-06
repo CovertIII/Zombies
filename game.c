@@ -62,6 +62,7 @@ typedef struct {
 	int state; 
 	int emo; 
 	int ready;
+    double mx_f;
 } ppl;
 
 typedef struct {
@@ -389,6 +390,7 @@ void gm_update(game gm, int width, int height, double dt){
             s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->person[i].o, 1, 1);
 			gm->person[i].o.v.x = rand()%50 - 25;
 			gm->person[i].o.v.y = rand()%50 - 25;
+            gm->person[i].mx_f = v2Len(gm->person[i].o.v);
 		}
 	}
 	gm->hero.timer -= dt;
@@ -427,15 +429,12 @@ void gm_update(game gm, int width, int height, double dt){
 			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
 			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
 		}
-        /* An Idea I might get back to - a shield power-up
-        if(gm->person[i].state == ZOMBIE && gm->shield == 1 &&
-           v2SPow(v2Sub(gm->person[i].o.p, gm->hero.o.p)) < (gm->hero.o.r*3 + gm->person[i].o.r)*(gm->hero.o.r*3 + gm->person[i].o.r)){
-            object * a = &gm->person[i].o;
-            object * b = &gm->hero.o;
-            a->f.x += 20500*a->m*b->m*(a->p.x - b->p.x)/(v2SPow(v2Sub(a->p, b->p)) * v2Len(v2Sub(a->p, b->p)));
-            a->f.y += 20500*a->m*b->m*(a->p.y - b->p.y)/(v2SPow(v2Sub(a->p, b->p)) * v2Len(v2Sub(a->p, b->p)));
+        if(gm->person[i].state == ZOMBIE || (gm->person[i].state == PERSON && gm->person[i].ready == 0)){
+            vector2 dir = v2Unit(gm->person[i].o.v);
+			gm->person[i].o.f.x +=  -gm->person[i].o.v.x + gm->person[i].mx_f*dir.x;
+			gm->person[i].o.f.y +=  -gm->person[i].o.v.y + gm->person[i].mx_f*dir.y;
         }
-        */
+
 	}
 	
 	/*Spring force in the people chain*/
@@ -583,6 +582,7 @@ void gm_update(game gm, int width, int height, double dt){
 					}
 					gm->hero.person_id = i;
 					gm->person[i].ready = 1;
+					gm->person[i].mx_f = 0;
 				}
 			}
 			else if(gm->person[i].state == ZOMBIE && gm->hero.state == PERSON){
@@ -1259,6 +1259,7 @@ int load_level_file(game gm, char * file){
 					printf("Error: A person was not loaded.\n");
 				}
 				else{
+                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
                     gm->person[num].o.snd = 0;
 					gm->person_num++;
 				}
@@ -1281,6 +1282,7 @@ int load_level_file(game gm, char * file){
 				}
 				else{
                     stink_add(gm, gm->person_num);
+                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
                     gm->person[num].o.snd = 0;
 					gm->person_num++;
 				}
@@ -1349,8 +1351,17 @@ void chain_cut(game gm, int index){
 		}
 	}
 	if(match == -1){return;}
-	chain_ready_zero(gm);
-	gm->chain_num = 0;
+    for(k = match; k >= 0; k--){
+        int temp = gm->ppl_chain[k];
+        gm->person[temp].ready = 0;
+    }
+    gm->chain_num = gm->chain_num - match - 1;
+    for(k = 0; k < gm->chain_num; k++){
+        gm->ppl_chain[k] = gm->ppl_chain[k + match + 1];
+    }
+    if(gm->chain_num = 0){
+        gm->hero.spring_state = NOT_ATTACHED;
+    }
 }
 
 void chain_ready_zero(game gm){

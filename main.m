@@ -42,6 +42,8 @@ enum{
 char * res_path;
 char * res_buf;
 
+int sound_track = 1;
+
 ALuint al_buf[al_buf_num];
 s_list src_list;
 al_stream als;
@@ -286,9 +288,10 @@ if(argc == 1){
 	
 	
 /*Load backgourd music and start playing*/
+   
   als = al_stream_init();
-	strcpy(res_buf, res_path);
-	strcat(res_buf, "/snd/track2.ogg");
+  strcpy(res_buf, res_path);
+  strcat(res_buf, "/snd/track1.ogg");
   al_stream_load_file(als, res_buf);
   al_stream_play(als);
 
@@ -321,8 +324,12 @@ void processNormalKeys(unsigned char key) {
             gm_lvl = 1;
             lives = 3;
             
-			//gm_free_level(gm);
+			gm_free_level(gm);
             char level[30];
+            strcpy(res_buf, res_path);
+            sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+            strcat(res_buf, level);
+            gm_load_bk(gm, res_buf);
 			strcpy(res_buf, res_path);
 			sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
 			strcat(res_buf, level);
@@ -378,9 +385,15 @@ void numbers(void)
     state = al_stream_update(als);
     if(state == AL_STOPPED){
         al_stream_free_file(als);    
-       
 		strcpy(res_buf, res_path);
-		strcat(res_buf, "/snd/track2.ogg");
+        if(sound_track == 1){
+            strcat(res_buf, "/snd/track2.ogg");
+            sound_track = 2;
+        }
+        else{
+            strcat(res_buf, "/snd/track1.ogg");
+            sound_track = 1;
+        }
         al_stream_load_file(als, res_buf);
         al_stream_play(als);
     }

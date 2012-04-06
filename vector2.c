@@ -20,6 +20,11 @@ vector2 v2Neg(vector2 a) {
 }	
 vector2 v2Unit(vector2 v) {
 	vector2 a;
+    if (v2Len(v) == 0){
+        a.x = 0;
+        a.y = 0;
+        return a;
+    }
 	a.x = v.x/v2Len(v);
 	a.y = v.y/v2Len(v);
 	return a;
