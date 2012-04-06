@@ -521,10 +521,7 @@ void gm_update(game gm, int width, int height, double dt){
             vector2 bp = gm->person[h].o.p;
 			for(i = 0; i < gm->wall_num; i++){
 	           if(line_line(p, bp, gm->walls[i].p1, gm->walls[i].p2)){
-	                chain_ready_zero(gm);
-					gm->chain_num = 0;
-		            gm->c = 1;
-					gm->hero.spring_state = NOT_ATTACHED;
+                    chain_cut(gm, j);
 	                i = gm->wall_num;
 	           } 
 	        }	
