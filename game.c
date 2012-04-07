@@ -523,6 +523,7 @@ void gm_update(game gm, int width, int height, double dt){
 	           if(line_line(p, bp, gm->walls[i].p1, gm->walls[i].p2)){
                     chain_cut(gm, j);
 	                i = gm->wall_num;
+                    k = 0;
 	           } 
 	        }	
 		}
@@ -1356,7 +1357,7 @@ void chain_cut(game gm, int index){
     for(k = 0; k < gm->chain_num; k++){
         gm->ppl_chain[k] = gm->ppl_chain[k + match + 1];
     }
-    if(gm->chain_num = 0){
+    if(gm->chain_num == 0){
         gm->hero.spring_state = NOT_ATTACHED;
     }
 }

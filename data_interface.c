@@ -491,7 +491,7 @@ int stats_render(data_record db, int width, int height){
     switch(db->disp){
         case 0:
             render_user_list(db, width, height);
-						return 0;
+			return 0;
             break;
         case 1:
             render_game_list(db, width, height);
