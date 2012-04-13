@@ -1,13 +1,13 @@
 CFLAGS=-g
 MACFLAGS=-framework GLUT -framework OpenGL -framework Cocoa -framework OpenAL
-STATIC = -lsqlite3 -lvorbis -logg -lvorbisfile -lpng -lfreetype `sdl-config --cflags --libs` 
+STATIC = -lsqlite3 -lcurl -lvorbis -logg -lvorbisfile -lpng -lfreetype `sdl-config --cflags --libs` 
 
 CC=gcc
 
 all: Zombies CTags
 
-Zombies: freetype_imp.o data_interface.o main.o physics.o load_sound.o game.o vector2.o load_png.o sound_list.o stream_sound.o
-	$(CC) $(CFLAGS) $(STATIC) $(MACFLAGS) data_interface.o freetype_imp.o physics.o stream_sound.o vector2.o sound_list.o load_png.o game.o load_sound.o main.o -o Zombies
+Zombies: freetype_imp.o data_interface.o main.o ai.o physics.o load_sound.o game.o vector2.o load_png.o sound_list.o stream_sound.o
+	$(CC) $(CFLAGS) $(STATIC) $(MACFLAGS) data_interface.o ai.o freetype_imp.o physics.o stream_sound.o vector2.o sound_list.o load_png.o game.o load_sound.o main.o -o Zombies
 
 CTags: main.o
 	ctags *.c *.h
@@ -29,6 +29,9 @@ data_interface.o: data_interface.c data_interface.h freetype_imp.h
 
 physics.o: physics.c physics.h vector2.h
 	$(CC) $(CFLAGS) -c physics.c 
+
+ai.o: ai.c ai.h vector2.h physics.h
+	$(CC) $(CFLAGS) -c ai.c 
 
 sound_list.o: sound_list.c sound_list.h vector2.h
 	$(CC) $(CFLAGS) -c sound_list.c

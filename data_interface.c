@@ -94,8 +94,8 @@ data_record init_data_record(char * file_name, char * resource_path){
     db->game_l = NULL;
     db->show_level = 1;
 
-    db->res_path = (char*)malloc(strlen(resource_path)*sizeof(char)+sizeof(char)*50);
-    db->res_buf  = (char*)malloc(strlen(resource_path)*sizeof(char)+sizeof(char)*50);
+    db->res_path = (char*)malloc(strlen(resource_path)*sizeof(char)+sizeof(char)*100);
+    db->res_buf  = (char*)malloc(strlen(resource_path)*sizeof(char)+sizeof(char)*100);
     strcpy(db->res_path, resource_path);
 	printf("data_interfae.c - path mem: %ld\n", strlen(resource_path)*sizeof(char)+sizeof(char)*50);
 
@@ -691,7 +691,8 @@ void user_skey_down(data_record db, int key){
 int user_nkey_down(data_record db, unsigned char key){
     if(db->disp == 0){
         if(key==10 || key==13){
-            if(db->v_cursor == -1 && db->h_cursor > 1){
+            if(db->v_cursor == -1 && db->h_cursor > 1 && strlen(db->tmp_name) > 3){
+                printf("%s %d\n", db->tmp_name, strlen(db->tmp_name));
                 sqlite3 * sdb;
                 sqlite3_stmt * sql;
                 const char * extra;

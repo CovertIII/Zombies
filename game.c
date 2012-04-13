@@ -15,9 +15,10 @@
 #include "load_sound.h"
 #include "vector2.h"
 #include "physics.h"
-#include "sound_list.h"
-#include "game.h"
 #include "load_png.h"
+#include "sound_list.h"
+#include "ai.h"
+#include "game.h"
 
 #define ZOMBIE 0
 #define Z_P 1
@@ -63,6 +64,9 @@ typedef struct {
 	int emo; 
 	int ready;
     double mx_f;
+
+    int chase;
+    int parent_id;
 } ppl;
 
 typedef struct {
@@ -112,6 +116,8 @@ typedef struct gametype {
 	int save_count;  //How many people you have to save to win the level
 	line walls[100];
 	int wall_num;
+
+    vector2 tp;
 	
 
     //Experiental Particle thiny for zombies
@@ -152,6 +158,7 @@ void chain_cut(game gm, int index);
 void stink_add(game gm, int id);
 void stink_step(game gm, double dt);
 void stink_render(game gm);
+void zb_chase_hero(game gm);
 
 
 game gm_init(char * res_path){
@@ -422,21 +429,29 @@ void gm_update(game gm, int width, int height, double dt){
 	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x + msf.x;
 	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y + msf.y;
 	
+
+    //Ai Forces
+
+    zb_chase_hero(gm);
+	
 	/*Slows a person down when they are in the safe zone or if they are turning into a zombie*/
 	for(i = 0; i < gm->person_num; i++){
-			//gm->person[i].o.f.y += -30;
 		if(gm->person[i].state == SAFE ||gm->person[i].state == P_Z){
 			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
 			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
 		}
-        if(gm->person[i].state == ZOMBIE || (gm->person[i].state == PERSON && gm->person[i].ready == 0)){
+        if((gm->person[i].state == ZOMBIE && gm->person[i].chase == 0 ) || (gm->person[i].state == PERSON && gm->person[i].ready == 0)){
             vector2 dir = v2Unit(gm->person[i].o.v);
 			gm->person[i].o.f.x +=  -gm->person[i].o.v.x + gm->person[i].mx_f*dir.x;
 			gm->person[i].o.f.y +=  -gm->person[i].o.v.y + gm->person[i].mx_f*dir.y;
         }
+        if(gm->person[i].chase == 1){
+			gm->person[i].o.f.x +=  -gm->person[i].o.v.x;
+			gm->person[i].o.f.y +=  -gm->person[i].o.v.y;
+        }
 
 	}
-	
+
 	/*Spring force in the people chain*/
 	if(gm->chain_num > 0){
 		float ks = 50, r = 5, kd=1;
@@ -642,12 +657,14 @@ void gm_update(game gm, int width, int height, double dt){
 				if(gm->person[i].state == PERSON && gm->person[k].state == ZOMBIE){					
 					gm->person[i].timer = MAX_TIME;
 					gm->person[i].state = P_Z;
+					gm->person[i].parent_id = k;
 					chain_cut(gm, i);
                     s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 4);
 				}
 				if(gm->person[i].state == ZOMBIE && gm->person[k].state == PERSON){
 					gm->person[k].timer = MAX_TIME;
 					gm->person[k].state = P_Z;
+					gm->person[k].parent_id = i;
 					chain_cut(gm, k);
                     s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 4);
 				}
@@ -844,6 +861,25 @@ void gm_render(game gm){
 	glVertex3f(1.0, -1.0, 0.0);
 	glEnd();
 	glPopMatrix();
+
+
+
+    glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
+    glPushMatrix();
+	glTranslatef(gm->tp.x, gm->tp.y, 0);
+	glScalef(0.5, 0.5,0);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(-1.0, -1.0, 0.0);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(-1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(1.0, 1.0, 0.0);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(1.0, -1.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
 
 
 	for(i=0; i<gm->person_num; i++){
@@ -1259,6 +1295,8 @@ int load_level_file(game gm, char * file){
 				else{
                     gm->person[num].mx_f = v2Len(gm->person[num].o.v);
                     gm->person[num].o.snd = 0;
+					gm->person[num].chase = 0;
+					gm->person[num].parent_id = -1;
 					gm->person_num++;
 				}
 			}
@@ -1281,6 +1319,8 @@ int load_level_file(game gm, char * file){
 				else{
                     stink_add(gm, gm->person_num);
                     gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+					gm->person[num].chase = 0;
+					gm->person[num].parent_id = -1;
                     gm->person[num].o.snd = 0;
 					gm->person_num++;
 				}
@@ -1436,5 +1476,40 @@ void stink_render(game gm){
         }
     }
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+}
+
+
+void zb_chase_hero(game gm){
+    int k;
+    for(k=0; k < gm->person_num; k++){
+        if(gm->person[k].state == ZOMBIE && gm->person[k].chase == 0 && gm->person[k].o.r > 2){
+            if(v2Len(v2Sub(gm->person[k].o.p, gm->hero.o.p)) <= 20){
+                gm->person[k].chase = 1;
+            }
+        }
+        else if(gm->person[k].state == ZOMBIE && gm->person[k].chase == 1 && gm->person[k].o.r > 2 ){
+            if(v2Len(v2Sub(gm->person[k].o.p, gm->hero.o.p)) >= 30){
+                gm->person[k].chase = 0;
+            }
+        }
+        if(gm->person[k].chase == 1 && gm->hero.state ==  PERSON){
+            ai_chase(&gm->hero.o, &gm->person[k].o, 70.0f, 30.0f);
+            //ai_seek(gm->hero.o.p, &gm->person[k].o, 2.0f);
+            //ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
+        }
+		else if(gm->person[k].state == ZOMBIE && gm->hero.state ==  ZOMBIE){
+            //ai_chase(&gm->hero.o, &gm->person[k].o, 70.0f, 30.0f);
+            ai_seek(gm->hero.o.p, &gm->person[k].o, 2.0f);
+            //ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
+        }
+		
+		if(gm->person[k].state == ZOMBIE && gm->person[k].parent_id >= 0){
+            //ai_chase(&gm->hero.o, &gm->person[k].o, 70.0f, 30.0f);
+            ai_seek(gm->person[gm->person[k].parent_id].o.p, &gm->person[k].o, 2.0f);
+            //ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
+        }
+        
+   }
+
 }
 

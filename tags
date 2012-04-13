@@ -1,6 +1,7 @@
 Mmain	main.c	/^int main(int argc, char *argv[])$/
 _hero	game.c	/^} _hero;$/
 _pow2	freetype_imp.c	/^inline static unsigned int _pow2(unsigned int i)$/
+ai_chase	ai.c	/^void ai_chase(object * target, object * chaser, do/
 al_stream	stream_sound.h	/^typedef struct al_stream_type * al_stream;$/
 al_stream_free_file	stream_sound.c	/^int al_stream_free_file(al_stream als){$/
 al_stream_init	stream_sound.c	/^al_stream al_stream_init(void){$/
@@ -29,9 +30,11 @@ game_start_session	data_interface.c	/^void game_start_session(data_record db){$/
 gametype	game.c	/^} gametype;$/
 gm_dim	game.c	/^vector2 gm_dim(game gm){$/
 gm_free	game.c	/^void gm_free(game gm){$/
+gm_free_level	game.c	/^void gm_free_level(game gm){$/
 gm_init	game.c	/^game gm_init(char * res_path){$/
 gm_init_sounds	game.c	/^void gm_init_sounds(game gm){$/
 gm_init_textures	game.c	/^int gm_init_textures(game gm){$/
+gm_load_bk	game.c	/^int gm_load_bk(game gm, char * file){$/
 gm_load_level	game.c	/^int gm_load_level(game gm, char * lvl){$/
 gm_message_render	game.c	/^void gm_message_render(game gm, int width, int hei/
 gm_mouse	game.c	/^void gm_mouse(game gm, int x, int y){$/
@@ -134,3 +137,4 @@ v2Sub	vector2.c	/^vector2 v2Sub(vector2 a, vector2 b) {$/
 v2Unit	vector2.c	/^vector2 v2Unit(vector2 v) {$/
 v2sMul	vector2.c	/^vector2 v2sMul(float f, vector2 v) {$/
 vector2	vector2.h	/^} vector2;$/
+zb_chase_hero	game.c	/^void zb_chase_hero(game gm){$/
