@@ -16,9 +16,9 @@
 	};
 	002F3A3E09D088BA00EBEB88 /* main.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {851, 9750}}";
-			sepNavSelRange = "{19415, 0}";
-			sepNavVisRange = "{16772, 445}";
+			sepNavIntBoundsRect = "{{0, 0}, {851, 9646}}";
+			sepNavSelRange = "{148, 49}";
+			sepNavVisRange = "{0, 689}";
 		};
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
@@ -91,7 +91,7 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					22,
 					300,
-					560.58349609375,
+					561,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXExecutablesDataSource_ActiveFlagID,
@@ -195,63 +195,36 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 356048632;
-			PBXWorkspaceStateSaveDate = 356048632;
+			PBXPerProjectTemplateStateSaveDate = 363458041;
+			PBXWorkspaceStateSaveDate = 363458041;
 		};
 		perUserProjectItems = {
-			7A004A951513F6C400B17FF6 /* PBXTextBookmark */ = 7A004A951513F6C400B17FF6 /* PBXTextBookmark */;
-			7A004A961513F6C400B17FF6 /* PBXTextBookmark */ = 7A004A961513F6C400B17FF6 /* PBXTextBookmark */;
-			7A0D1215150FE1BC0052F781 /* PBXTextBookmark */ = 7A0D1215150FE1BC0052F781 /* PBXTextBookmark */;
 			7A0D1217150FE1BC0052F781 /* PBXTextBookmark */ = 7A0D1217150FE1BC0052F781 /* PBXTextBookmark */;
 			7A0D1232150FE3650052F781 /* PBXTextBookmark */ = 7A0D1232150FE3650052F781 /* PBXTextBookmark */;
 			7A0D1253150FE51A0052F781 /* PBXTextBookmark */ = 7A0D1253150FE51A0052F781 /* PBXTextBookmark */;
 			7A1BBE94151D242D00163449 /* PBXTextBookmark */ = 7A1BBE94151D242D00163449 /* PBXTextBookmark */;
-			7A21DFDA152BB93C00C65D22 /* PBXTextBookmark */ = 7A21DFDA152BB93C00C65D22 /* PBXTextBookmark */;
-			7A266D821470AED9000B3C77 /* PBXTextBookmark */ = 7A266D821470AED9000B3C77 /* PBXTextBookmark */;
-			7A266D841470AED9000B3C77 /* PBXTextBookmark */ = 7A266D841470AED9000B3C77 /* PBXTextBookmark */;
-			7A266D881470AED9000B3C77 /* PBXTextBookmark */ = 7A266D881470AED9000B3C77 /* PBXTextBookmark */;
 			7A31989C14DE20120059FF6A /* PBXTextBookmark */ = 7A31989C14DE20120059FF6A /* PBXTextBookmark */;
 			7A377B4D152BC504005A8892 /* PBXTextBookmark */ = 7A377B4D152BC504005A8892 /* PBXTextBookmark */;
 			7A377B57152BC5C8005A8892 /* PBXTextBookmark */ = 7A377B57152BC5C8005A8892 /* PBXTextBookmark */;
 			7A377B58152BC5C8005A8892 /* PBXTextBookmark */ = 7A377B58152BC5C8005A8892 /* PBXTextBookmark */;
 			7A5488381538E348005B3906 /* PBXTextBookmark */ = 7A5488381538E348005B3906 /* PBXTextBookmark */;
-			7A54888A1538E503005B3906 /* PBXTextBookmark */ = 7A54888A1538E503005B3906 /* PBXTextBookmark */;
-			7A5488981538EE0D005B3906 /* PBXTextBookmark */ = 7A5488981538EE0D005B3906 /* PBXTextBookmark */;
-			7A5488991538EE0D005B3906 /* PBXTextBookmark */ = 7A5488991538EE0D005B3906 /* PBXTextBookmark */;
-			7A54889A1538EE0D005B3906 /* PBXTextBookmark */ = 7A54889A1538EE0D005B3906 /* PBXTextBookmark */;
-			7A54889C1538EE0D005B3906 /* PBXTextBookmark */ = 7A54889C1538EE0D005B3906 /* PBXTextBookmark */;
-			7A56D48414DE315700625D05 /* PBXTextBookmark */ = 7A56D48414DE315700625D05 /* PBXTextBookmark */;
-			7A5AAC30145346F500BE4B3C /* PBXBookmark */ = 7A5AAC30145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC32145346F500BE4B3C /* PBXBookmark */ = 7A5AAC32145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC33145346F500BE4B3C /* PBXBookmark */ = 7A5AAC33145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC34145346F500BE4B3C /* PBXBookmark */ = 7A5AAC34145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC35145346F500BE4B3C /* PBXBookmark */ = 7A5AAC35145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC36145346F500BE4B3C /* PBXBookmark */ = 7A5AAC36145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC37145346F500BE4B3C /* PBXBookmark */ = 7A5AAC37145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC39145346F500BE4B3C /* PBXBookmark */ = 7A5AAC39145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC3A145346F500BE4B3C /* PBXBookmark */ = 7A5AAC3A145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC3E145346F500BE4B3C /* PBXBookmark */ = 7A5AAC3E145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC41145346F500BE4B3C /* PBXTextBookmark */ = 7A5AAC41145346F500BE4B3C /* PBXTextBookmark */;
-			7A5AAC42145346F500BE4B3C /* PBXTextBookmark */ = 7A5AAC42145346F500BE4B3C /* PBXTextBookmark */;
 			7A5AAC43145346F500BE4B3C /* PBXBookmark */ = 7A5AAC43145346F500BE4B3C /* PBXBookmark */;
-			7A5AAC47145346F500BE4B3C /* PBXTextBookmark */ = 7A5AAC47145346F500BE4B3C /* PBXTextBookmark */;
 			7A5C4FBB1530ABE10041651A /* PBXTextBookmark */ = 7A5C4FBB1530ABE10041651A /* PBXTextBookmark */;
-			7A6341B9150B9DB40010CA19 /* PBXBookmark */ = 7A6341B9150B9DB40010CA19 /* PBXBookmark */;
 			7A6341C0150B9E450010CA19 /* PBXTextBookmark */ = 7A6341C0150B9E450010CA19 /* PBXTextBookmark */;
-			7A6D0CF3150FF1F300F44684 /* PBXTextBookmark */ = 7A6D0CF3150FF1F300F44684 /* PBXTextBookmark */;
-			7A6D0CFD150FF23200F44684 /* PBXTextBookmark */ = 7A6D0CFD150FF23200F44684 /* PBXTextBookmark */;
+			7A6ED78515A9DCBB00912BAB /* PBXTextBookmark */ = 7A6ED78515A9DCBB00912BAB /* PBXTextBookmark */;
+			7A6ED78615A9DCBB00912BAB /* PBXTextBookmark */ = 7A6ED78615A9DCBB00912BAB /* PBXTextBookmark */;
+			7A6ED78915A9DCBB00912BAB /* PBXTextBookmark */ = 7A6ED78915A9DCBB00912BAB /* PBXTextBookmark */;
+			7A6ED78B15A9DCBB00912BAB /* PBXTextBookmark */ = 7A6ED78B15A9DCBB00912BAB /* PBXTextBookmark */;
+			7A6ED7C715A9DE6700912BAB /* PBXTextBookmark */ = 7A6ED7C715A9DE6700912BAB /* PBXTextBookmark */;
+			7A6ED7C815A9DE6700912BAB /* PBXTextBookmark */ = 7A6ED7C815A9DE6700912BAB /* PBXTextBookmark */;
+			7A6ED81D15A9F52900912BAB /* PBXTextBookmark */ = 7A6ED81D15A9F52900912BAB /* PBXTextBookmark */;
+			7A6ED8FD15AA0A0900912BAB /* PBXTextBookmark */ = 7A6ED8FD15AA0A0900912BAB /* PBXTextBookmark */;
+			7A6ED8FE15AA0A0900912BAB /* PBXTextBookmark */ = 7A6ED8FE15AA0A0900912BAB /* PBXTextBookmark */;
+			7A6ED8FF15AA0A0900912BAB /* PBXTextBookmark */ = 7A6ED8FF15AA0A0900912BAB /* PBXTextBookmark */;
+			7A6ED95015AA30F200912BAB /* PBXTextBookmark */ = 7A6ED95015AA30F200912BAB /* PBXTextBookmark */;
 			7A72AEFE141F9975001EB26D /* PBXTextBookmark */ = 7A72AEFE141F9975001EB26D /* PBXTextBookmark */;
 			7A7E4EA61516BB4500C82D8B /* PlistBookmark */ = 7A7E4EA61516BB4500C82D8B /* PlistBookmark */;
 			7A804C2315275849008C3734 /* PBXTextBookmark */ = 7A804C2315275849008C3734 /* PBXTextBookmark */;
-			7A804C2615275849008C3734 /* PBXTextBookmark */ = 7A804C2615275849008C3734 /* PBXTextBookmark */;
-			7A82615D1512D9D400D519D7 /* PBXTextBookmark */ = 7A82615D1512D9D400D519D7 /* PBXTextBookmark */;
-			7A82615E1512D9D400D519D7 /* PBXTextBookmark */ = 7A82615E1512D9D400D519D7 /* PBXTextBookmark */;
-			7A8261611512D9D400D519D7 /* PBXTextBookmark */ = 7A8261611512D9D400D519D7 /* PBXTextBookmark */;
-			7A85CDFC14B8AC6C0098EAC1 /* PBXBookmark */ = 7A85CDFC14B8AC6C0098EAC1 /* PBXBookmark */;
-			7A85CDFD14B8AC6C0098EAC1 /* PBXBookmark */ = 7A85CDFD14B8AC6C0098EAC1 /* PBXBookmark */;
-			7A85CE0D14B8AD330098EAC1 /* PBXBookmark */ = 7A85CE0D14B8AD330098EAC1 /* PBXBookmark */;
-			7AB7CF8314B1574D00C200EB /* PBXBookmark */ = 7AB7CF8314B1574D00C200EB /* PBXBookmark */;
-			7AB7CF8414B1574D00C200EB /* PBXBookmark */ = 7AB7CF8414B1574D00C200EB /* PBXBookmark */;
 			7ABDBB3A14DE249100DB0082 /* PBXTextBookmark */ = 7ABDBB3A14DE249100DB0082 /* PBXTextBookmark */;
 			7AC1AE541514E9C2006969A7 /* PBXTextBookmark */ = 7AC1AE541514E9C2006969A7 /* PBXTextBookmark */;
 			7AC1F3721412FFB20086E03C /* PBXTextBookmark */ = 7AC1F3721412FFB20086E03C /* PBXTextBookmark */;
@@ -260,7 +233,6 @@
 			7AC1F3EE141309170086E03C /* PBXTextBookmark */ = 7AC1F3EE141309170086E03C /* PBXTextBookmark */;
 			7AC3B2BC151D2A6B00C7364E /* PBXTextBookmark */ = 7AC3B2BC151D2A6B00C7364E /* PBXTextBookmark */;
 			7AF40106153640F200CBCA91 /* PBXTextBookmark */ = 7AF40106153640F200CBCA91 /* PBXTextBookmark */;
-			7AF40107153640F200CBCA91 /* PBXBookmark */ = 7AF40107153640F200CBCA91 /* PBXBookmark */;
 			7AFA3CB1151FD2B9006DD555 /* PBXTextBookmark */ = 7AFA3CB1151FD2B9006DD555 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 7AC1F3521412FD240086E03C /* Source Control */;
@@ -274,42 +246,12 @@
 			sepNavVisRange = "{0, 175}";
 		};
 	};
-	7A004A951513F6C400B17FF6 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A8261601512D9D400D519D7 /* idea.txt */;
-		name = "idea.txt: 1";
-		rLen = 189;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 189;
-		vrLoc = 0;
-	};
-	7A004A961513F6C400B17FF6 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A8261661512DECB00D519D7 /* lvl1.txt */;
-		name = "lvl1.txt: 14";
-		rLen = 0;
-		rLoc = 189;
-		rType = 0;
-		vrLen = 189;
-		vrLoc = 0;
-	};
 	7A0D1211150FE19D0052F781 /* game.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {851, 19526}}";
-			sepNavSelRange = "{41373, 0}";
-			sepNavVisRange = "{39829, 1449}";
+			sepNavIntBoundsRect = "{{0, 0}, {894, 19981}}";
+			sepNavSelRange = "{8970, 0}";
+			sepNavVisRange = "{8678, 882}";
 		};
-	};
-	7A0D1215150FE1BC0052F781 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AC1F3621412FF8E0086E03C /* load_png.c */;
-		name = "load_png.c: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 989;
-		vrLoc = 0;
 	};
 	7A0D1217150FE1BC0052F781 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -341,13 +283,6 @@
 		vrLen = 1506;
 		vrLoc = 3911;
 	};
-	7A0D127F150FE7340052F781 /* ftutil.c */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.c;
-		name = ftutil.c;
-		path = "/Users/williamcovertiii/Downloads/freetype-2.4.7/src/base/ftutil.c";
-		sourceTree = "<absolute>";
-	};
 	7A1BBE94151D242D00163449 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 002F3A2B09D0888800EBEB88 /* SDLMain.h */;
@@ -358,80 +293,12 @@
 		vrLen = 374;
 		vrLoc = 0;
 	};
-	7A21DFDA152BB93C00C65D22 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 002F3A3E09D088BA00EBEB88 /* main.m */;
-		name = "main.m: 738";
-		rLen = 0;
-		rLoc = 19415;
-		rType = 0;
-		vrLen = 445;
-		vrLoc = 16772;
-	};
 	7A266D191470A5C2000B3C77 /* freetype_imp.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 3822}}";
 			sepNavSelRange = "{7406, 0}";
 			sepNavVisRange = "{1864, 577}";
 		};
-	};
-	7A266D821470AED9000B3C77 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A266D831470AED9000B3C77 /* ftgrays.c */;
-		name = "ftgrays.c: 1710";
-		rLen = 0;
-		rLoc = 51171;
-		rType = 0;
-		vrLen = 374;
-		vrLoc = 53657;
-	};
-	7A266D831470AED9000B3C77 /* ftgrays.c */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.c;
-		name = ftgrays.c;
-		path = "/Users/williamcovertiii/Downloads/freetype-2.4.7/src/smooth/ftgrays.c";
-		sourceTree = "<absolute>";
-	};
-	7A266D841470AED9000B3C77 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A266D851470AED9000B3C77 /* ftsmooth.c */;
-		name = "ftsmooth.c: 297";
-		rLen = 0;
-		rLoc = 8559;
-		rType = 0;
-		vrLen = 378;
-		vrLoc = 8360;
-	};
-	7A266D851470AED9000B3C77 /* ftsmooth.c */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.c;
-		name = ftsmooth.c;
-		path = "/Users/williamcovertiii/Downloads/freetype-2.4.7/src/smooth/ftsmooth.c";
-		sourceTree = "<absolute>";
-	};
-	7A266D871470AED9000B3C77 /* ftobjs.c */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.c;
-		name = ftobjs.c;
-		path = "/Users/williamcovertiii/Downloads/freetype-2.4.7/src/base/ftobjs.c";
-		sourceTree = "<absolute>";
-	};
-	7A266D881470AED9000B3C77 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A266D891470AED9000B3C77 /* ftglyph.c */;
-		name = "ftglyph.c: 566";
-		rLen = 0;
-		rLoc = 16393;
-		rType = 0;
-		vrLen = 340;
-		vrLoc = 16196;
-	};
-	7A266D891470AED9000B3C77 /* ftglyph.c */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.c;
-		name = ftglyph.c;
-		path = "/Users/williamcovertiii/Downloads/freetype-2.4.7/src/base/ftglyph.c";
-		sourceTree = "<absolute>";
 	};
 	7A31986214DE1E460059FF6A /* stream_sound.c */ = {
 		uiCtxt = {
@@ -510,178 +377,13 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 83;
-		location = Zombies;
-		modificationTime = 356049978.74427;
+		modificationTime = 363465275.543998;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
-	};
-	7A54888A1538E503005B3906 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AB7CE8614B1399800C200EB /* data_interface.c */;
-		name = "data_interface.c: 98";
-		rLen = 0;
-		rLoc = 2106;
-		rType = 0;
-		vrLen = 1099;
-		vrLoc = 1498;
-	};
-	7A5488981538EE0D005B3906 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 1505";
-		rLen = 0;
-		rLoc = 41373;
-		rType = 0;
-		vrLen = 1449;
-		vrLoc = 39829;
-	};
-	7A5488991538EE0D005B3906 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AF4010B153640F200CBCA91 /* lvl1.txt */;
-		name = "lvl1.txt: 9";
-		rLen = 0;
-		rLoc = 133;
-		rType = 0;
-		vrLen = 138;
-		vrLoc = 0;
-	};
-	7A54889A1538EE0D005B3906 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A54889B1538EE0D005B3906 /* lvl5.txt */;
-		name = "lvl5.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 258;
-		vrLoc = 0;
-	};
-	7A54889B1538EE0D005B3906 /* lvl5.txt */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text;
-		name = lvl5.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/MyGames/Zombies/lvl/lvl5.txt;
-		sourceTree = "<absolute>";
-	};
-	7A54889C1538EE0D005B3906 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A54889D1538EE0D005B3906 /* lvl5.txt */;
-		name = "lvl5.txt: 17";
-		rLen = 0;
-		rLoc = 250;
-		rType = 0;
-		vrLen = 254;
-		vrLoc = 0;
-	};
-	7A54889D1538EE0D005B3906 /* lvl5.txt */ = {
-		isa = PBXFileReference;
-		name = lvl5.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/MyGames/Zombies/lvl/lvl5.txt;
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {851, 474}}";
-			sepNavSelRange = "{250, 0}";
-			sepNavVisRange = "{0, 254}";
-		};
-	};
-	7A56D47214DE30CA00625D05 /* lvl6.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl6.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl6.txt;
-		sourceTree = "<absolute>";
-	};
-	7A56D47614DE30CA00625D05 /* lvl10.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl10.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl10.txt;
-		sourceTree = "<absolute>";
-	};
-	7A56D48414DE315700625D05 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A56D47214DE30CA00625D05 /* lvl6.txt */;
-		name = "lvl6.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 188;
-		vrLoc = 0;
-	};
-	7A5AAC30145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F3791412FFD00086E03C /* bk.png */;
-	};
-	7A5AAC32145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F37B1412FFD00086E03C /* hero.png */;
-	};
-	7A5AAC33145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F37C1412FFD00086E03C /* heroattached.png */;
-	};
-	7A5AAC34145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F37D1412FFD00086E03C /* herosafe.png */;
-	};
-	7A5AAC35145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F37E1412FFD00086E03C /* hzombie.png */;
-	};
-	7A5AAC36145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F37F1412FFD00086E03C /* p_z.png */;
-	};
-	7A5AAC37145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F3801412FFD00086E03C /* person.png */;
-	};
-	7A5AAC39145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F3831412FFD00086E03C /* safezone.png */;
-	};
-	7A5AAC3A145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F3841412FFD00086E03C /* zombie.png */;
-	};
-	7A5AAC3E145346F500BE4B3C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AA1AE5E1419208F0016FDA7 /* safe.png */;
-	};
-	7A5AAC41145346F500BE4B3C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AC1F38C1412FFD00086E03C /* lvl4.txt */;
-		name = "lvl4.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 189;
-		vrLoc = 0;
-	};
-	7A5AAC42145346F500BE4B3C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AC1F38D1412FFD00086E03C /* lvl5.txt */;
-		name = "lvl5.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 188;
-		vrLoc = 0;
 	};
 	7A5AAC43145346F500BE4B3C /* PBXBookmark */ = {
 		isa = PBXBookmark;
 		fRef = 7AA33AF514146C1300C09ED8 /* Zombie.icns */;
-	};
-	7A5AAC47145346F500BE4B3C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AA1AE58141920580016FDA7 /* lvl7.txt */;
-		name = "lvl7.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 258;
-		vrLoc = 11;
 	};
 	7A5C4FBB1530ABE10041651A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -693,10 +395,6 @@
 		vrLen = 1095;
 		vrLoc = 0;
 	};
-	7A6341B9150B9DB40010CA19 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F3811412FFD00086E03C /* rope.png */;
-	};
 	7A6341C0150B9E450010CA19 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 7AC1F3661412FF8E0086E03C /* sound_list.c */;
@@ -707,25 +405,148 @@
 		vrLen = 1053;
 		vrLoc = 487;
 	};
-	7A6D0CF3150FF1F300F44684 /* PBXTextBookmark */ = {
+	7A6ED78515A9DCBB00912BAB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 7A266D871470AED9000B3C77 /* ftobjs.c */;
-		name = "ftobjs.c: 144";
+		fRef = 7AC1F3621412FF8E0086E03C /* load_png.c */;
+		name = "load_png.c: 158";
 		rLen = 0;
-		rLoc = 4851;
+		rLoc = 5019;
 		rType = 0;
-		vrLen = 799;
-		vrLoc = 4400;
+		vrLen = 1135;
+		vrLoc = 3907;
 	};
-	7A6D0CFD150FF23200F44684 /* PBXTextBookmark */ = {
+	7A6ED78615A9DCBB00912BAB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 7A0D127F150FE7340052F781 /* ftutil.c */;
-		name = "ftutil.c: 76";
+		fRef = 7A7B4718153392D800A927AF /* ai.h */;
+		name = "ai.h: 4";
 		rLen = 0;
-		rLoc = 3337;
+		rLoc = 152;
 		rType = 0;
-		vrLen = 598;
-		vrLoc = 3057;
+		vrLen = 153;
+		vrLoc = 0;
+	};
+	7A6ED78915A9DCBB00912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6ED78A15A9DCBB00912BAB /* idea.txt */;
+		name = "idea.txt: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 189;
+		vrLoc = 0;
+	};
+	7A6ED78A15A9DCBB00912BAB /* idea.txt */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text;
+		name = idea.txt;
+		path = /Users/williamcovertiii/Documents/Thinkin/ProjectsMine/MyGames/Zombies/lvl/idea.txt;
+		sourceTree = "<absolute>";
+	};
+	7A6ED78B15A9DCBB00912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6ED78C15A9DCBB00912BAB /* level_format.txt */;
+		name = "level_format.txt: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 372;
+		vrLoc = 0;
+	};
+	7A6ED78C15A9DCBB00912BAB /* level_format.txt */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text;
+		name = level_format.txt;
+		path = /Users/williamcovertiii/Documents/Thinkin/ProjectsMine/MyGames/Zombies/lvl/level_format.txt;
+		sourceTree = "<absolute>";
+	};
+	7A6ED79015A9DCBB00912BAB /* lvl1.txt */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text;
+		name = lvl1.txt;
+		path = /Users/williamcovertiii/Documents/Thinkin/ProjectsMine/MyGames/Zombies/lvl/lvl1.txt;
+		sourceTree = "<absolute>";
+	};
+	7A6ED7C715A9DE6700912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7AB7CE8614B1399800C200EB /* data_interface.c */;
+		name = "data_interface.c: 98";
+		rLen = 0;
+		rLoc = 2106;
+		rType = 0;
+		vrLen = 975;
+		vrLoc = 1722;
+	};
+	7A6ED7C815A9DE6700912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6ED79015A9DCBB00912BAB /* lvl1.txt */;
+		name = "lvl1.txt: 2";
+		rLen = 0;
+		rLoc = 15;
+		rType = 0;
+		vrLen = 138;
+		vrLoc = 0;
+	};
+	7A6ED7CC15A9DE6700912BAB /* atest.txt */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text;
+		name = atest.txt;
+		path = /Users/williamcovertiii/Documents/Thinkin/ProjectsMine/MyGames/Zombies/lvl/atest.txt;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 440}}";
+			sepNavSelRange = "{52, 0}";
+			sepNavVisRange = "{0, 174}";
+		};
+	};
+	7A6ED81D15A9F52900912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A7B4717153392D800A927AF /* ai.c */;
+		name = "ai.c: 16";
+		rLen = 0;
+		rLoc = 518;
+		rType = 0;
+		vrLen = 917;
+		vrLoc = 0;
+	};
+	7A6ED8FD15AA0A0900912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A6ED7CC15A9DE6700912BAB /* atest.txt */;
+		name = "atest.txt: 5";
+		rLen = 0;
+		rLoc = 52;
+		rType = 0;
+		vrLen = 174;
+		vrLoc = 0;
+	};
+	7A6ED8FE15AA0A0900912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
+		name = "game.c: 355";
+		rLen = 0;
+		rLoc = 8970;
+		rType = 0;
+		vrLen = 882;
+		vrLoc = 8678;
+	};
+	7A6ED8FF15AA0A0900912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 002F3A3E09D088BA00EBEB88 /* main.m */;
+		name = "main.m: 676";
+		rLen = 569;
+		rLoc = 18134;
+		rType = 0;
+		vrLen = 752;
+		vrLoc = 18017;
+	};
+	7A6ED95015AA30F200912BAB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 002F3A3E09D088BA00EBEB88 /* main.m */;
+		name = "main.m: 8";
+		rLen = 49;
+		rLoc = 148;
+		rType = 0;
+		vrLen = 689;
+		vrLoc = 0;
 	};
 	7A72AED2141F910C001EB26D /* png.h */ = {
 		isa = PBXFileReference;
@@ -743,6 +564,20 @@
 		rType = 0;
 		vrLen = 701;
 		vrLoc = 44983;
+	};
+	7A7B4717153392D800A927AF /* ai.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 440}}";
+			sepNavSelRange = "{518, 0}";
+			sepNavVisRange = "{0, 917}";
+		};
+	};
+	7A7B4718153392D800A927AF /* ai.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 421}}";
+			sepNavSelRange = "{152, 0}";
+			sepNavVisRange = "{0, 153}";
+		};
 	};
 	7A7E4EA61516BB4500C82D8B /* PlistBookmark */ = {
 		isa = PlistBookmark;
@@ -775,79 +610,6 @@
 		vrLen = 509;
 		vrLoc = 1573;
 	};
-	7A804C2615275849008C3734 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A804C2715275849008C3734 /* lvl9.txt */;
-		name = "lvl9.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 214;
-		vrLoc = 0;
-	};
-	7A804C2715275849008C3734 /* lvl9.txt */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text;
-		name = lvl9.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/MyGames/Zombies/lvl/lvl9.txt;
-		sourceTree = "<absolute>";
-	};
-	7A82615D1512D9D400D519D7 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A56D47614DE30CA00625D05 /* lvl10.txt */;
-		name = "lvl10.txt: 27";
-		rLen = 0;
-		rLoc = 580;
-		rType = 0;
-		vrLen = 613;
-		vrLoc = 0;
-	};
-	7A82615E1512D9D400D519D7 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AC1F38A1412FFD00086E03C /* lvl2.txt */;
-		name = "lvl2.txt: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 173;
-		vrLoc = 0;
-	};
-	7A8261601512D9D400D519D7 /* idea.txt */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text;
-		name = idea.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/idea.txt;
-		sourceTree = "<absolute>";
-	};
-	7A8261611512D9D400D519D7 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AC1F38B1412FFD00086E03C /* lvl3.txt */;
-		name = "lvl3.txt: 1";
-		rLen = 257;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 257;
-		vrLoc = 0;
-	};
-	7A8261661512DECB00D519D7 /* lvl1.txt */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text;
-		name = lvl1.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl1.txt;
-		sourceTree = "<absolute>";
-	};
-	7A85CDFC14B8AC6C0098EAC1 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AC1F37A1412FFD00086E03C /* h_z.png */;
-	};
-	7A85CDFD14B8AC6C0098EAC1 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AA1AE53141920250016FDA7 /* eye.png */;
-	};
-	7A85CE0D14B8AD330098EAC1 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AB7CF8B14B1577F00C200EB /* extra.png */;
-	};
 	7AA1AE3914191CA10016FDA7 /* physics.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 2758}}";
@@ -862,64 +624,13 @@
 			sepNavVisRange = "{0, 507}";
 		};
 	};
-	7AA1AE53141920250016FDA7 /* eye.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = eye.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/eye.png;
-		sourceTree = "<absolute>";
-	};
-	7AA1AE58141920580016FDA7 /* lvl7.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl7.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl7.txt;
-		sourceTree = "<absolute>";
-	};
-	7AA1AE5E1419208F0016FDA7 /* safe.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = safe.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/safe.png;
-		sourceTree = "<absolute>";
-	};
 	7AB7CE8614B1399800C200EB /* data_interface.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1219, 11687}}";
+			sepNavIntBoundsRect = "{{0, 0}, {851, 11869}}";
 			sepNavSelRange = "{2106, 0}";
-			sepNavVisRange = "{1721, 694}";
+			sepNavVisRange = "{1722, 975}";
 			sepNavWindowFrame = "{{163, 14}, {1117, 764}}";
 		};
-	};
-	7AB7CF7614B156ED00C200EB /* person_s.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = person_s.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/person_s.png;
-		sourceTree = "<absolute>";
-	};
-	7AB7CF7814B156FF00C200EB /* blank.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = blank.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/blank.png;
-		sourceTree = "<absolute>";
-	};
-	7AB7CF8314B1574D00C200EB /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AB7CF7614B156ED00C200EB /* person_s.png */;
-	};
-	7AB7CF8414B1574D00C200EB /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AB7CF7814B156FF00C200EB /* blank.png */;
-	};
-	7AB7CF8B14B1577F00C200EB /* extra.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = extra.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/extra.png;
-		sourceTree = "<absolute>";
 	};
 	7ABDBB3A14DE249100DB0082 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -944,10 +655,10 @@
 	7AC1F3361412FCDD0086E03C /* Zombies */ = {
 		isa = PBXExecutable;
 		activeArgIndices = (
-			NO,
+			YES,
 		);
 		argumentStrings = (
-			"/Users/williamcovertiii/Documents/Thinkin/MyGames/Zombies svgtool/lvl/lvl7.txt",
+			/Users/williamcovertiii/Documents/Thinkin/ProjectsMine/MyGames/Zombies/lvl/lvl13.txt,
 		);
 		autoAttachOnCrash = 1;
 		breakpointsEnabled = 0;
@@ -998,9 +709,9 @@
 	};
 	7AC1F3621412FF8E0086E03C /* load_png.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {851, 2158}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 989}";
+			sepNavIntBoundsRect = "{{0, 0}, {851, 2041}}";
+			sepNavSelRange = "{5019, 0}";
+			sepNavVisRange = "{3907, 1135}";
 		};
 	};
 	7AC1F3631412FF8E0086E03C /* load_png.h */ = {
@@ -1054,115 +765,6 @@
 		rType = 0;
 		vrLen = 434;
 		vrLoc = 0;
-	};
-	7AC1F3791412FFD00086E03C /* bk.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = bk.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/bk.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F37A1412FFD00086E03C /* h_z.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = h_z.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/h_z.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F37B1412FFD00086E03C /* hero.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = hero.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/hero.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F37C1412FFD00086E03C /* heroattached.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = heroattached.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/heroattached.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F37D1412FFD00086E03C /* herosafe.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = herosafe.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/herosafe.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F37E1412FFD00086E03C /* hzombie.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = hzombie.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/hzombie.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F37F1412FFD00086E03C /* p_z.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = p_z.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/p_z.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F3801412FFD00086E03C /* person.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = person.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/person.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F3811412FFD00086E03C /* rope.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = rope.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/rope.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F3831412FFD00086E03C /* safezone.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = safezone.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/safezone.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F3841412FFD00086E03C /* zombie.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = zombie.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/imgs/zombie.png;
-		sourceTree = "<absolute>";
-	};
-	7AC1F38A1412FFD00086E03C /* lvl2.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl2.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl2.txt;
-		sourceTree = "<absolute>";
-	};
-	7AC1F38B1412FFD00086E03C /* lvl3.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl3.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl3.txt;
-		sourceTree = "<absolute>";
-	};
-	7AC1F38C1412FFD00086E03C /* lvl4.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl4.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl4.txt;
-		sourceTree = "<absolute>";
-	};
-	7AC1F38D1412FFD00086E03C /* lvl5.txt */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = text;
-		name = lvl5.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/OpenGL/Zombies/lvl/lvl5.txt;
-		sourceTree = "<absolute>";
 	};
 	7AC1F3CC141302C40086E03C /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1248,29 +850,6 @@
 		rType = 0;
 		vrLen = 175;
 		vrLoc = 0;
-	};
-	7AF40107153640F200CBCA91 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 7AF40108153640F200CBCA91 /* lvl1.png */;
-	};
-	7AF40108153640F200CBCA91 /* lvl1.png */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = image.png;
-		name = lvl1.png;
-		path = /Users/williamcovertiii/Documents/Thinkin/MyGames/Zombies/lvl/lvl1.png;
-		sourceTree = "<absolute>";
-	};
-	7AF4010B153640F200CBCA91 /* lvl1.txt */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text;
-		name = lvl1.txt;
-		path = /Users/williamcovertiii/Documents/Thinkin/MyGames/Zombies/lvl/lvl1.txt;
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {851, 451}}";
-			sepNavSelRange = "{133, 0}";
-			sepNavVisRange = "{0, 138}";
-		};
 	};
 	7AFA3CB1151FD2B9006DD555 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

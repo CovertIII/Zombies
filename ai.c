@@ -12,10 +12,11 @@ void ai_chase(object * target, object * chaser, double vec, double force){
     chaser->f = v2Add(chaser->f, fc);
 }
 
-void ai_seek(vector2 target, object * chaser, double force){
+void ai_seek(vector2 target, object * chaser, double force, double length){
     vector2 line = v2Sub(chaser->p, target);
     float len = v2Len(line);
     float var = len > 20 ? 20 : len;
+//	var = len < 5 ? 0 : var;
     vector2 fc = v2sMul(-force/len * var , line);
     chaser->f = v2Add(chaser->f, fc);
 }

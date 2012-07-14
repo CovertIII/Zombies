@@ -395,9 +395,9 @@ void gm_update(game gm, int width, int height, double dt){
 			gm->person[i].state = ZOMBIE;
             stink_add(gm, i);
             s_add_snd(gm->saved_src, gm->buf[al_p_z_buf], &gm->person[i].o, 1, 1);
-			gm->person[i].o.v.x = rand()%50 - 25;
-			gm->person[i].o.v.y = rand()%50 - 25;
-            gm->person[i].mx_f = v2Len(gm->person[i].o.v);
+			//gm->person[i].o.v.x = rand()%50 - 25;
+			//gm->person[i].o.v.y = rand()%50 - 25;
+            //gm->person[i].mx_f = v2Len(gm->person[i].o.v);
 		}
 	}
 	gm->hero.timer -= dt;
@@ -1495,18 +1495,24 @@ void zb_chase_hero(game gm){
         if(gm->person[k].chase == 1 && gm->hero.state ==  PERSON){
             ai_chase(&gm->hero.o, &gm->person[k].o, 70.0f, 30.0f);
             //ai_seek(gm->hero.o.p, &gm->person[k].o, 2.0f);
-            //ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
+			//ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
         }
 		else if(gm->person[k].state == ZOMBIE && gm->hero.state ==  ZOMBIE){
             //ai_chase(&gm->hero.o, &gm->person[k].o, 70.0f, 30.0f);
-            ai_seek(gm->hero.o.p, &gm->person[k].o, 2.0f);
-            //ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
+            ai_seek(gm->hero.o.p, &gm->person[k].o, 2.0f, 20);
+            ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
         }
 		
 		if(gm->person[k].state == ZOMBIE && gm->person[k].parent_id >= 0){
             //ai_chase(&gm->hero.o, &gm->person[k].o, 70.0f, 30.0f);
-            ai_seek(gm->person[gm->person[k].parent_id].o.p, &gm->person[k].o, 2.0f);
-            //ai_avoid(gm->hero.o.p, &gm->person[k].o, 200.0f);
+            ai_seek(gm->person[gm->person[k].parent_id].o.p, &gm->person[k].o, 2.1f, 20);
+            ai_avoid(gm->person[gm->person[k].parent_id].o.p, &gm->person[k].o, 200.0f);
+			int j;
+			for (j = k + 1; j < gm->person_num; j++) {
+				if(gm->person[j].state == ZOMBIE && gm->person[j].parent_id == gm->person[k].parent_id){
+					ai_avoid(gm->person[j].o.p, &gm->person[k].o, 50.0f);
+				}
+			}
         }
         
    }
