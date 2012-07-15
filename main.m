@@ -33,8 +33,8 @@ enum{
     al_game_over_buf,
     al_lvl_complete_buf,
     al_win_buf,
-	  al_loose1_buf,
-	  al_loose2_buf,
+    al_loose1_buf,
+	al_loose2_buf,
     al_count_buf,
     al_buf_num
 };
@@ -259,6 +259,8 @@ if(argc == 1){
 
 	char level[30];
 	if(argc == 1){
+		srand(time(NULL));
+		gm_lvl = 8;
         gm_free_level(gm);
         strcpy(res_buf, res_path);
         sprintf(level, "/lvl/lvl%d.png", gm_lvl);
@@ -311,16 +313,7 @@ void processNormalKeys(unsigned char key) {
 	  gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
-            game_start_session(stats);
-            gm_timer = 0.0f;
-            game_mode = PREGAME;
-            s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
-        }
-    }
-    else if(game_mode == GAMEOVER || game_mode == WIN){ 
-        if(key == ' '){
-            gm_timer = 0;
-            total_deaths = 0;
+			total_deaths = 0;
             gm_lvl = 1;
             lives = 3;
             
@@ -334,6 +327,17 @@ void processNormalKeys(unsigned char key) {
 			sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
 			strcat(res_buf, level);
 			gm_load_level(gm, res_buf);
+			
+            game_start_session(stats);
+            gm_timer = 0.0f;
+            game_mode = PREGAME;
+            s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
+        }
+    }
+    else if(game_mode == GAMEOVER || game_mode == WIN){ 
+        if(key == ' '){
+            gm_timer = 0;
+            
 			
             
             gm_update(gm,gScreen->w, gScreen->h,.01);
@@ -400,6 +404,7 @@ void numbers(void)
 
 	switch(game_mode){
         case USERSELECT:
+			gm_update(gm,gScreen->w, gScreen->h,h);
             break;
 		case PREGAME:
             cnt_down += h;
@@ -558,7 +563,7 @@ static void drawGL ()
 
     switch(game_mode){
         case USERSELECT:
-
+			gm_render(gm);
             if(stats_render(stats, gScreen->w, gScreen->h)==0){
 				      char buf[180];
 							float c[4] = {.1,.4,.15,1};

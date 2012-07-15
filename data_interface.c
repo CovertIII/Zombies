@@ -436,9 +436,9 @@ void render_game_list(data_record db, int width, int height){
 
 
     //Printf the data of the game high scores.
-    c[0] = .8;
-    c[1] = .8;
-    c[2] = .8;
+    c[0] = .2;
+    c[1] = .1;
+    c[2] = .2;
     c[3] = 1;
     rat_set_text_color(db->font, c);
     game_list * node;
@@ -836,9 +836,9 @@ void render_level_scores(data_record db, int width, int height)
     rat_font_render_text(db->font,width/2 + 150,height-40, buf);
 
     //Printf the data of the game high scores.
-    c[0] = .8;
-    c[1] = .8;
-    c[2] = .8;
+    c[0] = .2;
+    c[1] = .1;
+    c[2] = .2;
     c[3] = 1;
     rat_set_text_color(db->font, c);
     level_list * node;
