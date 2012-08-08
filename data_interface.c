@@ -113,6 +113,13 @@ data_record init_data_record(char * file_name, char * resource_path){
     return db;
 }
 
+void stats_reload_fonts(data_record db){
+	db->font = rat_init();
+    strcpy(db->res_buf, db->res_path);
+    strcat(db->res_buf, "/imgs/FreeUniversal.ttf");
+    rat_load_font(db->font, db->res_buf, 28);
+}
+
 int ck_create_tables(data_record db){
     printf("Checking to see if database is empty...\n");
     sqlite3 * sdb;

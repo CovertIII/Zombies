@@ -56,6 +56,7 @@ int windowHeight = 728;
 static SDL_Surface *gScreen;
 
 int lastFrameTime = 0;
+int nowfullscreen = 1;
 
 int game_mode = USERSELECT;
 double gm_timer = 0.0f;
@@ -140,7 +141,7 @@ static void printAttributes ()
     } 
 }
 
-static void createSurface (int fullscreen)
+static void createSurface (int fullscreen, int width, int height)
 {
     Uint32 flags = 0;
     
@@ -149,7 +150,7 @@ static void createSurface (int fullscreen)
         flags |= SDL_FULLSCREEN;
 	
     
-    gScreen = SDL_SetVideoMode (windowWidth, windowHeight, 0, flags);
+    gScreen = SDL_SetVideoMode (width, height, 0, flags);
 	
     if (gScreen == NULL) {
 		
@@ -185,7 +186,7 @@ void init(int argc, char** argv){
 	}
 	alcMakeContextCurrent(context);
 
-  alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+    alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 	alGenBuffers(al_buf_num, al_buf);
 
 /*Getting Resource path*/	
@@ -298,6 +299,50 @@ if(argc == 1){
   al_stream_play(als);
 
 	atexit(cleanup);
+}
+
+void reset(int width, int height){
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glClearColor (0.2f, 0.2f, 0.2f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glShadeModel(GL_FLAT);
+	
+	strcpy(res_buf, res_path);
+	strcat(res_buf, "/imgs/hero.png");
+	load_texture(res_buf, &lives_tex);
+	
+	strcpy(res_buf, res_path);
+	strcat(res_buf, "/imgs/extra.png");
+	load_texture(res_buf, &extra_tex);
+	
+	gm_init_textures(gm);
+	
+	stats_reload_fonts(stats);
+	
+	font = rat_init();
+	strcpy(res_buf, res_path);
+	strcat(res_buf, "/imgs/MedievalSharp.ttf");
+	rat_load_font(font, res_buf, 72*2);
+	sfont = rat_init();
+	rat_load_font(sfont, res_buf, 100);
+	ssfont = rat_init();
+	rat_load_font(ssfont, res_buf, 30);
+	
+	char level[30];
+	if(level_test == 1){
+        char bk[400];
+        strcpy(bk, argv1);
+        strcat(bk, ".png");
+        gm_load_bk(gm, bk);
+	}else{
+		strcpy(res_buf, res_path);
+        sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+        strcat(res_buf, level);
+        gm_load_bk(gm, res_buf);	
+	}
+	
+	gm_set_view(gScreen->w, gScreen->h, gm);
 }
 
 void processNormalKeys(unsigned char key) {
@@ -689,6 +734,22 @@ static void mainLoop ()
 				case SDL_KEYDOWN:
           processNormalKeys(event.key.keysym.sym);
           pressKey(event.key.keysym.sym);
+					if (event.key.keysym.sym == 'f') {
+						if(nowfullscreen == 1){
+							windowWidth = 1280;
+							windowHeight = 800;
+							createSurface (nowfullscreen, windowWidth, windowHeight);
+							reset(1280, 800);
+							nowfullscreen = 0;
+						} else {
+							windowWidth = 1024;
+							windowHeight = 768;
+							createSurface (nowfullscreen, windowWidth, windowHeight);
+							reset(windowWidth, windowHeight);
+							nowfullscreen = 1;
+						}
+						
+					}
 					break;
 				case SDL_KEYUP:
           releaseNormalKeys(event.key.keysym.sym);
@@ -732,7 +793,7 @@ int main(int argc, char *argv[])
 	}
 	
     initAttributes ();
-    createSurface (0);
+    createSurface (0, windowWidth, windowHeight);
     printAttributes ();
     init(argc, argv);
     mainLoop ();

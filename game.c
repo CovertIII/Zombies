@@ -117,7 +117,7 @@ typedef struct gametype {
 	line walls[100];
 	int wall_num;
 
-    vector2 tp;
+    vector2 tp; //What?!
 	
 
     //Experiental Particle thiny for zombies
@@ -850,24 +850,6 @@ void gm_render(game gm){
 	glPushMatrix();
 	glTranslatef(gm->hero.o.p.x, gm->hero.o.p.y, 0);
 	glScalef(gm->hero.o.r, gm->hero.o.r,0);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glEnd();
-	glPopMatrix();
-
-
-
-    glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
-    glPushMatrix();
-	glTranslatef(gm->tp.x, gm->tp.y, 0);
-	glScalef(0.5, 0.5,0);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0, 0.0);
 	glVertex3f(-1.0, -1.0, 0.0);
