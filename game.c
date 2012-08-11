@@ -11,6 +11,7 @@
 #include <freetype/ftglyph.h>
 #include <freetype/ftoutln.h>
 #include <freetype/fttrigon.h>
+#include <mxml.h>
 #include "freetype_imp.h"
 #include "load_sound.h"
 #include "vector2.h"
@@ -1206,146 +1207,6 @@ int gm_load_bk(game gm, char * file){
         }
 }
 
-int load_level_file(game gm, char * file){
-		int i;
-		FILE *loadFile;
-
-		loadFile = fopen(file, "r");
-
-		if(loadFile == NULL)
-		{
-			printf("File %s unable to load.\n", file); 
-			return 0;
-		}
-		
-
-		char type[5];
-		int result;
-		
-		gm->chain_num = 0;
-		
-		gm->safe_zone.m = 1000;
-		gm->safe_zone.v.x = 0;
-		gm->safe_zone.v.y = 0;
-		gm->person_num = 0;
-		gm->wall_num = 0;
-        gm->save_count = 1;
-		gm->timer = 0;
-		i = 1;
-        gm->stnk_num = 0;
-		while( (result = fscanf(loadFile, "%s", type)) != EOF){
-			if(!strncmp(type, "hw", 2)){
-				result = fscanf(loadFile, "%lf %lf", &gm->h, &gm->w);
-				if(result != 2){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Height and width.\n");
-				}
-			}
-			else if(!strncmp(type, "sz", 2)){
-				result = fscanf(loadFile, "%lf %lf %lf", 
-					&gm->safe_zone.p.x,
-					&gm->safe_zone.p.y,
-					&gm->safe_zone.r);
-				if(result != 3){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Safe Zone not loaded.\n");
-				}
-			}
-			else if(!strncmp(type, "sc", 2)){
-				result = fscanf(loadFile, "%d", &gm->save_count);
-				if(result != 1){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Save count not loaded.\n");
-				}
-			}
-			else if(!strncmp(type, "p", 1)){
-				int num = gm->person_num;
-				gm->person[num].state = PERSON;
-				gm->person[num].emo = NORMAL;
-				gm->person[num].ready = 0;
-				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
-					&gm->person[num].o.p.x,
-					&gm->person[num].o.p.y,
-					&gm->person[num].o.v.x,
-					&gm->person[num].o.v.y,
-					&gm->person[num].o.r,
-					&gm->person[num].o.m);
-				if(result != 6){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: A person was not loaded.\n");
-				}
-				else{
-                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
-                    gm->person[num].o.snd = 0;
-					gm->person[num].chase = 0;
-					gm->person[num].parent_id = -1;
-					gm->person_num++;
-				}
-			}
-			else if(!strncmp(type, "z", 1)){
-				int num = gm->person_num;
-				gm->person[num].state = ZOMBIE;
-				gm->person[num].emo = NORMAL;
-				gm->person[num].ready = 0;
-				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
-					&gm->person[num].o.p.x,
-					&gm->person[num].o.p.y,
-					&gm->person[num].o.v.x,
-					&gm->person[num].o.v.y,
-					&gm->person[num].o.r,
-					&gm->person[num].o.m);
-				if(result != 6){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: A zombie was not loaded.\n");
-				}
-				else{
-                    stink_add(gm, gm->person_num);
-                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
-					gm->person[num].chase = 0;
-					gm->person[num].parent_id = -1;
-                    gm->person[num].o.snd = 0;
-					gm->person_num++;
-				}
-			}
-			else if(!strncmp(type, "h", 1)){
-				gm->hero.state = PERSON;
-				gm->hero.spring_state = NOT_ATTACHED;
-				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
-					&gm->hero.o.p.x,
-					&gm->hero.o.p.y,
-					&gm->hero.o.v.x,
-					&gm->hero.o.v.y,
-					&gm->hero.o.r,
-					&gm->hero.o.m);
-				if(result != 6){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: The hero was not loaded!\n");
-				}
-                gm->hero.o.snd = 0;
-			}
-			else if(!strncmp(type, "w", 1)){
-				int n = gm->wall_num;
-				result = fscanf(loadFile, "%lf %lf %lf %lf", 
-					&gm->walls[n].p1.x,
-					&gm->walls[n].p1.y,
-					&gm->walls[n].p2.x,
-					&gm->walls[n].p2.y);
-				if(result != 4){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Wall not loaded\n");
-				}
-				else{
-					gm->wall_num++;
-				}
-			}
-		}
-        gm->gm_state = 0;
-
-		fclose(loadFile);
-		printf("Level file %s loaded.\n", file);
-		return 1;
-}
-
 void chain_remove(game gm, int index){
 	int k;
 	int match;
@@ -1499,5 +1360,405 @@ void zb_chase_hero(game gm){
         
    }
 
+}
+
+int load_level_file(game gm, char * file){
+		int i;
+		FILE *loadFile;
+
+		loadFile = fopen(file, "r");
+
+		if(loadFile == NULL)
+		{
+			printf("File %s unable to load.\n", file); 
+			return 0;
+		}
+		
+
+		char type[5];
+		int result;
+		
+		gm->chain_num = 0;
+		
+		gm->safe_zone.m = 1000;
+		gm->safe_zone.v.x = 0;
+		gm->safe_zone.v.y = 0;
+		gm->person_num = 0;
+		gm->wall_num = 0;
+        gm->save_count = 1;
+		gm->timer = 0;
+		i = 1;
+        gm->stnk_num = 0;
+		while( (result = fscanf(loadFile, "%s", type)) != EOF){
+			if(!strncmp(type, "hw", 2)){
+				result = fscanf(loadFile, "%lf %lf", &gm->h, &gm->w);
+				if(result != 2){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: Height and width.\n");
+				}
+			}
+			else if(!strncmp(type, "sz", 2)){
+				result = fscanf(loadFile, "%lf %lf %lf", 
+					&gm->safe_zone.p.x,
+					&gm->safe_zone.p.y,
+					&gm->safe_zone.r);
+				if(result != 3){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: Safe Zone not loaded.\n");
+				}
+			}
+			else if(!strncmp(type, "sc", 2)){
+				result = fscanf(loadFile, "%d", &gm->save_count);
+				if(result != 1){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: Save count not loaded.\n");
+				}
+			}
+			else if(!strncmp(type, "p", 1)){
+				int num = gm->person_num;
+				gm->person[num].state = PERSON;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
+					&gm->person[num].o.p.x,
+					&gm->person[num].o.p.y,
+					&gm->person[num].o.v.x,
+					&gm->person[num].o.v.y,
+					&gm->person[num].o.r,
+					&gm->person[num].o.m);
+				if(result != 6){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: A person was not loaded.\n");
+				}
+				else{
+                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+                    gm->person[num].o.snd = 0;
+					gm->person[num].chase = 0;
+					gm->person[num].parent_id = -1;
+					gm->person_num++;
+				}
+			}
+			else if(!strncmp(type, "z", 1)){
+				int num = gm->person_num;
+				gm->person[num].state = ZOMBIE;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
+					&gm->person[num].o.p.x,
+					&gm->person[num].o.p.y,
+					&gm->person[num].o.v.x,
+					&gm->person[num].o.v.y,
+					&gm->person[num].o.r,
+					&gm->person[num].o.m);
+				if(result != 6){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: A zombie was not loaded.\n");
+				}
+				else{
+                    stink_add(gm, gm->person_num);
+                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+					gm->person[num].chase = 0;
+					gm->person[num].parent_id = -1;
+                    gm->person[num].o.snd = 0;
+					gm->person_num++;
+				}
+			}
+			else if(!strncmp(type, "h", 1)){
+				gm->hero.state = PERSON;
+				gm->hero.spring_state = NOT_ATTACHED;
+				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
+					&gm->hero.o.p.x,
+					&gm->hero.o.p.y,
+					&gm->hero.o.v.x,
+					&gm->hero.o.v.y,
+					&gm->hero.o.r,
+					&gm->hero.o.m);
+				if(result != 6){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: The hero was not loaded!\n");
+				}
+                gm->hero.o.snd = 0;
+			}
+			else if(!strncmp(type, "w", 1)){
+				int n = gm->wall_num;
+				result = fscanf(loadFile, "%lf %lf %lf %lf", 
+					&gm->walls[n].p1.x,
+					&gm->walls[n].p1.y,
+					&gm->walls[n].p2.x,
+					&gm->walls[n].p2.y);
+				if(result != 4){
+					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
+					printf("Error: Wall not loaded\n");
+				}
+				else{
+					gm->wall_num++;
+				}
+			}
+		}
+        gm->gm_state = 0;
+
+		fclose(loadFile);
+		printf("Level file %s loaded.\n", file);
+		return 1;
+}
+
+int gm_load_level_svg(game gm, char * file_path){
+	int i;
+	FILE *fp;
+    mxml_node_t *tree;
+
+    fp = fopen(file_path, "r");
+	
+	if(fp == NULL)
+	{
+		printf("File %s unable to load.\n", file_path); 
+		return 0;
+	}
+	
+    tree = mxmlLoadFile(NULL, fp,
+                        MXML_TEXT_CALLBACK);
+    fclose(fp);
+
+    const char *name;
+
+    mxml_node_t *node = tree;
+	
+	name = mxmlGetElement(node);
+    if(strcmp(name, "svg") != 0){
+        node = mxmlFindElement(tree, tree, "svg", NULL, NULL, MXML_DESCEND);
+    }
+
+    gm->chain_num = 0;
+    
+    gm->safe_zone.m = 1000;
+    gm->safe_zone.v.x = 0;
+    gm->safe_zone.v.y = 0;
+    gm->person_num = 0;
+    gm->wall_num = 0;
+    gm->save_count = 1;
+    gm->timer = 0;
+    i = 1;
+    gm->stnk_num = 0;
+
+    name = mxmlElementGetAttr(node, "height"); 
+    sscanf(name, "%lf", &gm->h);
+    name = mxmlElementGetAttr(node, "width"); 
+    sscanf(name, "%lf", &gm->w);
+
+    gm->save_count = 2;
+
+	node = mxmlFindElement(tree, tree, "g", NULL, NULL, MXML_DESCEND);
+    node = mxmlWalkNext(node, tree, MXML_DESCEND);
+
+    for(node = node; node != NULL; node = mxmlGetNextSibling(node)){
+        name = mxmlGetElement(node);
+        while(name == NULL && node != NULL){
+            node = mxmlGetNextSibling(node);
+            name = mxmlGetElement(node);
+        }
+        if(name == NULL)
+        {break;}
+
+        if(strcmp(name, "circle") == 0){
+            float cx;
+            float cy;
+            float r;
+
+            name = mxmlElementGetAttr(node, "cx"); 
+            sscanf(name, "%f", &cx);
+            name = mxmlElementGetAttr(node, "cy"); 
+            sscanf(name, "%f", &cy);
+            name = mxmlElementGetAttr(node, "r"); 
+            sscanf(name, "%f", &r);
+            cy = gm->h - cy;
+
+            const char *color=mxmlElementGetAttr(node, "fill");
+            if(strcmp(color, "#e5e5e5") == 0){
+                gm->safe_zone.p.x = cx;
+                gm->safe_zone.p.y = cy;
+                gm->safe_zone.r = r;
+            }
+            else if(strcmp(color, "#ff0000") == 0 || strcmp(color, "#FF0000") == 0){
+				gm->hero.state = PERSON;
+				gm->hero.spring_state = NOT_ATTACHED;
+                gm->hero.o.p.x = cx;
+                gm->hero.o.p.y = cy;
+                gm->hero.o.v.x = 0;
+                gm->hero.o.v.y = 0;
+                gm->hero.o.r = r;
+                gm->hero.o.m = r*r*M_PI/25.2;
+                gm->hero.o.snd = 0;
+            }
+            else if(strcmp(color, "#00bf5f") == 0){
+                int num = gm->person_num;
+				gm->person[num].state = ZOMBIE;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+                gm->person[num].o.p.x = cx;
+                gm->person[num].o.p.y = cy;
+                gm->person[num].o.v.x = 0;
+                gm->person[num].o.v.y = 0;
+                gm->person[num].o.r = r;
+                gm->person[num].o.m = r*r*M_PI/25.2;
+                stink_add(gm, gm->person_num);
+                gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+                gm->person[num].chase = 0;
+                gm->person[num].parent_id = -1;
+                gm->person[num].o.snd = 0;
+                gm->person_num++;
+            }
+            else if(strcmp(color, "#ffff00") == 0){
+				int num = gm->person_num;
+				gm->person[num].state = PERSON;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+                gm->person[num].o.p.x = cx;
+                gm->person[num].o.p.y = cy;
+                gm->person[num].o.v.x = 0;
+                gm->person[num].o.v.y = 0;
+                gm->person[num].o.r = r;
+                gm->person[num].o.m = r*r*M_PI/25.2;
+                gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+                gm->person[num].chase = 0;
+                gm->person[num].parent_id = -1;
+                gm->person[num].o.snd = 0;
+                gm->person_num++;
+            }
+        }
+        else if(strcmp(name, "line") == 0){
+            float x1, x2, y1, y2;
+            name = mxmlElementGetAttr(node, "x1"); 
+            sscanf(name, "%f", &x1);
+            name = mxmlElementGetAttr(node, "y1"); 
+            sscanf(name, "%f", &y1);
+            y1 = gm->h - y1;
+            name = mxmlElementGetAttr(node, "x2"); 
+            sscanf(name, "%f", &x2);
+            name = mxmlElementGetAttr(node, "y2"); 
+            sscanf(name, "%f", &y2);
+            y2 = gm->h - y2;
+            
+            int n = gm->wall_num;
+            gm->walls[n].p1.x = x1;
+            gm->walls[n].p1.y = y1;
+            gm->walls[n].p2.x = x2;
+            gm->walls[n].p2.y = y2;
+            gm->wall_num++;
+        }
+		if(strcmp(name, "text") == 0){
+            name = mxmlGetText(node, NULL); 
+			sscanf(name, "%d", &gm->save_count);
+        }
+        else if(strcmp(name, "g") == 0){
+            mxml_node_t * child;
+
+            float cx;
+            float cy;
+            float r;
+            float vx, vy;
+
+            float x1, x2, y1, y2;
+
+            const char *color;
+
+            for(child = mxmlWalkNext(node, tree, MXML_DESCEND); child != NULL; child = mxmlGetNextSibling(child)){
+                name = mxmlGetElement(child);
+                while(name == NULL && child != NULL){
+                    child = mxmlGetNextSibling(child);
+                    name = mxmlGetElement(child);
+                }
+                if(name == NULL)
+                {break;}
+
+                if(strcmp(name, "circle") == 0){
+
+                    name = mxmlElementGetAttr(child, "cx"); 
+                    sscanf(name, "%f", &cx);
+                    name = mxmlElementGetAttr(child, "cy"); 
+                    sscanf(name, "%f", &cy);
+                    name = mxmlElementGetAttr(child, "r"); 
+                    sscanf(name, "%f", &r);
+                    cy = gm->h - cy; 
+                    color = mxmlElementGetAttr(child, "fill");
+                }
+                else if(strcmp(name, "line") == 0){
+                    name = mxmlElementGetAttr(child, "x1"); 
+                    sscanf(name, "%f", &x1);
+                    name = mxmlElementGetAttr(child, "y1"); 
+                    sscanf(name, "%f", &y1);
+                    y1 = gm->h - y1;
+                    name = mxmlElementGetAttr(child, "x2"); 
+                    sscanf(name, "%f", &x2);
+                    name = mxmlElementGetAttr(child, "y2"); 
+                    sscanf(name, "%f", &y2);
+                    y2 = gm->h - y2;
+                }
+            }
+
+            vx = x2 - x1;
+            vy = y2 - y1;
+                
+            if(sqrt((x2-cx)*(x2-cx)+(y2-cy)*(y2-cy)) < sqrt((x1-cx)*(x1-cx)+(y1-cy)*(y1-cy))){
+                vx *= -1;
+                vy *= -1;
+            }
+
+			
+            if(strcmp(color, "#e5e5e5") == 0){
+                gm->safe_zone.p.x = cx;
+                gm->safe_zone.p.y = cy;
+                gm->safe_zone.r = r;
+            }
+            else if(strcmp(color, "#ff0000") == 0 || strcmp(color, "#FF0000") == 0){
+				gm->hero.state = PERSON;
+				gm->hero.spring_state = NOT_ATTACHED;
+                gm->hero.o.p.x = cx;
+                gm->hero.o.p.y = cy;
+                gm->hero.o.v.x = vx;
+                gm->hero.o.v.y = vy;
+                gm->hero.o.r = r;
+                gm->hero.o.m = r*r*M_PI/25.2;
+                gm->hero.o.snd = 0;
+            }
+            else if(strcmp(color, "#00bf5f") == 0){
+                int num = gm->person_num;
+				gm->person[num].state = ZOMBIE;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+                gm->person[num].o.p.x = cx;
+                gm->person[num].o.p.y = cy;
+                gm->person[num].o.v.x = vx;
+                gm->person[num].o.v.y = vy;
+                gm->person[num].o.r = r;
+                gm->person[num].o.m = r*r*M_PI/25.2;
+                stink_add(gm, gm->person_num);
+                gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+                gm->person[num].chase = 0;
+                gm->person[num].parent_id = -1;
+                gm->person[num].o.snd = 0;
+                gm->person_num++;
+            }
+            else if(strcmp(color, "#ffff00") == 0){
+				int num = gm->person_num;
+				gm->person[num].state = PERSON;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+                gm->person[num].o.p.x = cx;
+                gm->person[num].o.p.y = cy;
+                gm->person[num].o.v.x = vx;
+                gm->person[num].o.v.y = vy;
+                gm->person[num].o.r = r;
+                gm->person[num].o.m = r*r*M_PI/25.2;
+                gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+                gm->person[num].chase = 0;
+                gm->person[num].parent_id = -1;
+                gm->person[num].o.snd = 0;
+                gm->person_num++;
+            }
+        }        
+      
+    }
+    gm->gm_state = 0;
+	return 1;
 }
 

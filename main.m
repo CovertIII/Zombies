@@ -268,9 +268,9 @@ if(argc == 1){
         strcat(res_buf, level);
         gm_load_bk(gm, res_buf);
 		strcpy(res_buf, res_path);
-		sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
+		sprintf(level, "/lvl/lvl%d.svg", gm_lvl);
 		strcat(res_buf, level);
-		gm_load_level(gm, res_buf);
+		gm_load_level_svg(gm, res_buf);
 		level_test = 0;
 	}
 	if(argc == 2){
@@ -280,7 +280,7 @@ if(argc == 1){
         strcpy(bk, argv1);
         strcat(bk, ".png");
         gm_load_bk(gm, bk);
-		gm_load_level(gm, argv1);
+		gm_load_level_svg(gm, argv1);
 		game_mode = GAME;
 		level_test = 1;
 	}
@@ -318,7 +318,9 @@ void reset(int width, int height){
 	
 	gm_init_textures(gm);
 	
-	stats_reload_fonts(stats);
+	if(level_test != 1){
+		stats_reload_fonts(stats);
+	}
 	
 	font = rat_init();
 	strcpy(res_buf, res_path);
@@ -369,9 +371,9 @@ void processNormalKeys(unsigned char key) {
             strcat(res_buf, level);
             gm_load_bk(gm, res_buf);
 			strcpy(res_buf, res_path);
-			sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
+			sprintf(level, "/lvl/lvl%d.svg", gm_lvl);
 			strcat(res_buf, level);
-			gm_load_level(gm, res_buf);
+			gm_load_level_svg(gm, res_buf);
 			
             game_start_session(stats);
             gm_timer = 0.0f;
@@ -398,7 +400,7 @@ void processNormalKeys(unsigned char key) {
             strcpy(bk, argv1);
             strcat(bk, ".png");
             gm_load_bk(gm, bk);
-            gm_load_level(gm, argv1);
+            gm_load_level_svg(gm, argv1);
         }
     }
 }
@@ -532,16 +534,16 @@ void numbers(void)
                     gm_load_bk(gm, res_buf);
 
                     strcpy(res_buf, res_path);
-                    sprintf(level, "/lvl/lvl%d.txt", gm_lvl);
+                    sprintf(level, "/lvl/lvl%d.svg", gm_lvl);
                     strcat(res_buf, level);
-                    if(gm_load_level(gm, res_buf) == 0 && level_test == 0){
+                    if(gm_load_level_svg(gm, res_buf) == 0 && level_test == 0){
                         game_mode = WIN;
                         s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
                         game_finish_session(stats, total_deaths);
                     }
                 }
                 else{
-                    gm_load_level(gm, argv1);
+                    gm_load_level_svg(gm, argv1);
                     game_mode = GAME;
                 }
 				gm_update(gm,gScreen->w, gScreen->h, h);
@@ -738,13 +740,13 @@ static void mainLoop ()
 						if(nowfullscreen == 1){
 							windowWidth = 1280;
 							windowHeight = 800;
-							createSurface (nowfullscreen, windowWidth, windowHeight);
+							createSurface (0, windowWidth, windowHeight);
 							reset(1280, 800);
 							nowfullscreen = 0;
 						} else {
 							windowWidth = 1024;
 							windowHeight = 768;
-							createSurface (nowfullscreen, windowWidth, windowHeight);
+							createSurface (0, windowWidth, windowHeight);
 							reset(windowWidth, windowHeight);
 							nowfullscreen = 1;
 						}

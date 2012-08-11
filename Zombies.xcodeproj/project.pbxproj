@@ -17,6 +17,7 @@
 		7A23EB3C1530C355005CEB0F /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A23EB3B1530C355005CEB0F /* libcurl.4.dylib */; };
 		7A23EB3D1530C360005CEB0F /* libcurl.4.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A23EB3B1530C355005CEB0F /* libcurl.4.dylib */; };
 		7A266D1B1470A5C2000B3C77 /* freetype_imp.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A266D191470A5C2000B3C77 /* freetype_imp.c */; };
+		7A2E4C6615D6B7B200DC2622 /* libmxml.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2E4C6515D6B7B200DC2622 /* libmxml.1.dylib */; };
 		7A31986414DE1E460059FF6A /* stream_sound.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A31986214DE1E460059FF6A /* stream_sound.c */; };
 		7A5AAB4B14533CB100BE4B3C /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */; };
 		7A5AAB4C14533CB100BE4B3C /* libpng15.15.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */; };
@@ -86,6 +87,7 @@
 		7A23EB3B1530C355005CEB0F /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = libs/libcurl.4.dylib; sourceTree = "<group>"; };
 		7A266D191470A5C2000B3C77 /* freetype_imp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = freetype_imp.c; sourceTree = "<group>"; };
 		7A266D1A1470A5C2000B3C77 /* freetype_imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = freetype_imp.h; sourceTree = "<group>"; };
+		7A2E4C6515D6B7B200DC2622 /* libmxml.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmxml.1.dylib; path = /usr/local/lib/libmxml.1.dylib; sourceTree = "<absolute>"; };
 		7A31986214DE1E460059FF6A /* stream_sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream_sound.c; sourceTree = "<group>"; };
 		7A31986314DE1E460059FF6A /* stream_sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream_sound.h; sourceTree = "<group>"; };
 		7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = libs/libogg.0.dylib; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */,
 				7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */,
 				7A23EB3C1530C355005CEB0F /* libcurl.4.dylib in Frameworks */,
+				7A2E4C6615D6B7B200DC2622 /* libmxml.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +180,7 @@
 				7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				7A2E4C6515D6B7B200DC2622 /* libmxml.1.dylib */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";

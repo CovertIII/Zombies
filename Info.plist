@@ -34,6 +34,24 @@
 			<key>NSDocumentClass</key>
 			<string>Document</string>
 		</dict>
+			<dict>
+				<key>CFBundleTypeExtensions</key>
+				<array>
+					<string>svg</string>
+				</array>
+				<key>CFBundleTypeIconFile</key>
+				<string>document.icns</string>
+				<key>CFBundleTypeMIMETypes</key>
+				<array>
+					<string>image/svg+xml</string>
+				</array>
+				<key>CFBundleTypeName</key>
+				<string>SVG document</string>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>NSDocumentClass</key>
+				<string>BrowserDocument</string>
+			</dict>
 	</array>
 	<key>CFBundleSignature</key>
 	<string>BILL</string>
