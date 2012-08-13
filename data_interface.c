@@ -213,6 +213,7 @@ int ck_create_tables(data_record db){
     sqlite3_finalize(sql);
 
     sqlite3_close(sdb);
+	return 1;
 }
 
 void stats_list_prep(data_record db){

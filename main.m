@@ -740,13 +740,13 @@ static void mainLoop ()
 						if(nowfullscreen == 1){
 							windowWidth = 1280;
 							windowHeight = 800;
-							createSurface (0, windowWidth, windowHeight);
+							createSurface (nowfullscreen, windowWidth, windowHeight);
 							reset(1280, 800);
 							nowfullscreen = 0;
 						} else {
 							windowWidth = 1024;
 							windowHeight = 768;
-							createSurface (0, windowWidth, windowHeight);
+							createSurface (nowfullscreen, windowWidth, windowHeight);
 							reset(windowWidth, windowHeight);
 							nowfullscreen = 1;
 						}

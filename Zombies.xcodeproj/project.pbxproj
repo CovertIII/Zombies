@@ -17,7 +17,6 @@
 		7A23EB3C1530C355005CEB0F /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A23EB3B1530C355005CEB0F /* libcurl.4.dylib */; };
 		7A23EB3D1530C360005CEB0F /* libcurl.4.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A23EB3B1530C355005CEB0F /* libcurl.4.dylib */; };
 		7A266D1B1470A5C2000B3C77 /* freetype_imp.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A266D191470A5C2000B3C77 /* freetype_imp.c */; };
-		7A2E4C6615D6B7B200DC2622 /* libmxml.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2E4C6515D6B7B200DC2622 /* libmxml.1.dylib */; };
 		7A31986414DE1E460059FF6A /* stream_sound.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A31986214DE1E460059FF6A /* stream_sound.c */; };
 		7A5AAB4B14533CB100BE4B3C /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */; };
 		7A5AAB4C14533CB100BE4B3C /* libpng15.15.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */; };
@@ -30,6 +29,8 @@
 		7A5AAC241453437C00BE4B3C /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5AAC231453437C00BE4B3C /* libz.1.dylib */; };
 		7A5AAC251453438300BE4B3C /* libz.1.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A5AAC231453437C00BE4B3C /* libz.1.dylib */; };
 		7A7B4719153392D800A927AF /* ai.c in Sources */ = {isa = PBXBuildFile; fileRef = 7A7B4717153392D800A927AF /* ai.c */; };
+		7A9184BE15D6ED3F00F33131 /* libmxml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A9184BD15D6ED3F00F33131 /* libmxml.dylib */; };
+		7A9184BF15D6ED4600F33131 /* libmxml.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7A9184BD15D6ED3F00F33131 /* libmxml.dylib */; };
 		7AA1AE3B14191CA10016FDA7 /* physics.c in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1AE3914191CA10016FDA7 /* physics.c */; };
 		7AA33AF614146C1300C09ED8 /* Zombie.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7AA33AF514146C1300C09ED8 /* Zombie.icns */; };
 		7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */; };
@@ -56,6 +57,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				7A9184BF15D6ED4600F33131 /* libmxml.dylib in Copy Frameworks into .app bundle */,
 				7AA9A38C14811C0B0075F1FB /* libfreetype.6.dylib in Copy Frameworks into .app bundle */,
 				7A5AAC251453438300BE4B3C /* libz.1.dylib in Copy Frameworks into .app bundle */,
 				7A5AAC1814533CE700BE4B3C /* libogg.0.dylib in Copy Frameworks into .app bundle */,
@@ -87,7 +89,6 @@
 		7A23EB3B1530C355005CEB0F /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = libs/libcurl.4.dylib; sourceTree = "<group>"; };
 		7A266D191470A5C2000B3C77 /* freetype_imp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = freetype_imp.c; sourceTree = "<group>"; };
 		7A266D1A1470A5C2000B3C77 /* freetype_imp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = freetype_imp.h; sourceTree = "<group>"; };
-		7A2E4C6515D6B7B200DC2622 /* libmxml.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmxml.1.dylib; path = /usr/local/lib/libmxml.1.dylib; sourceTree = "<absolute>"; };
 		7A31986214DE1E460059FF6A /* stream_sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stream_sound.c; sourceTree = "<group>"; };
 		7A31986314DE1E460059FF6A /* stream_sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream_sound.h; sourceTree = "<group>"; };
 		7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = libs/libogg.0.dylib; sourceTree = "<group>"; };
@@ -97,6 +98,7 @@
 		7A5AAC231453437C00BE4B3C /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = libs/libz.1.dylib; sourceTree = "<group>"; };
 		7A7B4717153392D800A927AF /* ai.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ai.c; sourceTree = "<group>"; };
 		7A7B4718153392D800A927AF /* ai.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ai.h; sourceTree = "<group>"; };
+		7A9184BD15D6ED3F00F33131 /* libmxml.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmxml.dylib; path = libs/libmxml.dylib; sourceTree = "<group>"; };
 		7AA1AE3914191CA10016FDA7 /* physics.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = physics.c; sourceTree = "<group>"; };
 		7AA1AE3A14191CA10016FDA7 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
 		7AA33AF514146C1300C09ED8 /* Zombie.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Zombie.icns; sourceTree = "<group>"; };
@@ -139,7 +141,7 @@
 				7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */,
 				7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */,
 				7A23EB3C1530C355005CEB0F /* libcurl.4.dylib in Frameworks */,
-				7A2E4C6615D6B7B200DC2622 /* libmxml.1.dylib in Frameworks */,
+				7A9184BE15D6ED3F00F33131 /* libmxml.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,10 +179,10 @@
 				7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */,
 				7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */,
 				7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */,
+				7A9184BD15D6ED3F00F33131 /* libmxml.dylib */,
 				7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
-				7A2E4C6515D6B7B200DC2622 /* libmxml.1.dylib */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";

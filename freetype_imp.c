@@ -191,7 +191,6 @@ static int make_glyph_texture(rat_glyph_font *gf,rat_texture_font *tf,unsigned c
 	FT_Face face=gf->face;
 	unsigned int *textures=tf->textures;
 	unsigned int width,height;
-	float texx,texy;
 
 	if (FT_Load_Glyph(face,FT_Get_Char_Index(face,ch),FT_LOAD_DEFAULT))
 		return 0;
