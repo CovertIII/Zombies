@@ -173,7 +173,7 @@ int line_collision(vector2 pt1, vector2 pt2, object *c, float uk, float us){
 		//Bounce
 		if(v2Len(v2Sub(ct, pt4)) < c->r){
 			c->p = v2Add(c->p, v2sMul(c->r - v2Len(v2Sub(ct, pt4)), v2Unit(n)));
-			vector2 vnf = v2sMul(-1, vn); 
+			vector2 vnf = v2sMul(-0.5, vn); 
 			c->v = v2Add(vnf, vt);
 			c->f = ft;
 			return 1;
@@ -193,7 +193,7 @@ int point_collision(vector2 pt, object *c){
 		vector2 vn = v2sMul(v2Dot(c->v, n), n);
 		vector2 vt = v2Sub(c->v, vn);
 
-		vector2 vnf = v2sMul(-1, vn); 
+		vector2 vnf = v2sMul(-0.5f, vn); 
 		c->v = v2Add(vnf, vt);
 
 		double diff = c->r - v2Len(v2Sub(c->p, pt));

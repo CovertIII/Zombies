@@ -115,7 +115,7 @@ typedef struct gametype {
 	int chain_num;
 	object safe_zone;
 	int save_count;  //How many people you have to save to win the level
-	line walls[100];
+	line walls[1000];
 	int wall_num;
 
     vector2 tp; //What?!
@@ -323,8 +323,9 @@ void gm_set_view(int width, int height, game gm){
 }
 
 void gm_update_view(game gm){
-	double minx = 1.0f/4.0*(gm->vmax.x - gm->vmin.x) + gm->vmin.x;
-	double maxx = gm->vmax.x - 1.0f/4.0*(gm->vmax.x - gm->vmin.x);
+    double VIEW_EDGE = 7.0f/16.0f;
+	double minx = VIEW_EDGE*(gm->vmax.x - gm->vmin.x) + gm->vmin.x;
+	double maxx = gm->vmax.x - VIEW_EDGE*(gm->vmax.x - gm->vmin.x);
 	
 	if(gm->hero.o.p.x < minx && gm->vmin.x > 0){
 		gm->vmin.x -= minx - gm->hero.o.p.x;
@@ -336,8 +337,8 @@ void gm_update_view(game gm){
 		gm->vmax.x += gm->hero.o.p.x - maxx;
 	}
 	
-	double miny = 1.0f/4.0*(gm->vmax.y - gm->vmin.y) + gm->vmin.y;
-	double maxy = gm->vmax.y - 1.0f/4.0*(gm->vmax.y - gm->vmin.y);
+	double miny = VIEW_EDGE*(gm->vmax.y - gm->vmin.y) + gm->vmin.y;
+	double maxy = gm->vmax.y - VIEW_EDGE*(gm->vmax.y - gm->vmin.y);
 	if(gm->hero.o.p.y < miny  && gm->vmin.y > 0){
 		gm->vmin.y -= miny - gm->hero.o.p.y;
 		gm->vmax.y -= miny - gm->hero.o.p.y;
@@ -1759,6 +1760,7 @@ int gm_load_level_svg(game gm, char * file_path){
       
     }
     gm->gm_state = 0;
+	printf("Wall Num: %d", gm->wall_num);
 	return 1;
 }
 
