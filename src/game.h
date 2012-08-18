@@ -5,7 +5,7 @@ game gm_init(char * res_path);
 int gm_init_textures(game gm);
 void gm_init_sounds(game gm);
 
-int gm_load_level(game gm, char * lvl);
+int gm_load_level_svg(game gm, char * file_path);
 
 //void gm_free_level(game gm);
 

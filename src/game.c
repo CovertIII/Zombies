@@ -90,7 +90,9 @@ typedef struct gametype {
 	char * res_path;
 	char * res_buf;
 	
-    vector2 ms;  /*mouse location*/
+    vector2 ms;  /*mouse location in world*/
+	int mpx; /* Mouse location on SDL context */
+	int mpy; /* Mouse location on SDL context */
 	int m;		 /*Whether to use mouse or not */
 	vector2 ak;  /*arrow key presses*/
 	
@@ -152,7 +154,6 @@ typedef struct gametype {
 	
 } gametype;
 
-int load_level_file(game gm, char * file);
 void chain_remove(game gm, int index);
 void chain_ready_zero(game gm);
 void chain_cut(game gm, int index);
@@ -160,6 +161,7 @@ void stink_add(game gm, int id);
 void stink_step(game gm, double dt);
 void stink_render(game gm);
 void zb_chase_hero(game gm);
+void gm_update_mouse(game gm);
 
 
 game gm_init(char * res_path){
@@ -367,13 +369,6 @@ void gm_reshape(game gm, int width, int height){
     glLoadIdentity();
     gluOrtho2D(gm->vmin.x, gm->vmax.x, gm->vmin.y, gm->vmax.y);
     glMatrixMode(GL_MODELVIEW);
-}
-
-int gm_load_level(game gm, char * lvl){
-	gm->ak.x =0;
-	gm->ak.y = 0;
-
-	return load_level_file(gm, lvl);
 }
 
 void gm_update_sound(game gm){
@@ -703,6 +698,8 @@ void gm_update(game gm, int width, int height, double dt){
 	
 	alListener3f(AL_POSITION, gm->hero.o.p.x, gm->hero.o.p.y, 0);
     s_update(gm->saved_src);
+	
+	gm_update_mouse(gm);
 }
 
 void gm_render(game gm){
@@ -1105,11 +1102,16 @@ void gm_free(game gm){
 }
 
 void gm_mouse(game gm, int x, int y){
+	gm->mpx = x;
+	gm->mpy = y;
+}
+
+void gm_update_mouse(game gm){
 	double vdiffy = gm->vmax.y - gm->vmin.y;
 	double vdiffx = gm->vmax.x - gm->vmin.x;
     
-    gm->ms.x = vdiffx / (double)gm->screenx * x + gm->vmin.x;
-    gm->ms.y = vdiffy / (double)gm->screeny * y + gm->vmin.y;
+    gm->ms.x = vdiffx / (double)gm->screenx * gm->mpx + gm->vmin.x;
+    gm->ms.y = vdiffy / (double)gm->screeny * gm->mpy + gm->vmin.y;
 }
 
 void gm_nkey_down(game gm, unsigned char key){
@@ -1365,146 +1367,6 @@ void zb_chase_hero(game gm){
 
 }
 
-int load_level_file(game gm, char * file){
-		int i;
-		FILE *loadFile;
-
-		loadFile = fopen(file, "r");
-
-		if(loadFile == NULL)
-		{
-			printf("File %s unable to load.\n", file); 
-			return 0;
-		}
-		
-
-		char type[5];
-		int result;
-		
-		gm->chain_num = 0;
-		
-		gm->safe_zone.m = 1000;
-		gm->safe_zone.v.x = 0;
-		gm->safe_zone.v.y = 0;
-		gm->person_num = 0;
-		gm->wall_num = 0;
-        gm->save_count = 1;
-		gm->timer = 0;
-		i = 1;
-        gm->stnk_num = 0;
-		while( (result = fscanf(loadFile, "%s", type)) != EOF){
-			if(!strncmp(type, "hw", 2)){
-				result = fscanf(loadFile, "%lf %lf", &gm->h, &gm->w);
-				if(result != 2){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Height and width.\n");
-				}
-			}
-			else if(!strncmp(type, "sz", 2)){
-				result = fscanf(loadFile, "%lf %lf %lf", 
-					&gm->safe_zone.p.x,
-					&gm->safe_zone.p.y,
-					&gm->safe_zone.r);
-				if(result != 3){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Safe Zone not loaded.\n");
-				}
-			}
-			else if(!strncmp(type, "sc", 2)){
-				result = fscanf(loadFile, "%d", &gm->save_count);
-				if(result != 1){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Save count not loaded.\n");
-				}
-			}
-			else if(!strncmp(type, "p", 1)){
-				int num = gm->person_num;
-				gm->person[num].state = PERSON;
-				gm->person[num].emo = NORMAL;
-				gm->person[num].ready = 0;
-				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
-					&gm->person[num].o.p.x,
-					&gm->person[num].o.p.y,
-					&gm->person[num].o.v.x,
-					&gm->person[num].o.v.y,
-					&gm->person[num].o.r,
-					&gm->person[num].o.m);
-				if(result != 6){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: A person was not loaded.\n");
-				}
-				else{
-                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
-                    gm->person[num].o.snd = 0;
-					gm->person[num].chase = 0;
-					gm->person[num].parent_id = -1;
-					gm->person_num++;
-				}
-			}
-			else if(!strncmp(type, "z", 1)){
-				int num = gm->person_num;
-				gm->person[num].state = ZOMBIE;
-				gm->person[num].emo = NORMAL;
-				gm->person[num].ready = 0;
-				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
-					&gm->person[num].o.p.x,
-					&gm->person[num].o.p.y,
-					&gm->person[num].o.v.x,
-					&gm->person[num].o.v.y,
-					&gm->person[num].o.r,
-					&gm->person[num].o.m);
-				if(result != 6){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: A zombie was not loaded.\n");
-				}
-				else{
-                    stink_add(gm, gm->person_num);
-                    gm->person[num].mx_f = v2Len(gm->person[num].o.v);
-					gm->person[num].chase = 0;
-					gm->person[num].parent_id = -1;
-                    gm->person[num].o.snd = 0;
-					gm->person_num++;
-				}
-			}
-			else if(!strncmp(type, "h", 1)){
-				gm->hero.state = PERSON;
-				gm->hero.spring_state = NOT_ATTACHED;
-				result = fscanf(loadFile, "%lf %lf %lf %lf %lf %lf", 
-					&gm->hero.o.p.x,
-					&gm->hero.o.p.y,
-					&gm->hero.o.v.x,
-					&gm->hero.o.v.y,
-					&gm->hero.o.r,
-					&gm->hero.o.m);
-				if(result != 6){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: The hero was not loaded!\n");
-				}
-                gm->hero.o.snd = 0;
-			}
-			else if(!strncmp(type, "w", 1)){
-				int n = gm->wall_num;
-				result = fscanf(loadFile, "%lf %lf %lf %lf", 
-					&gm->walls[n].p1.x,
-					&gm->walls[n].p1.y,
-					&gm->walls[n].p2.x,
-					&gm->walls[n].p2.y);
-				if(result != 4){
-					printf("Error loading level file %s on line %d. Result: %d\n", file, i, result);
-					printf("Error: Wall not loaded\n");
-				}
-				else{
-					gm->wall_num++;
-				}
-			}
-		}
-        gm->gm_state = 0;
-
-		fclose(loadFile);
-		printf("Level file %s loaded.\n", file);
-		return 1;
-}
-
 int gm_load_level_svg(game gm, char * file_path){
 	int i;
 	FILE *fp;
@@ -1530,6 +1392,9 @@ int gm_load_level_svg(game gm, char * file_path){
     if(strcmp(name, "svg") != 0){
         node = mxmlFindElement(tree, tree, "svg", NULL, NULL, MXML_DESCEND);
     }
+
+	gm->ak.x =0;
+	gm->ak.y = 0;
 
     gm->chain_num = 0;
     
