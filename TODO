@@ -5,7 +5,7 @@ Insert uppercase letters in SDL
 
 Load splash logo in data_interface render and directions and credits
 
-String length check on USERDATA to start gane
+String length check on USERDATA to start game
 
 DONE Load a different background for each level. -- Think of a png file that can be generated for each level.
 
@@ -31,8 +31,9 @@ DONE Add different accounts.  Look into sqlite3 to do this.
 
 # Ideas #
 Power-ups:
-	antidote
-	invincibility
+	killing ball
+	antidote ball
+	-invincibility-
 	
 AI
 	crowd stuff

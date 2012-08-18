@@ -2,7 +2,7 @@
 <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
  <g>
   <title>lvl8</title>
-  <circle fill="#e5e5e5" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="94" cy="50" r="8" id="svg_2"/>
+  <circle fill="#e5e5e5" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="94" cy="50" r="12" id="svg_2"/>
   <circle fill="#FF0000" stroke="#000000" stroke-width="0" cx="94" cy="50" r="2" id="svg_1"/>
   <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="12" y1="12" x2="12" y2="84" id="svg_42"/>
   <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="48" y1="12" x2="12" y2="12" id="svg_43"/>

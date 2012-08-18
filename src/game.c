@@ -121,7 +121,7 @@ typedef struct gametype {
     vector2 tp; //What?!
 	
 
-    //Experiental Particle thiny for zombies
+    //Experiental Particle thingy for zombies
     stink_struct stnk[100];
     int stnk_num;
 
@@ -876,10 +876,12 @@ void gm_render(game gm){
 		else if(gm->person[i].state == P_Z){
 			glBindTexture( GL_TEXTURE_2D, gm->p_z_tex);
 		}
-		else if(gm->person[i].state == ZOMBIE){
+		else if(gm->person[i].state == ZOMBIE && gm->person[i].o.r <= 2){
 			glBindTexture( GL_TEXTURE_2D, gm->zombie_tex);
 		}
-		
+		else if(gm->person[i].state == ZOMBIE && gm->person[i].o.r > 2){
+			glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
+		}
 		else if(gm->person[i].state == SAFE){
 			glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
 		}

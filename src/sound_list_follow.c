@@ -4,8 +4,9 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #include "vector2.h"
-#include "sound_list.h"
 #include "physics.h"
+#include "sound_list.h"
+
 
 typedef struct sf_node {
 	ALuint src;

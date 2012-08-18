@@ -1,6 +1,12 @@
 // !$*UTF8*$!
 {
 	002F3A2B09D0888800EBEB88 /* SDLMain.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 30;
+		lastKnownFileType = sourcecode.c.h;
+		name = SDLMain.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/SDLMain.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 328}}";
 			sepNavSelRange = "{288, 23}";
@@ -8,6 +14,12 @@
 		};
 	};
 	002F3A2C09D0888800EBEB88 /* SDLMain.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 30;
+		lastKnownFileType = sourcecode.c.objc;
+		name = SDLMain.m;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/SDLMain.m;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {887, 4979}}";
 			sepNavSelRange = "{7346, 21}";
@@ -15,6 +27,12 @@
 		};
 	};
 	002F3A3E09D088BA00EBEB88 /* main.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 30;
+		lastKnownFileType = sourcecode.c.objc;
+		name = main.m;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/main.m;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 10608}}";
 			sepNavSelRange = "{20120, 0}";
@@ -194,15 +212,13 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 366938845;
-			PBXWorkspaceStateSaveDate = 366938845;
+			PBXPerProjectTemplateStateSaveDate = 366986329;
+			PBXWorkspaceStateSaveDate = 366986329;
 		};
 		perUserProjectItems = {
 			7A0D1217150FE1BC0052F781 = 7A0D1217150FE1BC0052F781 /* PBXTextBookmark */;
 			7A1BBE94151D242D00163449 = 7A1BBE94151D242D00163449 /* PBXTextBookmark */;
 			7A25630F15DA6F9000DBEC6D = 7A25630F15DA6F9000DBEC6D /* PBXTextBookmark */;
-			7A25631015DA6F9000DBEC6D = 7A25631015DA6F9000DBEC6D /* PBXTextBookmark */;
-			7A25631115DA6F9000DBEC6D = 7A25631115DA6F9000DBEC6D /* PBXTextBookmark */;
 			7A2E4CA615D6C70900DC2622 = 7A2E4CA615D6C70900DC2622 /* PlistBookmark */;
 			7A31989C14DE20120059FF6A = 7A31989C14DE20120059FF6A /* PBXTextBookmark */;
 			7A377B4D152BC504005A8892 = 7A377B4D152BC504005A8892 /* PBXTextBookmark */;
@@ -210,7 +226,6 @@
 			7A5233B215D6EE9600DF5C99 = 7A5233B215D6EE9600DF5C99 /* PBXTextBookmark */;
 			7A5488381538E348005B3906 = 7A5488381538E348005B3906 /* PBXTextBookmark */;
 			7A5AAC43145346F500BE4B3C = 7A5AAC43145346F500BE4B3C /* PBXBookmark */;
-			7A5C4FBB1530ABE10041651A = 7A5C4FBB1530ABE10041651A /* PBXTextBookmark */;
 			7A6341C0150B9E450010CA19 = 7A6341C0150B9E450010CA19 /* PBXTextBookmark */;
 			7A6ED78515A9DCBB00912BAB = 7A6ED78515A9DCBB00912BAB /* PBXTextBookmark */;
 			7A72AEFE141F9975001EB26D = 7A72AEFE141F9975001EB26D /* PBXTextBookmark */;
@@ -229,19 +244,9 @@
 			7AC1F3721412FFB20086E03C = 7AC1F3721412FFB20086E03C /* PBXTextBookmark */;
 			7AC1F3EC141309170086E03C = 7AC1F3EC141309170086E03C /* PBXTextBookmark */;
 			7AC1F3EE141309170086E03C = 7AC1F3EE141309170086E03C /* PBXTextBookmark */;
-			7ACB8F9215DF0AEB00188E19 /* PBXTextBookmark */ = 7ACB8F9215DF0AEB00188E19 /* PBXTextBookmark */;
-			7ACB8F9315DF0AEB00188E19 /* PBXTextBookmark */ = 7ACB8F9315DF0AEB00188E19 /* PBXTextBookmark */;
-			7ACB8F9915DF0BB700188E19 /* PBXTextBookmark */ = 7ACB8F9915DF0BB700188E19 /* PBXTextBookmark */;
-			7ACB8FA515DF0BE900188E19 /* PBXTextBookmark */ = 7ACB8FA515DF0BE900188E19 /* PBXTextBookmark */;
-			7ACB8FA915DF0C0000188E19 /* PBXTextBookmark */ = 7ACB8FA915DF0C0000188E19 /* PBXTextBookmark */;
-			7ACB8FAD15DF0C1B00188E19 /* PBXTextBookmark */ = 7ACB8FAD15DF0C1B00188E19 /* PBXTextBookmark */;
-			7ACB8FAF15DF0C3700188E19 /* PBXTextBookmark */ = 7ACB8FAF15DF0C3700188E19 /* PBXTextBookmark */;
-			7ACB8FBC15DF0E9F00188E19 /* PBXTextBookmark */ = 7ACB8FBC15DF0E9F00188E19 /* PBXTextBookmark */;
-			7ACB8FBD15DF0E9F00188E19 /* PBXTextBookmark */ = 7ACB8FBD15DF0E9F00188E19 /* PBXTextBookmark */;
-			7ACB8FBE15DF0E9F00188E19 /* PBXTextBookmark */ = 7ACB8FBE15DF0E9F00188E19 /* PBXTextBookmark */;
-			7ACB8FC215DF0EAF00188E19 /* PBXTextBookmark */ = 7ACB8FC215DF0EAF00188E19 /* PBXTextBookmark */;
-			7ACB8FC615DF0EC300188E19 /* PBXTextBookmark */ = 7ACB8FC615DF0EC300188E19 /* PBXTextBookmark */;
-			7ACB8FCA15DF0ECE00188E19 /* PBXTextBookmark */ = 7ACB8FCA15DF0ECE00188E19 /* PBXTextBookmark */;
+			7ACB8FBC15DF0E9F00188E19 = 7ACB8FBC15DF0E9F00188E19 /* PBXTextBookmark */;
+			7ACB8FBD15DF0E9F00188E19 = 7ACB8FBD15DF0E9F00188E19 /* PBXTextBookmark */;
+			7ACB8FD815DF3BF000188E19 = 7ACB8FD815DF3BF000188E19 /* PBXTextBookmark */;
 			7AF40106153640F200CBCA91 = 7AF40106153640F200CBCA91 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 7AC1F3521412FD240086E03C /* Source Control */;
@@ -256,10 +261,16 @@
 		};
 	};
 	7A0D1211150FE19D0052F781 /* game.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = game.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/game.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {851, 22620}}";
-			sepNavSelRange = "{8076, 0}";
-			sepNavVisRange = "{7887, 598}";
+			sepNavIntBoundsRect = "{{0, 0}, {851, 22763}}";
+			sepNavSelRange = "{695, 0}";
+			sepNavVisRange = "{8021, 1324}";
 		};
 	};
 	7A0D1217150FE1BC0052F781 /* PBXTextBookmark */ = {
@@ -292,27 +303,13 @@
 		vrLen = 327;
 		vrLoc = 505;
 	};
-	7A25631015DA6F9000DBEC6D /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 1583";
-		rLen = 0;
-		rLoc = 43832;
-		rType = 0;
-		vrLen = 1000;
-		vrLoc = 43457;
-	};
-	7A25631115DA6F9000DBEC6D /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 1743";
-		rLen = 0;
-		rLoc = 49846;
-		rType = 0;
-		vrLen = 756;
-		vrLoc = 49809;
-	};
 	7A266D191470A5C2000B3C77 /* freetype_imp.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = freetype_imp.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/freetype_imp.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 3926}}";
 			sepNavSelRange = "{4800, 28}";
@@ -334,6 +331,12 @@
 		rLoc = 9223372036854775808;
 	};
 	7A31986214DE1E460059FF6A /* stream_sound.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = stream_sound.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/stream_sound.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 2379}}";
 			sepNavSelRange = "{3115, 0}";
@@ -341,6 +344,12 @@
 		};
 	};
 	7A31986314DE1E460059FF6A /* stream_sound.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = stream_sound.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/stream_sound.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 455}}";
 			sepNavSelRange = "{0, 0}";
@@ -401,16 +410,6 @@
 		isa = PBXBookmark;
 		fRef = 7AA33AF514146C1300C09ED8 /* Zombie.icns */;
 	};
-	7A5C4FBB1530ABE10041651A /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7AA1AE3914191CA10016FDA7 /* physics.c */;
-		name = "physics.c: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1095;
-		vrLoc = 0;
-	};
 	7A6341C0150B9E450010CA19 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 7AC1F3661412FF8E0086E03C /* sound_list.c */;
@@ -449,6 +448,12 @@
 		vrLoc = 44983;
 	};
 	7A7B4717153392D800A927AF /* ai.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = ai.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/ai.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 533}}";
 			sepNavSelRange = "{518, 0}";
@@ -456,6 +461,12 @@
 		};
 	};
 	7A7B4718153392D800A927AF /* ai.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = ai.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/ai.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 533}}";
 			sepNavSelRange = "{152, 0}";
@@ -569,7 +580,41 @@
 		vrLen = 791;
 		vrLoc = 7220;
 	};
+	7A9A2A8415DFC49B0094B3C6 /* sound_list.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 1794}}";
+			sepNavSelRange = "{208, 4}";
+			sepNavVisRange = "{0, 827}";
+		};
+	};
+	7A9A2A8515DFC49B0094B3C6 /* sound_list.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 529}}";
+			sepNavSelRange = "{51, 0}";
+			sepNavVisRange = "{0, 183}";
+		};
+	};
+	7A9A2A8815DFC49B0094B3C6 /* vector2.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 897}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 685}";
+		};
+	};
+	7A9A2A9815DFC4B00094B3C6 /* game.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {851, 23543}}";
+			sepNavSelRange = "{2134, 0}";
+			sepNavVisRange = "{1759, 877}";
+		};
+	};
 	7AA1AE3914191CA10016FDA7 /* physics.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = physics.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/physics.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 2810}}";
 			sepNavSelRange = "{3498, 0}";
@@ -577,6 +622,12 @@
 		};
 	};
 	7AA1AE3A14191CA10016FDA7 /* physics.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = physics.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/physics.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 416}}";
 			sepNavSelRange = "{0, 0}";
@@ -584,6 +635,12 @@
 		};
 	};
 	7AB7CE8614B1399800C200EB /* data_interface.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = data_interface.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/data_interface.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1090, 11414}}";
 			sepNavSelRange = "{7649, 0}";
@@ -592,6 +649,12 @@
 		};
 	};
 	7AB7CE8714B1399800C200EB /* data_interface.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = data_interface.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/data_interface.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 511}}";
 			sepNavSelRange = "{265, 0}";
@@ -667,6 +730,12 @@
 		indexTemplatePath = "";
 	};
 	7AC1F3611412FF8E0086E03C /* game.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = game.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/game.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 513}}";
 			sepNavSelRange = "{0, 0}";
@@ -674,6 +743,12 @@
 		};
 	};
 	7AC1F3621412FF8E0086E03C /* load_png.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = load_png.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/load_png.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 2041}}";
 			sepNavSelRange = "{5019, 0}";
@@ -681,6 +756,12 @@
 		};
 	};
 	7AC1F3631412FF8E0086E03C /* load_png.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = load_png.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/load_png.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 417}}";
 			sepNavSelRange = "{0, 0}";
@@ -688,6 +769,12 @@
 		};
 	};
 	7AC1F3641412FF8E0086E03C /* load_sound.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = load_sound.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/load_sound.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1219, 1170}}";
 			sepNavSelRange = "{166, 0}";
@@ -695,6 +782,12 @@
 		};
 	};
 	7AC1F3661412FF8E0086E03C /* sound_list.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = sound_list.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/sound_list.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 1690}}";
 			sepNavSelRange = "{1687, 0}";
@@ -702,6 +795,12 @@
 		};
 	};
 	7AC1F3671412FF8E0086E03C /* sound_list.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = sound_list.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/sound_list.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 522}}";
 			sepNavSelRange = "{0, 0}";
@@ -709,6 +808,12 @@
 		};
 	};
 	7AC1F3681412FF8E0086E03C /* vector2.c */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.c;
+		name = vector2.c;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/vector2.c;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {851, 858}}";
 			sepNavSelRange = "{1110, 0}";
@@ -716,6 +821,12 @@
 		};
 	};
 	7AC1F3691412FF8E0086E03C /* vector2.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = vector2.h;
+		path = /Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/vector2.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1012, 332}}";
 			sepNavSelRange = "{0, 0}";
@@ -787,76 +898,6 @@
 		path = "/Developer-old/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/OpenGL.framework/Headers/glext.h";
 		sourceTree = "<absolute>";
 	};
-	7ACB8F9215DF0AEB00188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 1743";
-		rLen = 0;
-		rLoc = 49846;
-		rType = 0;
-		vrLen = 938;
-		vrLoc = 49090;
-	};
-	7ACB8F9315DF0AEB00188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 1743";
-		rLen = 0;
-		rLoc = 49846;
-		rType = 0;
-		vrLen = 938;
-		vrLoc = 49090;
-	};
-	7ACB8F9915DF0BB700188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 1767";
-		rLen = 0;
-		rLoc = 50604;
-		rType = 0;
-		vrLen = 877;
-		vrLoc = 48904;
-	};
-	7ACB8FA515DF0BE900188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8082;
-		rType = 0;
-		vrLen = 637;
-		vrLoc = 7805;
-	};
-	7ACB8FA915DF0C0000188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8082;
-		rType = 0;
-		vrLen = 637;
-		vrLoc = 7805;
-	};
-	7ACB8FAD15DF0C1B00188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8082;
-		rType = 0;
-		vrLen = 635;
-		vrLoc = 7846;
-	};
-	7ACB8FAF15DF0C3700188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8082;
-		rType = 0;
-		vrLen = 640;
-		vrLoc = 7846;
-	};
 	7ACB8FBC15DF0E9F00188E19 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 7AA1AE3914191CA10016FDA7 /* physics.c */;
@@ -877,45 +918,15 @@
 		vrLen = 640;
 		vrLoc = 7846;
 	};
-	7ACB8FBE15DF0E9F00188E19 /* PBXTextBookmark */ = {
+	7ACB8FD815DF3BF000188E19 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
+		name = "game.c: 35";
 		rLen = 0;
-		rLoc = 8082;
+		rLoc = 695;
 		rType = 0;
-		vrLen = 597;
-		vrLoc = 7887;
-	};
-	7ACB8FC215DF0EAF00188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8082;
-		rType = 0;
-		vrLen = 597;
-		vrLoc = 7887;
-	};
-	7ACB8FC615DF0EC300188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8082;
-		rType = 0;
-		vrLen = 598;
-		vrLoc = 7887;
-	};
-	7ACB8FCA15DF0ECE00188E19 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 7A0D1211150FE19D0052F781 /* game.c */;
-		name = "game.c: 326";
-		rLen = 0;
-		rLoc = 8076;
-		rType = 0;
-		vrLen = 598;
-		vrLoc = 7887;
+		vrLen = 1324;
+		vrLoc = 8021;
 	};
 	7AF40106153640F200CBCA91 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

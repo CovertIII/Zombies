@@ -19,39 +19,23 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeIconFile</key>
-			<string>txt.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>NSStringPboardType</string>
-			<key>LSItemContentTypes</key>
+			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>public.plain-text</string>
+				<string>svg</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>document.icns</string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>image/svg+xml</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>SVG document</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
-			<key>LSIsAppleDefaultForType</key>
-			<false/>
 			<key>NSDocumentClass</key>
-			<string>Document</string>
+			<string>BrowserDocument</string>
 		</dict>
-			<dict>
-				<key>CFBundleTypeExtensions</key>
-				<array>
-					<string>svg</string>
-				</array>
-				<key>CFBundleTypeIconFile</key>
-				<string>document.icns</string>
-				<key>CFBundleTypeMIMETypes</key>
-				<array>
-					<string>image/svg+xml</string>
-				</array>
-				<key>CFBundleTypeName</key>
-				<string>SVG document</string>
-				<key>CFBundleTypeRole</key>
-				<string>Viewer</string>
-				<key>NSDocumentClass</key>
-				<string>BrowserDocument</string>
-			</dict>
 	</array>
 	<key>CFBundleSignature</key>
 	<string>BILL</string>

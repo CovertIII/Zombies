@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<svg width="150" height="220" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g>
+  <title>Save_Many</title>
+  <circle id="svg_1" r="16" cy="200" cx="77.75" stroke="#000000" fill="#e5e5e5"/>
+  <circle r="0" cy="90" cx="20" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_27"/>
+  <circle r="1" cy="63" cx="7" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_35"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="60" y1="60" x2="80" y2="60" id="svg_38"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="100" y1="60" x2="120" y2="60" id="svg_39"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="0" y1="10" x2="20" y2="10" id="svg_40"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="10" x2="60" y2="10" id="svg_43"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="10" x2="100" y2="10" id="svg_44"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="120" y1="10" x2="140" y2="10" id="svg_45"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="140" y1="20" x2="150" y2="20" id="svg_46"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="120" y1="20" x2="100" y2="20" id="svg_47"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="20" x2="60" y2="20" id="svg_48"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="20" x2="20" y2="20" id="svg_49"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="0" y1="30" x2="20" y2="30" id="svg_52"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="30" x2="60" y2="30" id="svg_53"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="30" x2="100" y2="30" id="svg_54"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="120" y1="30" x2="140" y2="30" id="svg_55"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="120" y1="30" x2="120" y2="70" id="svg_57"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="150" y1="70" x2="120" y2="70" id="svg_58"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="30" y1="30" x2="30" y2="70" id="svg_59"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="0" y1="70" x2="30" y2="70" id="svg_60"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="60" y1="40" x2="80" y2="40" id="svg_62"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="100" y1="40" x2="120" y2="40" id="svg_63"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="50" x2="60" y2="50" id="svg_65"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="50" x2="100" y2="50" id="svg_66"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="70" x2="60" y2="70" id="svg_71"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="70" x2="100" y2="70" id="svg_72"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="10" y1="70" x2="10" y2="90" id="svg_79"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="10" y1="110" x2="10" y2="130" id="svg_80"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="20" y1="90" x2="20" y2="110" id="svg_81"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="30" y1="90" x2="30" y2="70" id="svg_82"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="30" y1="130" x2="10" y2="130" id="svg_83"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="50" y1="130" x2="70" y2="130" id="svg_84"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="90" y1="130" x2="110" y2="130" id="svg_85"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="130" y1="130" x2="150" y2="130" id="svg_86"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="50" y1="90" x2="50" y2="70" id="svg_94"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="70" y1="90" x2="70" y2="70" id="svg_95"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="90" y1="90" x2="90" y2="70" id="svg_96"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="90" x2="40" y2="110" id="svg_97"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="60" y1="90" x2="60" y2="110" id="svg_98"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="90" x2="80" y2="110" id="svg_99"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="100" y1="90" x2="100" y2="110" id="svg_100"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="30" y1="110" x2="30" y2="130" id="svg_101"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="50" y1="110" x2="50" y2="130" id="svg_102"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="70" y1="110" x2="70" y2="130" id="svg_103"/>
+  <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="90" y1="110" x2="90" y2="130" id="svg_104"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="110" y1="110" x2="110" y2="130" id="svg_106"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="130" y1="110" x2="130" y2="130" id="svg_107"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="120" y1="90" x2="120" y2="110" id="svg_108"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="140" y1="90" x2="140" y2="110" id="svg_109"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="130" y1="90" x2="130" y2="70" id="svg_110"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="110" y1="90" x2="110" y2="70" id="svg_111"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="0" y1="140" x2="20" y2="140" id="svg_112"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="40" y1="140" x2="60" y2="140" id="svg_113"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="80" y1="140" x2="100" y2="140" id="svg_114"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="120" y1="140" x2="140" y2="140" id="svg_115"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="10" y1="150" x2="30" y2="150" id="svg_116"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="50" y1="150" x2="70" y2="150" id="svg_118"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="90" y1="150" x2="110" y2="150" id="svg_125"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="130" y1="150" x2="150" y2="150" id="svg_126"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="110" y1="160" x2="130" y2="160" id="svg_127"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="70" y1="160" x2="90" y2="160" id="svg_128"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="30" y1="160" x2="50" y2="160" id="svg_129"/>
+  <line fill="none" stroke="#000000" stroke-width="null" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="10" y1="160" x2="0" y2="160" id="svg_130"/>
+  <circle fill="#ff0000" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="62.75" cy="3.75" r="2" id="svg_132"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="16" cy="43.75" r="1" id="svg_135"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="20.25" cy="54" r="1.76777" id="svg_136"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="5" cy="52.75" r="1.45774" id="svg_143"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="4.25" cy="35.25" r="0.75" id="svg_144"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="4.25" cy="42.25" r="0.75" id="svg_146"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="15.5" cy="164" r="1.03078" id="svg_155"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="17.5" cy="167.75" r="1.45774" id="svg_156"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="16.5" cy="170.5" r="1.11803" id="svg_157"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="12" cy="120.25" r="1.45774" id="svg_158"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="17.5" cy="119.75" r="1.95256" id="svg_159"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="22" cy="124.75" r="1.41421" id="svg_160"/>
+  <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="142.75" cy="124.5" r="1.52069" id="svg_162"/>
+  <circle r="2" cy="120" cx="100.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_163"/>
+  <text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="11" id="svg_2" y="202.5" x="79.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">10</text>
+  <g id="svg_7">
+   <circle r="2" cy="14.5" cx="110.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_134"/>
+   <line id="svg_6" y2="14" x2="100.480284" y1="14" x1="110" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#00ffff" fill="none"/>
+  </g>
+  <g id="svg_8">
+   <circle r="2" cy="15.25" cx="80.25" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_133"/>
+   <line id="svg_5" y2="15.5" x2="68.084475" y1="15.5" x1="80.25" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#00ffff" fill="none"/>
+  </g>
+  <g id="svg_9">
+   <circle r="2" cy="15" cx="50" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_41"/>
+   <line id="svg_4" y2="15.5" x2="60.012492" y1="15.5" x1="50" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#00ffff" fill="none"/>
+  </g>
+  <g id="svg_10">
+   <circle r="2" cy="15" cx="20.25" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_42"/>
+   <line id="svg_3" y2="15.5" x2="30.780356" y1="15.5" x1="21.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#00ffff" fill="none"/>
+  </g>
+  <g id="svg_19">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="129" cy="60.75" r="1.45774" id="svg_148"/>
+   <line id="svg_12" y2="61.25" x2="129.25" y1="63.5" x1="134" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_20">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="142.5" cy="57.75" r="3.40037" id="svg_147"/>
+   <line id="svg_11" y2="54.75" x2="138" y1="56.75" x1="142.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_21">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="138.25" cy="45.75" r="0.70711" id="svg_142"/>
+   <line id="svg_16" y2="45.75" x2="138.625" y1="48.5" x1="137.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_22">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="140" cy="39.5" r="0.79057" id="svg_140"/>
+   <line id="svg_18" y2="39.5" x2="139.875" y1="43.375" x1="144.875" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_23">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="136.25" cy="36" r="1" id="svg_139"/>
+   <line id="svg_17" y2="36" x2="136.375" y1="38.625" x1="137.125" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_24">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="130.5" cy="35.25" r="0.75" id="svg_149"/>
+   <line id="svg_14" y2="35.5" x2="130.75" y1="37.25" x1="132" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_25">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="127.5" cy="41.75" r="2.01556" id="svg_138"/>
+   <line id="svg_13" y2="42" x2="128" y1="44.25" x1="129" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_28">
+   <circle fill="#00bf5f" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="55" cy="44.5" r="1.34629" id="svg_141"/>
+   <line id="svg_26" y2="44.625" x2="54.292758" y1="44.625" x1="36" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_31">
+   <circle fill="#00bf5f" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="12" cy="50.75" r="3" id="svg_145"/>
+   <line id="svg_30" y2="51.375" x2="12.125" y1="45.5" x1="7.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_61">
+   <circle id="svg_15" r="2" cy="77" cx="45.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f"/>
+   <line id="svg_50" y2="77.622826" x2="45.75" y1="92" x1="45.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_64">
+   <circle r="2" cy="65.75" cx="114.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_32"/>
+   <line id="svg_51" y2="65.25" x2="113.56361" y1="65.25" x1="101.25" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <g id="svg_67">
+   <circle r="2" cy="74.5" cx="125.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#007fff" fill="#00bf5f" id="svg_29"/>
+   <line id="svg_56" y2="74.75" x2="125.625" y1="85.375" x1="125.625" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_75">
+   <circle r="2" cy="75.5" cx="4" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_37"/>
+   <line id="svg_70" y2="87.142945" x2="4.125" y1="76.25" x1="4.125" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_76">
+   <circle r="2" cy="74.5" cx="24.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_36"/>
+   <line id="svg_73" y2="74.625" x2="18.860598" y1="74.625" x1="23.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_77">
+   <circle r="2" cy="124" cx="59.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_33"/>
+   <line id="svg_74" y2="124.375" x2="63.751953" y1="124.375" x1="59.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_78">
+   <circle fill="#ffff00" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="134.75" cy="120" r="1.95256" id="svg_161"/>
+   <line id="svg_68" y2="108.982055" x2="134.5" y1="119.875" x1="134.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_87">
+   <circle r="2" cy="76.5" cx="146" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_34"/>
+   <line id="svg_69" y2="88.069231" x2="145.625" y1="76.75" x1="145.625" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_93">
+   <circle fill="#00bf5f" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="115.25" cy="211" r="2.01556" id="svg_154"/>
+   <line id="svg_92" y2="211.5" x2="115" y1="188.625" x1="108.125" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_105">
+   <circle fill="#00bf5f" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="30" cy="210" r="1.45774" id="svg_153"/>
+   <line id="svg_90" y2="218.5" x2="43.75" y1="210.5" x1="30.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_117">
+   <circle fill="#00bf5f" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="15.25" cy="212.5" r="2.15058" id="svg_152"/>
+   <line id="svg_89" y2="206.625" x2="21.5" y1="212.5" x1="15.375" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+  <g id="svg_119">
+   <circle fill="#00bf5f" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" cx="10.25" cy="168" r="4.98121" id="svg_151"/>
+   <line id="svg_88" y2="167.375" x2="53.125" y1="168" x1="11.125" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#007fff" fill="none"/>
+  </g>
+ </g>
+</svg>
