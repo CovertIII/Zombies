@@ -15,6 +15,8 @@ There's the required libs:
  * libvorbis
  * libogg
  * libvorbisfile
+ * libmxml
+ * libcurl
  * sqlite3
  * OpenGL
  * GLUT
@@ -75,11 +77,11 @@ Credits
 
 *Fonts*
 
- MedievalSharp
+MedievalSharp
    * By wmk69 on openfontlibrary.org
    * License: OFL (SIL Open Font License)
 
 
- FreeUniversal
+FreeUniversal
   * By: narrowhouse on openfontlibrary.org
   * License: OFL (SIL Open Font License)
