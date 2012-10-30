@@ -283,7 +283,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>61</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -329,6 +329,10 @@
 										<string>7AC1F34D1412FD240086E03C</string>
 										<key>PBXProjectModuleLabel</key>
 										<string>game.c</string>
+										<key>_historyCapacity</key>
+										<integer>0</integer>
+										<key>bookmark</key>
+										<string>7A3AC5901640233B00F40DDC</string>
 										<key>history</key>
 										<array>
 											<string>7AC1F3EC141309170086E03C</string>
@@ -337,10 +341,17 @@
 											<string>7A5AAC43145346F500BE4B3C</string>
 											<string>7A804C2315275849008C3734</string>
 											<string>7AF40106153640F200CBCA91</string>
-											<string>7A2E4CA615D6C70900DC2622</string>
 											<string>7A9184C615D6EDB300F33131</string>
 											<string>7A9184C815D6EDB300F33131</string>
 											<string>7A9184C915D6EDB300F33131</string>
+											<string>7A9A2AE615E13DE50094B3C6</string>
+											<string>7A9A2AE715E13DE50094B3C6</string>
+											<string>7A9A2AE815E13DE50094B3C6</string>
+											<string>7A9A2AE915E13DE50094B3C6</string>
+											<string>7A9A2AEA15E13DE50094B3C6</string>
+											<string>7A9A2AEB15E13DE50094B3C6</string>
+											<string>7A9A2AEC15E13DE50094B3C6</string>
+											<string>7AC7D4F815E1494800911A41</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -354,18 +365,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {912, 561}}</string>
+								<string>{{0, 0}, {912, 554}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 59 1280 719 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>561pt</string>
+							<string>554pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>112pt</string>
+							<string>119pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
@@ -379,7 +390,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {912, 85}}</string>
+										<string>{{10, 27}, {912, 92}}</string>
 										<key>RubberWindowFrame</key>
 										<string>0 59 1280 719 0 0 1280 778 </string>
 									</dict>
@@ -435,7 +446,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {912, 292}}</string>
+										<string>{{10, 27}, {912, 85}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -463,11 +474,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7A9A2A7D15DFC46D0094B3C6</string>
+				<string>7A3AC5911640233B00F40DDC</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>7A9A2A7E15DFC46D0094B3C6</string>
+				<string>7A3AC5921640233B00F40DDC</string>
 				<string>7AC1F34C1412FD240086E03C</string>
-				<string>7A9A2A7F15DFC46D0094B3C6</string>
+				<string>7A3AC5931640233B00F40DDC</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -616,14 +627,14 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7ACB8F9A15DF0BB700188E19</string>
+				<string>7AC7D4EF15E140A300911A41</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>7ACB8F9B15DF0BB700188E19</string>
-				<string>7ACB8F9C15DF0BB700188E19</string>
-				<string>7ACB8F9D15DF0BB700188E19</string>
-				<string>7ACB8F9E15DF0BB700188E19</string>
-				<string>7ACB8F9F15DF0BB700188E19</string>
+				<string>7AC7D4F015E140A300911A41</string>
+				<string>7AC7D4F115E140A300911A41</string>
+				<string>7AC7D4F215E140A300911A41</string>
+				<string>7AC7D4F315E140A300911A41</string>
+				<string>7AC7D4F415E140A300911A41</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
 			<string>2</string>
