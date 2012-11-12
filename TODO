@@ -1,6 +1,15 @@
 My Random TODO list for the zombie game.
 ========================================
 
+Fixe the bug where the textures don't work.
+
+Allow for indefinate amount of music tracks and detect when there are no more (like i do for the levels).
+
+Auto generate a texture with the walls on it for each level when loading a level.
+   This will save on resources so the calculations for each wall aren't done on each frame.
+
+Have an over world map and allow people to pick up where they left off since last playing the game.
+
 Insert uppercase letters in SDL
 
 Load splash logo in data_interface render and directions and credits

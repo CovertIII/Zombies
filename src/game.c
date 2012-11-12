@@ -58,6 +58,14 @@ enum{
     al_buf_num
 };
 
+enum{
+    gl_hero0,
+    gl_hero25,
+    gl_hero50,
+    gl_hero100,
+    gl_num
+};
+
 typedef struct {
 	object o;
 	float timer;
@@ -78,6 +86,8 @@ typedef struct {
 	
 	int spring_state;
 	int person_id;
+	
+	float nrg;
 } _hero;
 
 typedef struct {
@@ -95,6 +105,7 @@ typedef struct gametype {
 	int mpy; /* Mouse location on SDL context */
 	int m;		 /*Whether to use mouse or not */
 	vector2 ak;  /*arrow key presses*/
+	int n;  /*checks if nrg key is being pressed*/
 	
 	vector2 vmin; /*sceen size */
 	vector2 vmax; /*sceen size */
@@ -132,6 +143,8 @@ typedef struct gametype {
 	ALuint buf[al_buf_num];
     s_list saved_src;
 	
+	GLuint h_tex[gl_num];
+
 	GLuint zombie_tex;
 	GLuint person_tex;
 	GLuint safe_tex;
@@ -184,6 +197,7 @@ game gm_init(char * res_path){
   gm->timer = 0;
   gm->c=0;
   gm->m=0;
+  gm->n=0;
 
   return gm;
 }
@@ -253,6 +267,23 @@ int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/stink.png");
     load_texture(gm->res_buf, &gm->stink_tex);
+
+/******/
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/heron0.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_hero0]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/heron25.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_hero25]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/heron50.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_hero50]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/heron100.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_hero100]);
 }	
 
 void gm_init_sounds(game gm){
@@ -260,7 +291,7 @@ void gm_init_sounds(game gm){
 
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf,"/snd/saved1.ogg"); 
-	  snd_load_file(gm->res_buf, gm->buf[al_saved1_buf]);
+    snd_load_file(gm->res_buf, gm->buf[al_saved1_buf]);
 	
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/snd/saved2.ogg");
@@ -413,18 +444,47 @@ void gm_update(game gm, int width, int height, double dt){
 	gm->hero.o.f.y=0;
 	
 	/*Add forces*/
+    //First hero energy
+    if(gm->n && gm->hero.nrg > 12){
+        gm->hero.nrg -= dt*50;
+    }
+    else if(gm->hero.nrg < 100 && gm->hero.state == PERSON){
+        gm->hero.nrg += dt*5;
+    }
+    if(gm->hero.nrg < 12.5){
+        gm->n = 0;
+    }
+
+    if(gm->hero.nrg < 0 && gm->hero.state == PERSON){
+        gm->hero.nrg = 0;
+        gm->hero.spring_state = NOT_ATTACHED;
+        gm->hero.timer = MAX_TIME;
+        gm->hero.state = P_Z;
+        chain_ready_zero(gm);
+        gm->chain_num = 0;
+        s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
+    }
+
+
 	double msd = v2Len(v2Sub(gm->hero.o.p, gm->ms));
     vector2 msu = v2Unit(v2Sub(gm->hero.o.p, gm->ms));
-    if(msd < gm->hero.o.r){msd = 0;}
-    vector2 msf = v2sMul(-5*msd, msu);
 	
+    float hf = (gm->n)?300:100;
+    vector2 msf = v2sMul(-1*hf, msu);
+
+    if(msd < gm->hero.o.r){
+        msf.x = 0;
+        msf.y = 0;
+    }
+
 	if(!gm->m){
 		msf.x = 0;
 		msf.y = 0;	
 	}
 
-	gm->hero.o.f.x += gm->ak.x*100 - gm->hero.o.v.x + msf.x;
-	gm->hero.o.f.y += gm->ak.y*100 - gm->hero.o.v.y + msf.y;
+    
+	gm->hero.o.f.x += gm->ak.x*hf - gm->hero.o.v.x + msf.x;
+	gm->hero.o.f.y += gm->ak.y*hf - gm->hero.o.v.y + msf.y;
 	
 
     //Ai Forces
@@ -596,11 +656,15 @@ void gm_update(game gm, int width, int height, double dt){
 				}
 			}
 			else if(gm->person[i].state == ZOMBIE && gm->hero.state == PERSON){
+                /*
 				gm->hero.spring_state = NOT_ATTACHED;
 				gm->hero.timer = MAX_TIME;
 				gm->hero.state = P_Z;
 				chain_ready_zero(gm);
 				gm->chain_num = 0;
+                s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
+                */
+                gm->hero.nrg -= 75;
                 s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
 			}
 			else if(gm->person[i].state == PERSON && gm->hero.state == ZOMBIE){
@@ -844,6 +908,21 @@ void gm_render(game gm){
 	if(gm->hero.spring_state == ATTACHED){
 		glBindTexture( GL_TEXTURE_2D, gm->heroattached_tex);
 	}
+    if(gm->hero.nrg > 99){
+        glBindTexture( GL_TEXTURE_2D, gm->herosafe_tex);
+    }
+    else if(gm->hero.nrg > 75 && gm->hero.nrg < 99){
+        glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_hero100]);
+    }
+    else if(gm->hero.nrg > 50 && gm->hero.nrg < 75){
+        glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_hero50]);
+    }
+    else if(gm->hero.nrg > 25 && gm->hero.nrg < 50){
+        glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_hero25]);
+    }
+    else if(gm->hero.nrg > 0 && gm->hero.nrg < 25){
+        glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_hero0]);
+    }
 	
 	
 	glPushMatrix();
@@ -994,6 +1073,10 @@ void gm_message_render(game gm, int width, int height){
 	sprintf(buf, "%.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
+
+	sprintf(buf, "%.1lf", gm->hero.nrg);	
+    len = rat_font_text_length(gm->font, buf);
+    rat_font_render_text(gm->font,width/2 + 50,height-4, buf);
 	
 	/*
     sprintf(buf, "Chain Num: %d", gm->chain_num);	
@@ -1138,11 +1221,18 @@ void gm_nkey_down(game gm, unsigned char key){
         case 'm':
 		    gm->m = gm->m ? 0 : 1;
 			break;
+
+        case 'n':
+		    gm->n = 1;
+			break;
 	}
 }
 
 void gm_nkey_up(game gm, unsigned char key){
 	switch(key) {
+        case 'n':
+		    gm->n = 0;
+			break;
 		case 'z':
 			gm->zoom = 0;
 			break;
@@ -1153,6 +1243,7 @@ void gm_nkey_up(game gm, unsigned char key){
 		case 'c':
 			gm->c = 0;
 			break;
+
 		case ' ':
 			gm->c = 0;
 			break;
@@ -1448,6 +1539,7 @@ int gm_load_level_svg(game gm, char * file_path){
             }
             else if(strcmp(color, "#ff0000") == 0 || strcmp(color, "#FF0000") == 0){
 				gm->hero.state = PERSON;
+				gm->hero.nrg = 100;
 				gm->hero.spring_state = NOT_ATTACHED;
                 gm->hero.o.p.x = cx;
                 gm->hero.o.p.y = cy;

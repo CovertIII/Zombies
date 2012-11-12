@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>How to make levels for Zombies!</title>
+<meta name="Generator" content="Vim reStructured Text 140 - Vim 7.3" />
+
+<style type="text/css">
+/*<![CDATA[*/
+body { color: #000; background-color: #fff; margin: 0px 10%; min-width: 720px; font-family: Verdana, sans-serif;
+       counter-reset: chapter section subsection subsubsection paragraph lchapter lsection lsubsection lsubsubsection lparagraph}
+div.footnote { border-left: 1px solid #000; margin-left: 0em; clear: both }
+div.ftext { position: relative; margin-left: 50px }
+div.fnumber { float: left; width: 40px; padding: 0em; margin-left: 0.5em; margin-top: 0em }
+div.fnumber a { margin: 0px; padding: 0px }
+div.ctext { position: relative; margin-left: 100px }
+div.cnumber { float: left; width: 90px; padding: 0em; margin-left: 0.5em; margin-top: 0em }
+div.cnumber a { margin: 0px; padding: 0px }
+div.tip { border: 2px solid #0d0; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.warning, div.caution, div.danger, div.error { border: 2px solid #f00; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.note, div.hint, div.important { border: 2px solid #000; margin: 0.5em 2em 1em 2em; padding: 0em 1em }
+div.figure { display: block; padding: 1em; width: 400px; clear: both}
+div.topic { margin: 2em }
+div.vstsidebar, div.sidebar { border: 2px solid #aaa; color: #000; background-color: #ffffee; float: right; width: 40%; margin-left: 1em; margin-right: -1em; padding: 1em }
+span.strike { text-decoration: line-through }
+span.big { font-size: large }
+span.small { font-size: small }
+span.title { font-style: italic }
+span.notetitle { font-size: large; font-weight: 900; font-family: Verdana, sans-serif }
+p.toc { font-size: large; font-weight: 900 }
+p.notesubtitle { font-weight: 900; font-family: Verdana, sans-serif }
+p.attribution { font-style: italic; margin-left: 8em; text-indent: -1.4em }
+.vstright { float: right; margin: 1em }
+.vstleft { float: left; margin: 1em }
+.vstcenter { margin: 1em auto }
+blockquote.pull { font-size: large }
+p.rubric { font-size: large; margin-left: 2em }
+dd.normal { margin-bottom: 0.5em }
+dt.option { float: left; margin: 0em 0em 5px 2em; padding: 0px; font-family: monospace }
+dd.option { padding: 0px; margin: 0em 0em 5px 10em; text-indent: 0.5em }
+dd.option > p { margin: 0px }
+dd.normal > p { margin: 0px }
+table { border-collapse: collapse; margin: 0.5em 0em }
+thead, tfoot { text-align: center; font-weight: bold }
+td { border: 1px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td blockquote p{ margin: 0px; padding: 0px}
+td blockquote { margin: 0px; padding: 0px}
+table.vstbless td { border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td > p { margin: 0px }
+table.field { border: 0px solid #000; margin-left: 2em; padding: 0.25em; _top: 0%; vertical-align: top }
+td.fkey { font-weight: 900 }
+td.fval { border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td.fkey { font-weight: 900; border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+td.fdkey { text-align: center; font-weight: 900 }
+td.fdval { text-align: center; font-style: italic }
+td.fakey { text-align: center; font-weight: 900 }
+td.faval { border: 0px solid #000; padding: 0.25em; _top: 0%; vertical-align: top }
+hr { width: 80%; margin: 1.5em auto }
+h1 { text-align: center; clear: both }
+h2, h3, h4, h5, h6 { text-align: left; margin-top: 1em; clear: both }
+h2 { counter-reset: section subsection subsubsection paragraph }
+h3 { counter-reset: subsection subsubsection paragraph }
+h4 { counter-reset: subsubsection paragraph }
+h5 { counter-reset: paragraph }
+h1 a { color: #000; background-color: transparent }
+h2 a { color: #000; background-color: transparent }
+h3 a { color: #000; background-color: transparent }
+h4 a { color: #000; background-color: transparent }
+h5 a { color: #000; background-color: transparent }
+h6 a { color: #000; background-color: transparent }
+p.subh1 { text-align: center; font-size: 120%; font-variant: small-caps }
+p.subh2, p.subh3, p.subh4, p.subh5, p.subh6 { text-align: left; font-size: 120%; font-variant: small-caps }
+h2:before { content: counter(chapter)" "; counter-increment: chapter }
+h3:before { content: counter(chapter)"."counter(section)" "; counter-increment: section }
+h4:before { content: counter(chapter)"."counter(section)"."counter(subsection)" "; counter-increment: subsection }
+h5:before { content: counter(chapter)"."counter(section)"."counter(subsection)"."counter(subsubsection)" "; counter-increment: subsubsection }
+h6:before { content: counter(chapter)"."counter(section)"."counter(subsection)"."counter(subsubsection)"."counter(paragraph)" "; counter-increment: paragraph}
+li.h1 { margin-left: 0em }
+li.h2 { margin-left: 1em; counter-reset: lsection lsubsection lsubsubsection lparagraph }
+li.h3 { margin-left: 2em; counter-reset: lsubsection lsubsubsection lparagraph }
+li.h4 { margin-left: 3em; counter-reset: lsubsubsection lparagraph }
+li.h5 { margin-left: 4em; counter-reset: lparagraph }
+li.h2:before { content: counter(lchapter)" "; counter-increment: lchapter }
+li.h3:before { content: counter(lchapter)"."counter(lsection)" "; counter-increment: lsection }
+li.h4:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)" "; counter-increment: lsubsection }
+li.h5:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)"."counter(lsubsubsection)" "; counter-increment: lsubsubsection }
+li.h6:before { content: counter(lchapter)"."counter(lsection)"."counter(lsubsection)"."counter(lsubsubsection)"."counter(lparagraph)" "; counter-increment: lparagraph}
+li.h6 { margin-left: 5em }
+ol, ul { margin-bottom: 0.5em; margin-top: 0.5em }
+ol.loweralpha { list-style-type: lower-alpha }
+ol.upperalpha { list-style-type: upper-alpha }
+ol.lowerroman { list-style-type: lower-roman }
+ol.upperroman { list-style-type: upper-roman }
+ol.decimal { list-style-type: decimal }
+ul.square { list-style-type: square }
+ul.circle { list-style-type: circle }
+ul.disc { list-style-type: disc }
+li > p { margin: 0em }
+img { border: 1px solid #000; padding: 0em; display: block; margin: 1em auto }
+img.inline { border: 1px solid #000; padding: 0em; margin: 0em; display: inline }
+pre { color: #000; background-color: #eee; margin-left: 2em; clear: both; overflow: auto }
+div.unknown { font-family: monospace; color: #000; background-color: #fff; margin: 1em; padding: 1em; clear: both; border: 3px solid red}
+pre.quoted { color: #000; background-color: #eee; margin-left: 0em; clear: both; overflow: auto  }
+pre.rawlatex { color: #000; background-color: #ddd; border: 1px solid #000; padding: 0.1em; clear: both; overflow: auto  }
+pre.address { font-family: Verdana, sans-serif; display: inline; margin: 0px; color: #000; background-color: #fff; overflow: auto }
+span.target { text-decoration: underline }
+div.vstfooter hr { width: 100%; margin: 0px }
+div.vstfooter p { margin: 0px }
+/*]]>*/
+</style>
+
+</head>
+<body>
+
+<h1 id="lhow-to-make-levels-for-zombies33">How to make levels for Zombies!</h1>
+
+<p>
+Levels are now made using svg edit (the alpha build).  This is
+an in browser svg-editor.
+</p>
+
+<h2 id="lin-game-elements">In Game Elements</h2>
+
+<p>
+<em>Height and width:</em>  The height and width attributes of the svg
+canvas is going to be the dimensions of the game.  A small level
+is 50x50, a large level is 200x200.  This can be changed in the
+svg source or the document properties in the menu.
+</p>
+
+<p>
+<em>Save Count:</em> This is a text element in the level with a single
+number in it.  Don't use any other text elements other than this
+one and don't have any other characters in it other than
+numbers.
+</p>
+
+<p>
+<em>Safe Zone:</em>  This is defined by a circle element (not an
+ellipse) and MUST be the fill color e5e5e5 in lower case
+letters.  It cannot have velocity.
+</p>
+
+<p>
+<em>Hero:</em> There is only one hero per level.  If you put in more
+than one the last one will be loaded.  He is a circle element
+defined by the fill color of ff0000 in lowercase letters.
+</p>
+
+<p>
+<em>People:</em>  These are the people you have to save.  They are a
+circle element with a fill color of ffff00 in lowercase letters.
+</p>
+
+<p>
+<em>Zombies:</em>  These are the enemy to be avoided.  Again a circle
+with the fill color of 00bf5f in lowercase letters.
+</p>
+
+<p>
+<em>Walls:</em>  These are single ungrouped line segments.  These must
+use the line element and not the path element or the polyline
+element.  You may find it useful to turn on grid snapping to get
+them to touch each other.
+</p>
+
+<h2 id="lgetting-people-to-move">Getting people to move</h2>
+
+<p>
+If you want some people to start out moving draw a line on them
+which indicates the direction they will go.  Then group the line
+and circle together.  The parser will know this is a velocity
+vector and it will not show up as a wall.
+</p>
+
+<h2 id="lai">AI</h2>
+
+<p>
+If the zombie circle radius is bigger than 2 they will follow
+the hero and try to bit him if he gets too close.  It makes the
+game interesting.
+</p>
+
+<p>
+Also, when a person is bit by a zombie, they will start
+following that zombie around.  You can make this interesting by
+intentionally having a zombie run into someone (or multiple
+people) to generate some weird behaviour.
+</p>
+
+<h2 id="lbackground-image">Background Image</h2>
+
+<p>
+A custom background image can be made for each level.  It must
+have the same name as the level file for it to be loaded and it
+must be a png file.  For example if you level is name lvl1.svg
+than the background image must be named lvl1.png.  Also the
+image must be a square with a power of 2 dimensions (64, 128, 256,
+512, 1024 are all valid) because that's how openGL likes to
+handle textures.
+</p>
+
+<p>
+I have found it useful to make background images in gimp.
+Create a new document 512x512.  Then open the svg file in gimp,
+make sure the import ratio matches the document, 512x512 in this
+case then copy and paste it as a new layer on the background
+image and use it to trace over.  (It's pretty cool that gimp can
+import svg images as a bitmap).  If you level file is not square
+(it's okay for the svg file to not be square, just the png image
+has to be square) than you can compress or stretch to fit the
+512x512 background image.  When the image is loaded in the game
+it will be stretched to fill the level.
+</p>
+
+<p>
+See the levels inside the Zombies.app/Contents/lvl/ for
+examples of how to make a level.
+</p>
+
+<p>
+
+<img src="lvl1.svg"  alt="lvl1.svg" />
+
+</p>
+
+<p>
+Happy level making!
+</p>
+
+</body>
+</html>
+

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g>
+  <title>Over World</title>
+
+  <a xlink:href="lvl1.svg" transform="translate(100 100)">
+      <circle id="svg_2" r="15" cy="0" cx="0" stroke-width="1" stroke="#000000" fill="#bfbfbf"/>
+      <text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="12" id="svg_2" y="0" x="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Level 1</text>
+  </a>
+
+
+  <a xlink:href="lvl2.svg" transform="translate(100 150)">
+      <circle id="svg_2" r="15" cy="0" cx="0" stroke-width="1" stroke="#000000" fill="#bfbfbf"/>
+      <text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="12" id="svg_2" y="0" x="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Level 2</text>
+  </a>
+
+
+  <a xlink:href="lvl3.svg" transform="translate(100 400)">
+      <circle id="svg_2" r="15" cy="0" cx="0" stroke-width="1" stroke="#000000" fill="#bfbfbf"/>
+      <text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="12" id="svg_2" y="0" x="0" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000">Level 3</text>
+  </a>
+ </g>
+</svg>

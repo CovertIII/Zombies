@@ -441,7 +441,11 @@ void numbers(void)
             strcat(res_buf, "/snd/track2.ogg");
             sound_track = 2;
         }
-        else{
+        else if(sound_track == 2){
+            strcat(res_buf, "/snd/track3.ogg");
+            sound_track = 3;
+        }
+		else if(sound_track == 3){
             strcat(res_buf, "/snd/track1.ogg");
             sound_track = 1;
         }
