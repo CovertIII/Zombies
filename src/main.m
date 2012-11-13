@@ -28,6 +28,7 @@
 #define GAMEOVER 3
 #define USERSELECT 4
 #define WIN 5
+#define OVERWORLD 6
 
 enum{
     al_game_over_buf,
@@ -357,7 +358,7 @@ void processNormalKeys(unsigned char key) {
 
 
 	
-	  gm_nkey_down(gm, key);	
+    gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
 			total_deaths = 0;
@@ -367,17 +368,17 @@ void processNormalKeys(unsigned char key) {
 			gm_free_level(gm);
             char level[30];
             strcpy(res_buf, res_path);
-            sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+            sprintf(level, "/lvl/bk.png", gm_lvl);
             strcat(res_buf, level);
             gm_load_bk(gm, res_buf);
 			strcpy(res_buf, res_path);
-			sprintf(level, "/lvl/lvl%d.svg", gm_lvl);
+			sprintf(level, "/lvl/overworld.svg", gm_lvl);
 			strcat(res_buf, level);
 			gm_load_level_svg(gm, res_buf);
 			
             game_start_session(stats);
             gm_timer = 0.0f;
-            game_mode = PREGAME;
+            game_mode = OVERWORLD;
             s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
         }
     }
@@ -411,7 +412,7 @@ void releaseNormalKeys(unsigned char key) {
 
 
 void pressKey(int key) {
-	if(game_mode == GAME || game_mode == POSTGAME){
+	if(game_mode == GAME || game_mode == POSTGAME || game_mode == OVERWORLD){
 		gm_skey_down(gm, key);	
 	}
     if(level_test == 0){
@@ -456,6 +457,33 @@ void numbers(void)
 	switch(game_mode){
         case USERSELECT:
 			gm_update(gm,gScreen->w, gScreen->h,h);
+            break;
+        case OVERWORLD:
+			gm_update(gm,gScreen->w, gScreen->h,h);
+			char * portal = gm_portal(gm);
+            if(portal != NULL){
+                game_mode = PREGAME;
+                gm_timer = 0;
+                gm_free_level(gm);
+                char level[30];
+                strcpy(res_buf, res_path);
+                sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+                strcat(res_buf, level);
+                gm_load_bk(gm, res_buf);
+
+                strcpy(res_buf, res_path);
+                sprintf(level, "/lvl/%s", portal);
+                strcat(res_buf, level);
+                gm_load_level_svg(gm, res_buf);
+                printf("OW lvl: %s\n", portal);
+                /*
+                if(gm_load_level_svg(gm, res_buf) == 0 && level_test == 0){
+                    game_mode = WIN;
+                    s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
+                    game_finish_session(stats, total_deaths);
+                }
+                */
+            }
             break;
 		case PREGAME:
             cnt_down += h;
@@ -529,22 +557,17 @@ void numbers(void)
 			if (gm_timer > 4){				
 				gm_timer = 0;
                 if(!level_test){
-                    game_mode = PREGAME;
                     gm_free_level(gm);
                     char level[30];
                     strcpy(res_buf, res_path);
-                    sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+                    sprintf(level, "/lvl/bk.png", gm_lvl);
                     strcat(res_buf, level);
                     gm_load_bk(gm, res_buf);
-
                     strcpy(res_buf, res_path);
-                    sprintf(level, "/lvl/lvl%d.svg", gm_lvl);
+                    sprintf(level, "/lvl/overworld.svg", gm_lvl);
                     strcat(res_buf, level);
-                    if(gm_load_level_svg(gm, res_buf) == 0 && level_test == 0){
-                        game_mode = WIN;
-                        s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
-                        game_finish_session(stats, total_deaths);
-                    }
+                    gm_load_level_svg(gm, res_buf);
+                    game_mode = OVERWORLD;
                 }
                 else{
                     gm_load_level_svg(gm, argv1);
@@ -648,6 +671,7 @@ static void drawGL ()
             len = rat_font_text_length(sfont, buf);
             rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
             break;
+        case OVERWORLD:
         case GAME:
             gm_render(gm);
             gm_message_render(gm, gScreen->w, gScreen->h);

@@ -63,6 +63,8 @@ enum{
     gl_hero25,
     gl_hero50,
     gl_hero100,
+	gl_smart_zombie,
+	gl_shield,
     gl_num
 };
 
@@ -89,6 +91,14 @@ typedef struct {
 	
 	float nrg;
 } _hero;
+
+typedef struct {
+	object o;
+	char * lvl_path;
+	char * name;
+	int save_count; 
+    int open;
+} _portal;
 
 typedef struct {
     object n[STINK_PARTICLE_NUM];
@@ -131,8 +141,11 @@ typedef struct gametype {
 	line walls[1000];
 	int wall_num;
 
-    vector2 tp; //What?!
-	
+    //This is for the overworld
+	_portal portal[100];
+	int portal_num;
+    int onpt; //Portal index hero is on
+
 
     //Experiental Particle thingy for zombies
     stink_struct stnk[100];
@@ -198,6 +211,7 @@ game gm_init(char * res_path){
   gm->c=0;
   gm->m=0;
   gm->n=0;
+  gm->onpt=-1;
 
   return gm;
 }
@@ -284,6 +298,14 @@ int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/heron100.png");
     load_texture(gm->res_buf, &gm->h_tex[gl_hero100]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/zombie_smart.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_smart_zombie]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/shield.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_shield]);
 }	
 
 void gm_init_sounds(game gm){
@@ -445,13 +467,7 @@ void gm_update(game gm, int width, int height, double dt){
 	
 	/*Add forces*/
     //First hero energy
-    if(gm->n && gm->hero.nrg > 12){
-        gm->hero.nrg -= dt*50;
-    }
-    else if(gm->hero.nrg < 100 && gm->hero.state == PERSON){
-        gm->hero.nrg += dt*5;
-    }
-    if(gm->hero.nrg < 12.5){
+    if(gm->hero.nrg < 25){
         gm->n = 0;
     }
 
@@ -482,10 +498,21 @@ void gm_update(game gm, int width, int height, double dt){
 		msf.y = 0;	
 	}
 
+	gm->hero.o.f.x += gm->ak.x*hf + msf.x;
+	gm->hero.o.f.y += gm->ak.y*hf + msf.y;
+
+    if(gm->n && gm->hero.nrg > 25){
+        float force = v2Len(gm->hero.o.f);
+        gm->hero.nrg -= dt*force/10.0f;
+    }
+    else if(gm->hero.nrg < 100 && gm->hero.state == PERSON){
+        gm->hero.nrg += dt*5;
+    }
+
+	gm->hero.o.f.x -= gm->hero.o.v.x;
+	gm->hero.o.f.y -= gm->hero.o.v.y;
+
     
-	gm->hero.o.f.x += gm->ak.x*hf - gm->hero.o.v.x + msf.x;
-	gm->hero.o.f.y += gm->ak.y*hf - gm->hero.o.v.y + msf.y;
-	
 
     //Ai Forces
 
@@ -619,6 +646,18 @@ void gm_update(game gm, int width, int height, double dt){
 		r_collision(&gm->safe_zone, &gm->hero.o);
 	}
 	
+    gm->onpt = -1;
+    for(i=0; i < gm->portal_num; i++){
+        if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE && gm->portal[i].open == 0){
+            vector2 p = gm->portal[i].o.p;
+            collision(&gm->hero.o, &gm->portal[i].o); 
+            gm->portal[i].o.p = p;
+        }
+        
+        if(safe_zone_test(gm->portal[i].o, gm->hero.o)){
+            gm->onpt = i;
+        } 
+    }
 	
 	
 	for(i = 0; i < gm->person_num; i++){
@@ -664,7 +703,7 @@ void gm_update(game gm, int width, int height, double dt){
 				gm->chain_num = 0;
                 s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
                 */
-                gm->hero.nrg -= 75;
+                gm->hero.nrg -= 90;
                 s_add_snd(gm->saved_src, gm->buf[al_hdeath_buf], &gm->hero.o,0.1, 1);
 			}
 			else if(gm->person[i].state == PERSON && gm->hero.state == ZOMBIE){
@@ -797,6 +836,34 @@ void gm_render(game gm){
 	glVertex3f(1.0, -1.0, 0.0);
 	glEnd();
 	glPopMatrix();
+
+    float len,hi;
+    for(i = 0; i<gm->portal_num; i++){
+        glPushMatrix();
+        glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_shield]);
+        glTranslatef(gm->portal[i].o.p.x, gm->portal[i].o.p.y, 0);
+        glScalef(gm->portal[i].o.r, gm->portal[i].o.r,0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex3f(-1.0, -1.0, 0.0);
+        glTexCoord2f(0.0, 1.0);
+        glVertex3f(-1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 1.0);
+        glVertex3f(1.0, 1.0, 0.0);
+        glTexCoord2f(1.0, 0.0);
+        glVertex3f(1.0, -1.0, 0.0);
+        glEnd();
+        glPopMatrix();
+        
+        float scale = 0.1;
+        glPushMatrix();
+        len = rat_font_text_length(gm->font, gm->portal[i].lvl_path);
+        hi = rat_font_height(gm->font);
+        glTranslatef(gm->portal[i].o.p.x - len/2.0f*scale,gm->portal[i].o.p.y+hi/2.0f*scale, 0);
+        glScalef(scale,scale,0);
+        rat_font_render_text(gm->font,0,0,gm->portal[i].lvl_path);
+        glPopMatrix();
+    }
 
 	for(i = 0; i<gm->wall_num; i++){
 		glBindTexture( GL_TEXTURE_2D, gm->rope_tex);
@@ -956,7 +1023,7 @@ void gm_render(game gm){
 			glBindTexture( GL_TEXTURE_2D, gm->zombie_tex);
 		}
 		else if(gm->person[i].state == ZOMBIE && gm->person[i].o.r > 2){
-			glBindTexture( GL_TEXTURE_2D, gm->hzombie_tex);
+			glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_smart_zombie]);
 		}
 		else if(gm->person[i].state == SAFE){
 			glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
@@ -1035,6 +1102,14 @@ void gm_stats(game gm, double * time, int * people){
 
 }
 
+char * gm_portal(game gm){
+    if(gm->onpt >= 0 && gm->c){
+      return gm->portal[gm->onpt].lvl_path;
+    }else{
+        return NULL;
+    }
+}
+
 void gm_message_render(game gm, int width, int height){
 	int i, add = 0;
     int check = 0;
@@ -1077,6 +1152,10 @@ void gm_message_render(game gm, int width, int height){
 	sprintf(buf, "%.1lf", gm->hero.nrg);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 + 50,height-4, buf);
+
+	sprintf(buf, "PI: %d", gm->onpt);	
+    len = rat_font_text_length(gm->font, buf);
+    rat_font_render_text(gm->font,width/2,height-40, buf);
 	
 	/*
     sprintf(buf, "Chain Num: %d", gm->chain_num);	
@@ -1494,6 +1573,7 @@ int gm_load_level_svg(game gm, char * file_path){
     gm->safe_zone.v.y = 0;
     gm->person_num = 0;
     gm->wall_num = 0;
+    gm->portal_num = 0;
     gm->save_count = 1;
     gm->timer = 0;
     i = 1;
@@ -1609,6 +1689,58 @@ int gm_load_level_svg(game gm, char * file_path){
             name = mxmlGetText(node, NULL); 
 			sscanf(name, "%d", &gm->save_count);
         }
+
+
+        //THis is for portals, portals are stored in anchor elements
+		if(strcmp(name, "a") == 0){
+            mxml_node_t * child;
+            int pn = gm->portal_num;
+            name = mxmlElementGetAttr(node, "xlink:href"); 
+            //printf("xlink:href portal link: %s\n", name);
+            gm->portal[pn].lvl_path = (char*)malloc(strlen(name)*sizeof(char)+sizeof(char)*2);
+            strcpy(gm->portal[pn].lvl_path, name);
+
+            float cx;
+            float cy;
+            float r;
+
+            for(child = mxmlWalkNext(node, tree, MXML_DESCEND); child != NULL; child = mxmlGetNextSibling(child)){
+                name = mxmlGetElement(child);
+                while(name == NULL && child != NULL){
+                    child = mxmlGetNextSibling(child);
+                    name = mxmlGetElement(child);
+                }
+                if(name == NULL)
+                {break;}
+
+                if(strcmp(name, "circle") == 0){
+                    name = mxmlElementGetAttr(child, "cx"); 
+                    sscanf(name, "%f", &cx);
+                    name = mxmlElementGetAttr(child, "cy"); 
+                    sscanf(name, "%f", &cy);
+                    name = mxmlElementGetAttr(child, "r"); 
+                    sscanf(name, "%f", &r);
+                    cy = gm->h - cy; 
+                }
+                else if(strcmp(name, "text") == 0){
+                    name = mxmlGetText(node, NULL); 
+                    //printf("Text portal name: %s\n", name);
+                    //strcpy(gm->portal[pn].name, name);
+                }
+            }
+
+            gm->portal[pn].o.p.x = cx;
+            gm->portal[pn].o.p.y = cy;
+            gm->portal[pn].o.r = r;
+            gm->portal[pn].open = 1;
+            gm->portal[pn].o.m = 1000;
+            gm->portal[pn].o.v.x = 0;
+            gm->portal[pn].o.v.y = 0;
+            gm->portal_num++;
+        }
+
+
+        //THis is for groups, groups store velocity information
         else if(strcmp(name, "g") == 0){
             mxml_node_t * child;
 
@@ -1719,7 +1851,8 @@ int gm_load_level_svg(game gm, char * file_path){
       
     }
     gm->gm_state = 0;
-	printf("Wall Num: %d", gm->wall_num);
+    mxmlDelete(tree);
+	printf("Wall Num: %d\n", gm->wall_num);
 	return 1;
 }
 
