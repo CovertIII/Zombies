@@ -62,6 +62,7 @@ int nowfullscreen = 1;
 int game_mode = USERSELECT;
 double gm_timer = 0.0f;
 int gm_lvl = 1;
+char level[30];
 int lives = 3;
 int extra_ppl = 0;
 int total_deaths = 0;
@@ -94,7 +95,7 @@ void releaseKey(int key);
  */
 struct thread_data{
     data_record stats;
-    int gm_lvl;
+    char * gm_lvl;
     double tmp_time;
     int ppl;
 };
@@ -265,11 +266,11 @@ if(argc == 1){
 		gm_lvl = 8;
         gm_free_level(gm);
         strcpy(res_buf, res_path);
-        sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+        sprintf(level, "/lvl/bk.png", gm_lvl);
         strcat(res_buf, level);
         gm_load_bk(gm, res_buf);
 		strcpy(res_buf, res_path);
-		sprintf(level, "/lvl/lvl%d.svg", gm_lvl);
+		sprintf(level, "/lvl/overworld.svg", gm_lvl);
 		strcat(res_buf, level);
 		gm_load_level_svg(gm, res_buf);
 		level_test = 0;
@@ -453,29 +454,60 @@ void numbers(void)
         al_stream_load_file(als, res_buf);
         al_stream_play(als);
     }
-
+    
+    int gm_state;
 	switch(game_mode){
         case USERSELECT:
 			gm_update(gm,gScreen->w, gScreen->h,h);
             break;
         case OVERWORLD:
 			gm_update(gm,gScreen->w, gScreen->h,h);
+			gm_state = gm_progress(gm);
+            if(gm_state < 0){
+				gm_timer = 0;
+                lives--;
+                total_deaths++;
+                extra_ppl = extra_ppl <= 0 ? 0 : extra_ppl--;
+                if(lives < 0 && level_test == 0 ){
+                    game_mode = GAMEOVER;
+                    s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,0.1, 0);
+                    game_finish_session(stats, total_deaths);
+                }else
+                {
+					int rand_num = rand()%2;	
+					if (rand_num == 0) {
+						s_add_snd(src_list, al_buf[al_loose1_buf], &snd_obj,0.1, 0);
+					}
+					else{
+						s_add_snd(src_list, al_buf[al_loose2_buf], &snd_obj,0.1, 0);
+					}
+					
+                    game_mode = POSTGAME;
+                }
+            }       
 			char * portal = gm_portal(gm);
             if(portal != NULL){
                 game_mode = PREGAME;
                 gm_timer = 0;
                 gm_free_level(gm);
-                char level[30];
+                char loadbuf[30];
+
+                char *ans;
+                sprintf(level, "%s", portal);
+                ans = strchr(level,'.');
+                *ans = '\0';
+
                 strcpy(res_buf, res_path);
-                sprintf(level, "/lvl/lvl%d.png", gm_lvl);
-                strcat(res_buf, level);
+                sprintf(loadbuf, "/lvl/%s.png", level);
+                strcat(res_buf, loadbuf);
                 gm_load_bk(gm, res_buf);
 
                 strcpy(res_buf, res_path);
-                sprintf(level, "/lvl/%s", portal);
-                strcat(res_buf, level);
+                sprintf(loadbuf, "/lvl/%s.svg", level);
+                strcat(res_buf, loadbuf);
                 gm_load_level_svg(gm, res_buf);
-                printf("OW lvl: %s\n", portal);
+                printf("OW lvl: %s\n", level);
+
                 /*
                 if(gm_load_level_svg(gm, res_buf) == 0 && level_test == 0){
                     game_mode = WIN;
@@ -499,15 +531,15 @@ void numbers(void)
 		case GAME:
 			gm_update(gm,gScreen->w, gScreen->h,h);
 			
-			int state = gm_progress(gm);
-            if(state > 0){
+			gm_state = gm_progress(gm);
+            if(gm_state > 0){
                 s_add_snd(src_list, al_buf[al_lvl_complete_buf], &snd_obj, 0.05, 0);
                 int ppl;
                 double tmp_time;
                 gm_stats(gm, &tmp_time, &ppl);
                 if(!level_test){
                 	threadData.stats = stats;
-                	threadData.gm_lvl = gm_lvl;
+                	threadData.gm_lvl = level;
                 	threadData.tmp_time = tmp_time;
                 	threadData.ppl = ppl;
                 	pthread_t thread;
@@ -521,14 +553,14 @@ void numbers(void)
 				gm_timer = 0;
 				game_mode = POSTGAME;
 				gm_lvl++;	
-                extra_ppl += state - 1;
+                extra_ppl += gm_state - 1;
                 while(extra_ppl >= 3){
                     lives++;
                     extra_ppl -= 3;
                     extra_ppl = extra_ppl < 0 ? 0 : extra_ppl;
                 }
             }
-            else if(state < 0){
+            else if(gm_state < 0){
 				gm_timer = 0;
                 lives--;
                 total_deaths++;
@@ -666,7 +698,7 @@ static void drawGL ()
             float len = rat_font_text_length(font, buf);
             rat_font_render_text(font,(width-len)/2,(height+top)/2, buf);
 
-            sprintf(buf, "Level %d",gm_lvl);	
+            sprintf(buf, "%s",level);	
             top = rat_font_height(sfont);
             len = rat_font_text_length(sfont, buf);
             rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);

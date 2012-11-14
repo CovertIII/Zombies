@@ -1153,9 +1153,6 @@ void gm_message_render(game gm, int width, int height){
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 + 50,height-4, buf);
 
-	sprintf(buf, "PI: %d", gm->onpt);	
-    len = rat_font_text_length(gm->font, buf);
-    rat_font_render_text(gm->font,width/2,height-40, buf);
 	
 	/*
     sprintf(buf, "Chain Num: %d", gm->chain_num);	

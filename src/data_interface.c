@@ -560,7 +560,7 @@ void game_finish_session(data_record db, int deaths){
     sqlite3_close(sdb);
 }
 
-void game_record_lvl_stats(data_record db, int lvl, double time_lvl, int extra_ppl){
+void game_record_lvl_stats(data_record db, char * lvl, double time_lvl, int extra_ppl){
     sqlite3 * sdb;
     sqlite3_stmt * sql;
     const char * extra;
@@ -569,10 +569,14 @@ void game_record_lvl_stats(data_record db, int lvl, double time_lvl, int extra_p
             "INSERT INTO level_stats (game_session_id,"
                  "level_id,"
                  "time,"
-                 "people_saved) VALUES ('%d', '%d', '%f','%d');",
+                 "datetime,"
+                 "user_id,"
+                 "people_saved) VALUES ('%d', '%s', '%f','%d','%d','%d');",
             db->game_id,
             lvl,
             time_lvl,
+            (int)time(NULL),
+            db->user_id,
             extra_ppl
            );
     printf("%s\n", stmt);
@@ -598,6 +602,7 @@ void game_record_lvl_stats(data_record db, int lvl, double time_lvl, int extra_p
 
     sqlite3_close(sdb);
 
+    /*
     //This will push the stats to a server
     CURL *curl;
     CURLcode res;
@@ -657,6 +662,7 @@ void game_record_lvl_stats(data_record db, int lvl, double time_lvl, int extra_p
         // then cleanup the formpost chain  
         curl_formfree(formpost);
       }
+      */
 }
 
 void user_skey_down(data_record db, int key){

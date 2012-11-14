@@ -127,5 +127,6 @@
    <circle id="svg_30" r="5" cy="190" cx="10" stroke-width="2" stroke="#000000" fill="#0000ff"/>
    <text fill="#000000" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="-61.670927" y="410.762822" font-size="24" font-family="serif" text-anchor="middle" xml:space="preserve" transform="matrix(0.365385 0 0 0.365385 33 42.5192)" id="svg_68">8</text>
   </a>
+  <circle id="svg_61" r="9.620941" cy="188.75" cx="324" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="#e5e5e5"/>
  </g>
 </svg>

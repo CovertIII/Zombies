@@ -270,7 +270,6 @@
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
-								<string>7ADD8769150F86EF002E49AB</string>
 								<string>29B97323FDCFA39411CA2CEA</string>
 								<string>1058C7A0FEA54F0111CA2CBB</string>
 								<string>1058C7A2FEA54F0111CA2CBB</string>
@@ -282,12 +281,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>93</integer>
-									<integer>92</integer>
+									<integer>24</integer>
+									<integer>5</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 1091}, {346, 660}}</string>
+							<string>{{0, 84}, {346, 660}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -320,7 +320,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>7AC1F34C1412FD240086E03C</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>game.c</string>
+								<string>main.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -328,11 +328,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>7AC1F34D1412FD240086E03C</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>game.c</string>
+										<string>main.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7A656D37165303C000FC2E76</string>
+										<string>7A656DCE16531D2100FC2E76</string>
 										<key>history</key>
 										<array>
 											<string>7AC1F3EC141309170086E03C</string>
@@ -357,9 +357,9 @@
 											<string>7A2E426B164582BD0098D52F</string>
 											<string>7A0993C116516A030097E913</string>
 											<string>7A656C101652CCE600FC2E76</string>
-											<string>7A656D31165303AF00FC2E76</string>
 											<string>7A656D32165303AF00FC2E76</string>
-											<string>7A656D33165303AF00FC2E76</string>
+											<string>7A656D651653065700FC2E76</string>
+											<string>7A656DBE16531B6D00FC2E76</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -676,7 +676,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7A656D38165303C000FC2E76</string>
 		<string>7A656C1D1652CD1A00FC2E76</string>
 		<string>7A656C1E1652CD1A00FC2E76</string>
 		<string>/Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/Zombies.xcodeproj</string>
