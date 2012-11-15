@@ -66,6 +66,7 @@ char level[30];
 int lives = 3;
 int extra_ppl = 0;
 int total_deaths = 0;
+object herot;
 GLuint lives_tex;
 GLuint extra_tex;
 game gm;
@@ -362,6 +363,7 @@ void processNormalKeys(unsigned char key) {
     gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
+            //int save_count = db_get_save_count(stats);
 			total_deaths = 0;
             gm_lvl = 1;
             lives = 3;
@@ -497,6 +499,8 @@ void numbers(void)
                 ans = strchr(level,'.');
                 *ans = '\0';
 
+                herot = gm_get_hero(gm);
+
                 strcpy(res_buf, res_path);
                 sprintf(loadbuf, "/lvl/%s.png", level);
                 strcat(res_buf, loadbuf);
@@ -600,6 +604,7 @@ void numbers(void)
                     strcat(res_buf, level);
                     gm_load_level_svg(gm, res_buf);
                     game_mode = OVERWORLD;
+                    gm_set_hero(gm, herot);
                 }
                 else{
                     gm_load_level_svg(gm, argv1);

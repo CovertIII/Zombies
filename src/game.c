@@ -1103,7 +1103,7 @@ void gm_stats(game gm, double * time, int * people){
 }
 
 char * gm_portal(game gm){
-    if(gm->onpt >= 0 && gm->c){
+    if(gm->onpt >= 0 && gm->c == 1){
       return gm->portal[gm->onpt].lvl_path;
     }else{
         return NULL;
@@ -1263,6 +1263,16 @@ void gm_free(game gm){
 void gm_mouse(game gm, int x, int y){
 	gm->mpx = x;
 	gm->mpy = y;
+}
+
+object gm_get_hero(game gm){
+    return gm->hero.o;
+}
+
+void gm_set_hero(game gm, object hero){
+    gm->hero.o = hero;
+    gm->hero.o.v.x = 0;
+    gm->hero.o.v.y = 0;
 }
 
 void gm_update_mouse(game gm){
@@ -1562,6 +1572,7 @@ int gm_load_level_svg(game gm, char * file_path){
 
 	gm->ak.x =0;
 	gm->ak.y = 0;
+    gm->c = 0;
 
     gm->chain_num = 0;
     
@@ -1719,8 +1730,11 @@ int gm_load_level_svg(game gm, char * file_path){
                     sscanf(name, "%f", &r);
                     cy = gm->h - cy; 
                 }
-                else if(strcmp(name, "text") == 0){
-                    name = mxmlGetText(node, NULL); 
+                if(strcmp(name, "text") == 0){
+                    name = mxmlGetText(child, NULL); 
+                    sscanf(name, "%d", &gm->portal[pn].save_count);
+                    printf("Portal Save Count name: %d\n", gm->portal[pn].save_count);
+                    //sscanf(name, "%d", &gm->save_count);
                     //printf("Text portal name: %s\n", name);
                     //strcpy(gm->portal[pn].name, name);
                 }

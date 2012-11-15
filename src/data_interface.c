@@ -64,6 +64,7 @@ typedef struct data_record_type{
     int show_level;
 
     int user_id;
+    int save_count;
     int game_id;
 
     user_list * user_l;

@@ -23,6 +23,10 @@ void gm_skey_up(game gm, int key);
 
 void gm_render(game gm);
 
+object gm_get_hero(game gm);
+
+void gm_set_hero(game gm, object hero);
+
 char * gm_portal(game gm);
 
 void gm_reshape(game gm, int width, int height);
