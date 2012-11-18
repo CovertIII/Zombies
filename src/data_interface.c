@@ -561,6 +561,43 @@ void game_finish_session(data_record db, int deaths){
     sqlite3_close(sdb);
 }
 
+/*
+ * SQL Code to get save count for all levels
+  
+SELECT SUM(A.mp) as cur_ct FROM
+  (SELECT MAX(people_saved) mp, level_id 
+    FROM level_stats 
+    WHERE user_id = 1
+    GROUP BY level_id) as A;
+*/
+int db_get_save_count(data_record db){
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    const char * extra;
+    char stmt[200];
+    int result;
+
+    sprintf(stmt, "SELECT SUM(A.mp) as cur_ct FROM "
+                     "(SELECT MAX(people_saved) mp, level_id"
+                     " FROM level_stats "
+                     " WHERE user_id = %d"
+                     " GROUP BY level_id) as A;", db->user_id);
+    printf("%s\n", stmt);
+    result = sqlite3_open(db->file_name, &sdb);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1, &sql, &extra);
+    printf("prepare result: %d  ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    int save_count = sqlite3_column_int(sql, 0);
+    printf("Save Count for %d: %d\n", db->user_id, save_count);
+    sqlite3_finalize(sql);
+    sqlite3_close(sdb);
+
+    return save_count;
+}
+
+
+
 void game_record_lvl_stats(data_record db, char * lvl, double time_lvl, int extra_ppl){
     sqlite3 * sdb;
     sqlite3_stmt * sql;

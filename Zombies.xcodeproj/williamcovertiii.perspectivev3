@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>ActivePerspectiveName</key>
-	<string>Project</string>
+	<string>Debug</string>
 	<key>AllowedModules</key>
 	<array>
 		<dict>
@@ -303,8 +303,6 @@
 							<string>MainColumn</string>
 							<real>346</real>
 						</array>
-						<key>RubberWindowFrame</key>
-						<string>0 59 1280 719 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -315,14 +313,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>7AC1F34C1412FD240086E03C</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>main.m</string>
+								<string>game.c</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -330,11 +326,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>7AC1F34D1412FD240086E03C</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>main.m</string>
+										<string>game.c</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7ABB1DA41655B5440082E3C3</string>
+										<string>7ABB1DE0165884120082E3C3</string>
 										<key>history</key>
 										<array>
 											<string>7AC1F3EC141309170086E03C</string>
@@ -352,7 +348,6 @@
 											<string>7A91CC0616454B1E00284129</string>
 											<string>7A91CC0716454B1E00284129</string>
 											<string>7A91CC0816454B1E00284129</string>
-											<string>7A91CC0916454B1E00284129</string>
 											<string>7A91CC0A16454B1E00284129</string>
 											<string>7A2E424C164576F60098D52F</string>
 											<string>7A2E4269164582BD0098D52F</string>
@@ -360,8 +355,9 @@
 											<string>7A0993C116516A030097E913</string>
 											<string>7A656C101652CCE600FC2E76</string>
 											<string>7A656D32165303AF00FC2E76</string>
-											<string>7ABB1D961655B27F0082E3C3</string>
-											<string>7ABB1D9A1655B31A0082E3C3</string>
+											<string>7ABB1DB016587EA50082E3C3</string>
+											<string>7ABB1DC3165881450082E3C3</string>
+											<string>7ABB1DC81658815C0082E3C3</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -376,8 +372,6 @@
 							<dict>
 								<key>Frame</key>
 								<string>{{0, 0}, {912, 516}}</string>
-								<key>RubberWindowFrame</key>
-								<string>0 59 1280 719 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -401,8 +395,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {912, 130}}</string>
-										<key>RubberWindowFrame</key>
-										<string>0 59 1280 719 0 0 1280 778 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -456,7 +448,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {912, 120}}</string>
+										<string>{{10, 27}, {912, 130}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -529,6 +521,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
@@ -540,6 +534,8 @@
 					<dict>
 						<key>Frame</key>
 						<string>{{0, 0}, {1280, 342}}</string>
+						<key>RubberWindowFrame</key>
+						<string>0 59 1280 719 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugCLIModule</string>
@@ -614,7 +610,11 @@
 							</array>
 							<key>Frame</key>
 							<string>{{625, 0}, {655, 161}}</string>
+							<key>RubberWindowFrame</key>
+							<string>0 59 1280 719 0 0 1280 778 </string>
 						</dict>
+						<key>RubberWindowFrame</key>
+						<string>0 59 1280 719 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugSessionModule</string>
@@ -678,7 +678,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7ABB1DA51655B5440082E3C3</string>
+		<string>7ABB1DE1165884120082E3C3</string>
 		<string>7ABB1D6E16549A1B0082E3C3</string>
 		<string>7ABB1D6F16549A1B0082E3C3</string>
 		<string>/Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/Zombies.xcodeproj</string>

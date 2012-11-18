@@ -363,7 +363,7 @@ void processNormalKeys(unsigned char key) {
     gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
-            //int save_count = db_get_save_count(stats);
+            int save_count = db_get_save_count(stats);
 			total_deaths = 0;
             gm_lvl = 1;
             lives = 3;
@@ -383,6 +383,7 @@ void processNormalKeys(unsigned char key) {
             gm_timer = 0.0f;
             game_mode = OVERWORLD;
             s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
+            gm_check_portals(gm, save_count);
         }
     }
     else if(game_mode == GAMEOVER || game_mode == WIN){ 

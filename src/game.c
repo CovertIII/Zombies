@@ -648,7 +648,7 @@ void gm_update(game gm, int width, int height, double dt){
 	
     gm->onpt = -1;
     for(i=0; i < gm->portal_num; i++){
-        if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE && gm->portal[i].open == 0){
+        if(gm->hero.state == P_Z || gm->hero.state == ZOMBIE || gm->portal[i].open == 0){
             vector2 p = gm->portal[i].o.p;
             collision(&gm->hero.o, &gm->portal[i].o); 
             gm->portal[i].o.p = p;
@@ -856,13 +856,25 @@ void gm_render(game gm){
         glPopMatrix();
         
         float scale = 0.1;
-        glPushMatrix();
-        len = rat_font_text_length(gm->font, gm->portal[i].lvl_path);
-        hi = rat_font_height(gm->font);
-        glTranslatef(gm->portal[i].o.p.x - len/2.0f*scale,gm->portal[i].o.p.y+hi/2.0f*scale, 0);
-        glScalef(scale,scale,0);
-        rat_font_render_text(gm->font,0,0,gm->portal[i].lvl_path);
-        glPopMatrix();
+        if(gm->portal[i].open){
+            glPushMatrix();
+            len = rat_font_text_length(gm->font, gm->portal[i].lvl_path);
+            hi = rat_font_height(gm->font);
+            glTranslatef(gm->portal[i].o.p.x - len/2.0f*scale,gm->portal[i].o.p.y+hi/2.0f*scale, 0);
+            glScalef(scale,scale,0);
+            rat_font_render_text(gm->font,0,0,gm->portal[i].lvl_path);
+            glPopMatrix();
+        }else{
+            glPushMatrix();
+            char sc_buf[6];
+            sprintf(sc_buf, "%d", gm->portal[i].save_count);
+            len = rat_font_text_length(gm->font, sc_buf);
+            hi = rat_font_height(gm->font);
+            glTranslatef(gm->portal[i].o.p.x - len/2.0f*scale,gm->portal[i].o.p.y+hi/2.0f*scale, 0);
+            glScalef(scale,scale,0);
+            rat_font_render_text(gm->font,0,0,sc_buf);
+            glPopMatrix();
+        }
     }
 
 	for(i = 0; i<gm->wall_num; i++){
@@ -1387,6 +1399,20 @@ int gm_load_bk(game gm, char * file){
             strcat(gm->res_buf, "/imgs/bk.png");
             load_texture(gm->res_buf, &gm->bk);
         }
+}
+
+
+
+void gm_check_portals(game gm, int save_count){
+    int i;
+    for(i = 0; i<gm->portal_num; i++){
+        if(gm->portal[i].save_count > save_count){
+            gm->portal[i].open = 0;
+        }else{
+            gm->portal[i].open = 1;
+        }
+        printf("Portid %d; Open %d;\n", i, gm->portal[i].open);
+    }
 }
 
 void chain_remove(game gm, int index){
