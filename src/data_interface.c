@@ -26,6 +26,7 @@ typedef struct user_list{
     struct user_list * next;
 } user_list;
 
+
 typedef struct level_list{
     int id;
     unsigned char * name;
@@ -594,6 +595,11 @@ int db_get_save_count(data_record db){
     sqlite3_close(sdb);
 
     return save_count;
+}
+
+
+int db_get_user_id(data_record db){
+    return db->user_id;
 }
 
 

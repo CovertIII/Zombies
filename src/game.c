@@ -12,6 +12,7 @@
 #include <freetype/ftoutln.h>
 #include <freetype/fttrigon.h>
 #include <mxml.h>
+#include <sqlite3.h>
 #include "freetype_imp.h"
 #include "load_sound.h"
 #include "vector2.h"
@@ -65,6 +66,8 @@ enum{
     gl_hero100,
 	gl_smart_zombie,
 	gl_shield,
+	gl_portal_closed,
+	gl_portal_done,
     gl_num
 };
 
@@ -97,6 +100,7 @@ typedef struct {
 	char * lvl_path;
 	char * name;
 	int save_count; 
+    int max_saved;
     int open;
 } _portal;
 
@@ -109,6 +113,7 @@ typedef struct {
 typedef struct gametype {
 	char * res_path;
 	char * res_buf;
+	char * db_path;
 	
     vector2 ms;  /*mouse location in world*/
 	int mpx; /* Mouse location on SDL context */
@@ -216,6 +221,12 @@ game gm_init(char * res_path){
   return gm;
 }
 
+
+void gm_set_db_string(game gm, char * db_path){
+  gm->db_path = (char*)malloc(strlen(db_path)*sizeof(char)+sizeof(char)*2);
+  strcpy(gm->db_path, db_path);
+}
+
 int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/zombie.png");
@@ -306,6 +317,14 @@ int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/shield.png");
     load_texture(gm->res_buf, &gm->h_tex[gl_shield]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/portalclosed.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_portal_closed]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/portaldone.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_portal_done]);
 }	
 
 void gm_init_sounds(game gm){
@@ -840,7 +859,15 @@ void gm_render(game gm){
     float len,hi;
     for(i = 0; i<gm->portal_num; i++){
         glPushMatrix();
-        glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_shield]);
+        if(gm->portal[i].open && gm->portal[i].max_saved == 0){
+            glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_shield]);
+        }
+        else if(gm->portal[i].open && gm->portal[i].max_saved > 0){
+            glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_portal_done]);
+        }
+        else{
+            glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_portal_closed]);
+        }
         glTranslatef(gm->portal[i].o.p.x, gm->portal[i].o.p.y, 0);
         glScalef(gm->portal[i].o.r, gm->portal[i].o.r,0);
         glBegin(GL_QUADS);
@@ -856,15 +883,27 @@ void gm_render(game gm){
         glPopMatrix();
         
         float scale = 0.1;
-        if(gm->portal[i].open){
+        if(gm->portal[i].open && gm->portal[i].max_saved ==0){
             glPushMatrix();
-            len = rat_font_text_length(gm->font, gm->portal[i].lvl_path);
+            len = rat_font_text_length(gm->font, gm->portal[i].name);
             hi = rat_font_height(gm->font);
             glTranslatef(gm->portal[i].o.p.x - len/2.0f*scale,gm->portal[i].o.p.y+hi/2.0f*scale, 0);
             glScalef(scale,scale,0);
-            rat_font_render_text(gm->font,0,0,gm->portal[i].lvl_path);
+            rat_font_render_text(gm->font,0,0,gm->portal[i].name);
             glPopMatrix();
-        }else{
+        }
+        else if(gm->portal[i].open && gm->portal[i].max_saved > 0){
+            glPushMatrix();
+            char sc_buf[6];
+            sprintf(sc_buf, "%d", gm->portal[i].max_saved);
+            len = rat_font_text_length(gm->font, sc_buf);
+            hi = rat_font_height(gm->font);
+            glTranslatef(gm->portal[i].o.p.x - len/2.0f*scale,gm->portal[i].o.p.y+hi/2.0f*scale, 0);
+            glScalef(scale,scale,0);
+            rat_font_render_text(gm->font,0,0,sc_buf);
+            glPopMatrix();
+        }
+        else{
             glPushMatrix();
             char sc_buf[6];
             sprintf(sc_buf, "%d", gm->portal[i].save_count);
@@ -1154,15 +1193,15 @@ void gm_message_render(game gm, int width, int height){
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
     float len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,20,height-4, buf);
-    */
 
     float len;
 	sprintf(buf, "%.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
+    */
 
 	sprintf(buf, "%.1lf", gm->hero.nrg);	
-    len = rat_font_text_length(gm->font, buf);
+    float len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 + 50,height-4, buf);
 
 	
@@ -1570,10 +1609,41 @@ void zb_chase_hero(game gm){
 
 }
 
+void gm_portal_ct(game gm, int user_id){
+    printf("Checking to see which levels have been beat and by how much...\n");
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    const char * extra;
+    char stmt[150];
+    sprintf(stmt, "SELECT level_id, MAX(people_saved) mp FROM level_stats  WHERE user_id = %d GROUP BY level_id;", user_id);
+    printf("%s\n", stmt);
+    int result; 
+    printf("db_path %s\n", gm->db_path);
+    result = sqlite3_open(gm->db_path, &sdb);
+    printf("Open result: %d; ", result);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d\n", result);
+
+    int i = 0;
+
+    while((result = sqlite3_step(sql)) == SQLITE_ROW){
+        for(i=0; i<gm->portal_num; i++){
+            if(strcmp(sqlite3_column_text(sql, 0), gm->portal[i].name) == 0){
+                gm->portal[i].max_saved =  sqlite3_column_int(sql, 1);
+                printf("Portal %s sc: %d\n", gm->portal[i].name, gm->portal[i].max_saved);
+            }
+        }
+    }
+    printf("Step result: %d\n", result);
+    sqlite3_finalize(sql);
+    sqlite3_close(sdb);   
+}
+
 int gm_load_level_svg(game gm, char * file_path){
 	int i;
 	FILE *fp;
     mxml_node_t *tree;
+
 
     fp = fopen(file_path, "r");
 	
@@ -1732,7 +1802,13 @@ int gm_load_level_svg(game gm, char * file_path){
             name = mxmlElementGetAttr(node, "xlink:href"); 
             //printf("xlink:href portal link: %s\n", name);
             gm->portal[pn].lvl_path = (char*)malloc(strlen(name)*sizeof(char)+sizeof(char)*2);
+            gm->portal[pn].name = (char*)malloc(strlen(name)*sizeof(char)+sizeof(char)*2);
             strcpy(gm->portal[pn].lvl_path, name);
+
+            char *ans;
+            ans = strchr(name,'.');
+            *ans = '\0';
+            strcpy(gm->portal[pn].name, name);
 
             float cx;
             float cy;
@@ -1766,6 +1842,8 @@ int gm_load_level_svg(game gm, char * file_path){
                 }
             }
 
+
+            gm->portal[pn].max_saved = 0;
             gm->portal[pn].o.p.x = cx;
             gm->portal[pn].o.p.y = cy;
             gm->portal[pn].o.r = r;

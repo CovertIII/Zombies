@@ -287,7 +287,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {346, 660}}</string>
+							<string>{{0, 21}, {346, 660}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -330,7 +330,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7ABB1DE0165884120082E3C3</string>
+										<string>7A7652D1165BE39100C152DF</string>
 										<key>history</key>
 										<array>
 											<string>7AC1F3EC141309170086E03C</string>
@@ -355,9 +355,10 @@
 											<string>7A0993C116516A030097E913</string>
 											<string>7A656C101652CCE600FC2E76</string>
 											<string>7A656D32165303AF00FC2E76</string>
-											<string>7ABB1DB016587EA50082E3C3</string>
-											<string>7ABB1DC3165881450082E3C3</string>
-											<string>7ABB1DC81658815C0082E3C3</string>
+											<string>7ABB1E44165948270082E3C3</string>
+											<string>7ABB1E4E16594AEF0082E3C3</string>
+											<string>7A7652B7165BE27F00C152DF</string>
+											<string>7A7652B8165BE27F00C152DF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -371,16 +372,16 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {912, 516}}</string>
+								<string>{{0, 0}, {912, 511}}</string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>516pt</string>
+							<string>511pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>157pt</string>
+							<string>162pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
@@ -394,7 +395,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {912, 130}}</string>
+										<string>{{10, 27}, {912, 135}}</string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -448,7 +449,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {912, 130}}</string>
+										<string>{{10, 27}, {912, 135}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -476,11 +477,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7ABB1D6416549A1B0082E3C3</string>
+				<string>7A76527E165BD88300C152DF</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>7ABB1D6516549A1B0082E3C3</string>
+				<string>7A76527F165BD88300C152DF</string>
 				<string>7AC1F34C1412FD240086E03C</string>
-				<string>7ABB1D6616549A1B0082E3C3</string>
+				<string>7A765280165BD88300C152DF</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -637,14 +638,14 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7ABB1D6716549A1B0082E3C3</string>
+				<string>7A765281165BD88300C152DF</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>7ABB1D6816549A1B0082E3C3</string>
-				<string>7ABB1D6916549A1B0082E3C3</string>
-				<string>7ABB1D6A16549A1B0082E3C3</string>
-				<string>7ABB1D6B16549A1B0082E3C3</string>
-				<string>7ABB1D6C16549A1B0082E3C3</string>
+				<string>7A765282165BD88300C152DF</string>
+				<string>7A765283165BD88300C152DF</string>
+				<string>7A765284165BD88300C152DF</string>
+				<string>7A765285165BD88300C152DF</string>
+				<string>7A765286165BD88300C152DF</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
 			<string>2</string>
@@ -678,9 +679,9 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7ABB1DE1165884120082E3C3</string>
-		<string>7ABB1D6E16549A1B0082E3C3</string>
-		<string>7ABB1D6F16549A1B0082E3C3</string>
+		<string>7A7652D2165BE39100C152DF</string>
+		<string>7A76528C165BD88E00C152DF</string>
+		<string>7A76528D165BD88E00C152DF</string>
 		<string>/Users/williamcovertiii/Documents/ZombiesGame/Zombies_src/Zombies.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

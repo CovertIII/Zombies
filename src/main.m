@@ -67,6 +67,7 @@ int lives = 3;
 int extra_ppl = 0;
 int total_deaths = 0;
 object herot;
+int save_count = 0;
 GLuint lives_tex;
 GLuint extra_tex;
 game gm;
@@ -227,6 +228,11 @@ void init(int argc, char** argv){
 
 	src_list = s_init();
 
+/*Init game_engine*/
+  gm = gm_init(res_path);	
+  gm_init_textures(gm);
+  gm_init_sounds(gm);
+
 // Init Database 
 if(argc == 1){
   NSString * path;
@@ -235,6 +241,7 @@ if(argc == 1){
   printf("Database path: %s\n", [path cStringUsingEncoding:1]);
   stats = init_data_record([path cStringUsingEncoding:1], res_path);
   stats_list_prep(stats);
+  gm_set_db_string(gm, [path cStringUsingEncoding:1]);
 }
 
 // Loads Fonts for HUD
@@ -256,11 +263,7 @@ if(argc == 1){
   strcat(res_buf, "/imgs/extra.png");
   load_texture(res_buf, &extra_tex);
 
-/*Init game_engine*/
-  gm = gm_init(res_path);	
-  gm_init_textures(gm);
-  gm_init_sounds(gm);
-
+/* More init game levels */
 	char level[30];
 	if(argc == 1){
 		srand(time(NULL));
@@ -363,7 +366,7 @@ void processNormalKeys(unsigned char key) {
     gm_nkey_down(gm, key);	
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
-            int save_count = db_get_save_count(stats);
+            save_count = db_get_save_count(stats);
 			total_deaths = 0;
             gm_lvl = 1;
             lives = 3;
@@ -383,6 +386,8 @@ void processNormalKeys(unsigned char key) {
             gm_timer = 0.0f;
             game_mode = OVERWORLD;
             s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
+            int user_id = db_get_user_id(stats);
+            gm_portal_ct(gm, user_id);
             gm_check_portals(gm, save_count);
         }
     }
@@ -606,6 +611,10 @@ void numbers(void)
                     gm_load_level_svg(gm, res_buf);
                     game_mode = OVERWORLD;
                     gm_set_hero(gm, herot);
+                    save_count = db_get_save_count(stats);
+                    int user_id = db_get_user_id(stats);
+                    gm_portal_ct(gm, user_id);
+                    gm_check_portals(gm, save_count);
                 }
                 else{
                     gm_load_level_svg(gm, argv1);
@@ -710,6 +719,16 @@ static void drawGL ()
             rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
             break;
         case OVERWORLD:
+            gm_render(gm);
+            gm_message_render(gm, gScreen->w, gScreen->h);
+            showhud();
+
+            sprintf(buf, "%d",save_count);	
+
+            top = rat_font_height(font);
+            len = rat_font_text_length(font, buf);
+            rat_font_render_text(sfont,width-len,height, buf);
+            break;
         case GAME:
             gm_render(gm);
             gm_message_render(gm, gScreen->w, gScreen->h);
