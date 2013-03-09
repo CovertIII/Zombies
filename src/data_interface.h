@@ -8,3 +8,5 @@ void stats_list_prep(data_record db);
 void render_level_scores(data_record db, int width, int height);
 
 void stats_reload_fonts(data_record db);
+
+int db_get_lives(data_record db);

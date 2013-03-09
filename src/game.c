@@ -1795,7 +1795,7 @@ int gm_load_level_svg(game gm, char * file_path){
         }
 
 
-        //THis is for portals, portals are stored in anchor elements
+        //This is for portals, portals are stored in anchor elements
 		if(strcmp(name, "a") == 0){
             mxml_node_t * child;
             int pn = gm->portal_num;
@@ -1855,7 +1855,7 @@ int gm_load_level_svg(game gm, char * file_path){
         }
 
 
-        //THis is for groups, groups store velocity information
+        //This is for groups, groups store velocity information
         else if(strcmp(name, "g") == 0){
             mxml_node_t * child;
 

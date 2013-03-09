@@ -64,6 +64,7 @@ double gm_timer = 0.0f;
 int gm_lvl = 1;
 char level[30];
 int lives = 3;
+int continues = 3;
 int extra_ppl = 0;
 int total_deaths = 0;
 object herot;
@@ -263,7 +264,7 @@ if(argc == 1){
   strcat(res_buf, "/imgs/extra.png");
   load_texture(res_buf, &extra_tex);
 
-/* More init game levels */
+/*  init game levels */
 	char level[30];
 	if(argc == 1){
 		srand(time(NULL));
@@ -355,8 +356,8 @@ void reset(int width, int height){
 
 void processNormalKeys(unsigned char key) {
 	if (key == 27) {
-        if((game_mode == PREGAME || game_mode == GAME || game_mode == POSTGAME) && !level_test){
-            game_finish_session(stats, total_deaths);
+        if(game_mode != USERSELECT && !level_test){
+            game_leave(stats, lives, total_deaths);
         }
 		exit(0);
     }
@@ -367,9 +368,10 @@ void processNormalKeys(unsigned char key) {
     if(game_mode == USERSELECT){
         if(user_nkey_down(stats, key) == 1){
             save_count = db_get_save_count(stats);
+            lives = db_get_lives(stats);
+            continues = db_get_continues(stats);
 			total_deaths = 0;
             gm_lvl = 1;
-            lives = 3;
             
 			gm_free_level(gm);
             char level[30];
@@ -382,13 +384,13 @@ void processNormalKeys(unsigned char key) {
 			strcat(res_buf, level);
 			gm_load_level_svg(gm, res_buf);
 			
-            game_start_session(stats);
             gm_timer = 0.0f;
             game_mode = OVERWORLD;
             s_add_snd(src_list, al_buf[al_count_buf], &snd_obj, 1, 0);
             int user_id = db_get_user_id(stats);
             gm_portal_ct(gm, user_id);
             gm_check_portals(gm, save_count);
+            herot = gm_get_hero(gm);
         }
     }
     else if(game_mode == GAMEOVER || game_mode == WIN){ 
@@ -479,7 +481,7 @@ void numbers(void)
                 if(lives < 0 && level_test == 0 ){
                     game_mode = GAMEOVER;
                     s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,0.1, 0);
-                    game_finish_session(stats, total_deaths);
+                    game_over(stats, total_deaths);
                 }else
                 {
 					int rand_num = rand()%2;	
@@ -578,7 +580,7 @@ void numbers(void)
                 if(lives < 0 && level_test == 0 ){
                     game_mode = GAMEOVER;
                     s_add_snd(src_list, al_buf[al_game_over_buf], &snd_obj,0.1, 0);
-                    game_finish_session(stats, total_deaths);
+                    game_over(stats, total_deaths);
                 }else
                 {
 					int rand_num = rand()%2;	

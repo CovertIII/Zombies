@@ -77,7 +77,8 @@ int al_stream_load_file(al_stream als, const char * file){
 	alSource3f(als->source, AL_VELOCITY,        0.0, 0.0, 0.0);
 	alSource3f(als->source, AL_DIRECTION,       0.0, 0.0, 0.0);
 	alSourcef (als->source, AL_ROLLOFF_FACTOR,  0.0          );
-	alSourcef (als->source, AL_GAIN,  0.1          );
+	alSourcef (als->source, AL_GAIN,  0.05         );
+	//alSourcef (als->source, AL_GAIN,  0          );
 	alSourcei (als->source, AL_SOURCE_RELATIVE, AL_TRUE      );
 
     load_buffer(als, als->buffer[0]);
@@ -105,6 +106,7 @@ int al_stream_play(al_stream als){
     {
         printf("playing\n");
     }
+	return error;
 }
 
 int al_stream_update(al_stream als){

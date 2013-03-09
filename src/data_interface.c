@@ -152,7 +152,7 @@ int ck_create_tables(data_record db){
     
     
     printf("Database Empty.  Making tables...\n");
-    sprintf(stmt, "CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT);");
+    sprintf(stmt, "CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT, lives NUMERIC DEFAULT 3, continues INTEGER DEFAULT 0, deaths INTEGER DEFAULT 0);");
     printf("%s\n", stmt);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
     printf("prepare result: %d; ", result);
@@ -161,7 +161,7 @@ int ck_create_tables(data_record db){
     sqlite3_finalize(sql);
 
 
-    sprintf(stmt, "CREATE TABLE level_stats (id INTEGER PRIMARY KEY, game_session_id NUMERIC, level_id NUMERIC, time NUMERIC, people_saved NUMERIC);");
+    sprintf(stmt, "CREATE TABLE level_stats (id INTEGER PRIMARY KEY, game_session_id NUMERIC, level_id TEXT, datetime INTEGER, time NUMERIC, people_saved NUMERIC, user_id INTEGER);");
     printf("%s\n", stmt);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
     printf("prepare result: %d; ", result);
@@ -505,11 +505,11 @@ int stats_render(data_record db, int width, int height){
             break;
         case 1:
             render_game_list(db, width, height);
-						return 1;
+            return 1;
             break;
         case 2:
             render_level_scores(db, width, height);
-						return 2;
+			return 2;
             break;
     }
 }
@@ -538,19 +538,45 @@ void game_start_session(data_record db){
 }
 
 
-void game_finish_session(data_record db, int deaths){
+void game_over(data_record db, int deaths){
     sqlite3 * sdb;
     sqlite3_stmt * sql;
     const char * extra;
     char stmt[200];
+    int result; 
+
     sprintf(stmt,
-            "UPDATE game_session SET date_time_end = '%d', deaths = '%d' WHERE id = '%d';",
-            (int)time(NULL),
+            "UPDATE user SET continues = continues + 1, lives = 3, deaths = deaths + %d WHERE id = '%d';",
             deaths,
-            db->game_id
+            db->user_id
            );
     printf("%s\n", stmt);
+    result = sqlite3_open(db->file_name, &sdb);
+    printf("game_st Open result: %d\n", result);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+    printf("prepare result: %d\n", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    db->game_id = sqlite3_last_insert_rowid(sdb);
+    sqlite3_finalize(sql);
+    sqlite3_close(sdb);
+}
+
+
+void game_leave(data_record db, int lives, int deaths){
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    const char * extra;
+    char stmt[200];
     int result; 
+
+    sprintf(stmt,
+            "UPDATE user SET lives = '%d', deaths = deaths + '%d' WHERE id = '%d';",
+            lives,
+            deaths,
+            db->user_id
+           );
+    printf("%s\n", stmt);
     result = sqlite3_open(db->file_name, &sdb);
     printf("game_st Open result: %d\n", result);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
@@ -597,6 +623,50 @@ int db_get_save_count(data_record db){
     return save_count;
 }
 
+
+int db_get_lives(data_record db){
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    const char * extra;
+    char stmt[200];
+    int result;
+
+    sprintf(stmt, "SELECT lives FROM user WHERE id = %d", db->user_id);
+    printf("%s\n", stmt);
+    result = sqlite3_open(db->file_name, &sdb);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1, &sql, &extra);
+    printf("prepare result: %d  ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    int lives = sqlite3_column_int(sql, 0);
+    printf("Lives for %d: %d\n", db->user_id, lives);
+    sqlite3_finalize(sql);
+    sqlite3_close(sdb);
+
+    return lives;
+}
+
+int db_get_continues(data_record db){
+    sqlite3 * sdb;
+    sqlite3_stmt * sql;
+    const char * extra;
+    char stmt[200];
+    int result;
+
+    sprintf(stmt, "SELECT continues FROM user WHERE id = %d", db->user_id);
+    printf("%s\n", stmt);
+    result = sqlite3_open(db->file_name, &sdb);
+    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1, &sql, &extra);
+    printf("prepare result: %d  ", result);
+    result = sqlite3_step(sql);
+    printf("Step result: %d\n", result);
+    int lives = sqlite3_column_int(sql, 0);
+    printf("Lives for %d: %d\n", db->user_id, lives);
+    sqlite3_finalize(sql);
+    sqlite3_close(sdb);
+
+    return lives;
+}
 
 int db_get_user_id(data_record db){
     return db->user_id;
@@ -855,7 +925,7 @@ void prepare_level_scores(data_record db){
 
     sqlite3_finalize(sql);
 
-    sprintf(stmt, "SELECT MAX(level_id) FROM level_stats;");
+    sprintf(stmt, "SELECT COUNT(DISTINCT level_id) FROM level_stats;");
     printf("%s\n", stmt);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1, &sql, &extra);
     printf("prepare result: %d  ", result);
