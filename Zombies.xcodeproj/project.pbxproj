@@ -40,12 +40,11 @@
 		7AA33AF614146C1300C09ED8 /* Zombie.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7AA33AF514146C1300C09ED8 /* Zombie.icns */; };
 		7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */; };
 		7AA9A38C14811C0B0075F1FB /* libfreetype.6.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */; };
+		7AB6331B170773BD00321396 /* SQLite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB6331A170773BD00321396 /* SQLite3.framework */; };
 		7AC1F3A71413002A0086E03C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC1F3A61413002A0086E03C /* OpenAL.framework */; };
 		7ADD8752150F86CE002E49AB /* snd in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD873B150F86CE002E49AB /* snd */; };
 		7ADD877B150F86EF002E49AB /* imgs in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD8753150F86EF002E49AB /* imgs */; };
 		7ADD877C150F86EF002E49AB /* lvl in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD8769150F86EF002E49AB /* lvl */; };
-		7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */; };
-		7AF6D09214B7D909002D630A /* libsqlite3.0.8.6.dylib in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -62,7 +61,6 @@
 				7A5AAC251453438300BE4B3C /* libz.1.dylib in Copy Frameworks into .app bundle */,
 				7A5AAC1814533CE700BE4B3C /* libogg.0.dylib in Copy Frameworks into .app bundle */,
 				7A23EB3D1530C360005CEB0F /* libcurl.4.dylib in Copy Frameworks into .app bundle */,
-				7AF6D09214B7D909002D630A /* libsqlite3.0.8.6.dylib in Copy Frameworks into .app bundle */,
 				7A5AAC1914533CE700BE4B3C /* libpng15.15.dylib in Copy Frameworks into .app bundle */,
 				7A5AAC1A14533CE700BE4B3C /* libvorbis.0.dylib in Copy Frameworks into .app bundle */,
 				7A5AAC1B14533CE700BE4B3C /* libvorbisfile.3.dylib in Copy Frameworks into .app bundle */,
@@ -114,11 +112,11 @@
 		7A9A2AA015DFC4B00094B3C6 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physics.h; path = src/physics.h; sourceTree = "<group>"; };
 		7AA33AF514146C1300C09ED8 /* Zombie.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Zombie.icns; sourceTree = "<group>"; };
 		7AA9A38A14811C040075F1FB /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = libs/libfreetype.6.dylib; sourceTree = "<group>"; };
+		7AB6331A170773BD00321396 /* SQLite3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite3.framework; path = Library/Frameworks/SQLite3.framework; sourceTree = SDKROOT; };
 		7AC1F3A61413002A0086E03C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		7ADD873B150F86CE002E49AB /* snd */ = {isa = PBXFileReference; lastKnownFileType = folder; path = snd; sourceTree = "<group>"; };
 		7ADD8753150F86EF002E49AB /* imgs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = imgs; sourceTree = "<group>"; };
 		7ADD8769150F86EF002E49AB /* lvl */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lvl; sourceTree = "<group>"; };
-		7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.8.6.dylib; path = libs/libsqlite3.0.8.6.dylib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Zombies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zombies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -139,9 +137,9 @@
 				7A5AAB4E14533CB100BE4B3C /* libvorbisfile.3.dylib in Frameworks */,
 				7A5AAC241453437C00BE4B3C /* libz.1.dylib in Frameworks */,
 				7AA9A38B14811C040075F1FB /* libfreetype.6.dylib in Frameworks */,
-				7AF6CF5A14B7D8E9002D630A /* libsqlite3.0.8.6.dylib in Frameworks */,
 				7A23EB3C1530C355005CEB0F /* libcurl.4.dylib in Frameworks */,
 				7A9184BE15D6ED3F00F33131 /* libmxml.dylib in Frameworks */,
+				7AB6331B170773BD00321396 /* SQLite3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +163,7 @@
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				002F3C0009D093BD00EBEB88 /* OpenGL.framework */,
 				7AC1F3A61413002A0086E03C /* OpenAL.framework */,
+				7AB6331A170773BD00321396 /* SQLite3.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -177,7 +176,6 @@
 				7A5AAC231453437C00BE4B3C /* libz.1.dylib */,
 				7A5AAB4714533CB100BE4B3C /* libogg.0.dylib */,
 				7A5AAB4814533CB100BE4B3C /* libpng15.15.dylib */,
-				7AF6CF5914B7D8E9002D630A /* libsqlite3.0.8.6.dylib */,
 				7A5AAB4914533CB100BE4B3C /* libvorbis.0.dylib */,
 				7A9184BD15D6ED3F00F33131 /* libmxml.dylib */,
 				7A5AAB4A14533CB100BE4B3C /* libvorbisfile.3.dylib */,

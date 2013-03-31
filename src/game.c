@@ -28,6 +28,7 @@
 #define P_Z 3
 #define SAFE 4
 #define DONE 5
+#define SPIKE 6
 
 #define STINK_PARTICLE_NUM 6 
 
@@ -68,6 +69,7 @@ enum{
 	gl_shield,
 	gl_portal_closed,
 	gl_portal_done,
+	gl_spike_ball,
     gl_num
 };
 
@@ -325,6 +327,10 @@ int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/portaldone.png");
     load_texture(gm->res_buf, &gm->h_tex[gl_portal_done]);
+
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/spikeball.png");
+    load_texture(gm->res_buf, &gm->h_tex[gl_spike_ball]);
 }	
 
 void gm_init_sounds(game gm){
@@ -681,7 +687,7 @@ void gm_update(game gm, int width, int height, double dt){
 	
 	for(i = 0; i < gm->person_num; i++){
 		if(collision(&gm->person[i].o, &gm->hero.o)){
-			if(gm->hero.state == PERSON && gm->person[i].state == PERSON)
+			if(gm->hero.state == PERSON && (gm->person[i].state == PERSON || gm->person[i].state == SPIKE))
 			{				
 				int k = 0;
 				int leave = 0;
@@ -736,6 +742,7 @@ void gm_update(game gm, int width, int height, double dt){
 		vector2 p = gm->safe_zone.p;
 		if((gm->person[i].state == PERSON && gm->person[i].ready == 0) || 
 			gm->person[i].state == ZOMBIE ||
+			gm->person[i].state == SPIKE ||
 			gm->person[i].state == P_Z){
 			collision(&gm->person[i].o, &gm->safe_zone); 	
 		}
@@ -786,6 +793,9 @@ void gm_update(game gm, int width, int height, double dt){
 					gm->person[k].parent_id = i;
 					chain_cut(gm, k);
                     s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 4);
+				}
+				if(gm->person[i].state == SPIKE && gm->person[k].state == ZOMBIE){
+                    //s_add_snd(gm->saved_src, gm->buf[al_pdeath_buf], &gm->person[i].o,1, 4);
 				}
 			}
 		}
@@ -1079,6 +1089,9 @@ void gm_render(game gm){
 		else if(gm->person[i].state == SAFE){
 			glBindTexture( GL_TEXTURE_2D, gm->safe_tex);
 		}
+		else if(gm->person[i].state == SPIKE){
+			glBindTexture( GL_TEXTURE_2D, gm->h_tex[gl_spike_ball]);
+		}
 		glPushMatrix();
 		glTranslatef(gm->person[i].o.p.x, gm->person[i].o.p.y, 0);
 		glScalef(gm->person[i].o.r, gm->person[i].o.r,0);
@@ -1156,6 +1169,14 @@ void gm_stats(game gm, double * time, int * people){
 char * gm_portal(game gm){
     if(gm->onpt >= 0 && gm->c == 1){
       return gm->portal[gm->onpt].lvl_path;
+    }else{
+        return NULL;
+    }
+}
+
+char * gm_portal_check(game gm){
+    if(gm->onpt >= 0){
+      return gm->portal[gm->onpt].name;
     }else{
         return NULL;
     }
@@ -1754,6 +1775,23 @@ int gm_load_level_svg(game gm, char * file_path){
             else if(strcmp(color, "#ffff00") == 0){
 				int num = gm->person_num;
 				gm->person[num].state = PERSON;
+				gm->person[num].emo = NORMAL;
+				gm->person[num].ready = 0;
+                gm->person[num].o.p.x = cx;
+                gm->person[num].o.p.y = cy;
+                gm->person[num].o.v.x = 0;
+                gm->person[num].o.v.y = 0;
+                gm->person[num].o.r = r;
+                gm->person[num].o.m = r*r*M_PI/25.2;
+                gm->person[num].mx_f = v2Len(gm->person[num].o.v);
+                gm->person[num].chase = 0;
+                gm->person[num].parent_id = -1;
+                gm->person[num].o.snd = 0;
+                gm->person_num++;
+            }
+            else if(strcmp(color, "#999999") == 0){
+				int num = gm->person_num;
+				gm->person[num].state = SPIKE;
 				gm->person[num].emo = NORMAL;
 				gm->person[num].ready = 0;
                 gm->person[num].o.p.x = cx;

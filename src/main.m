@@ -69,6 +69,7 @@ int extra_ppl = 0;
 int total_deaths = 0;
 object herot;
 int save_count = 0;
+char * portal_disp;
 GLuint lives_tex;
 GLuint extra_tex;
 game gm;
@@ -358,8 +359,10 @@ void processNormalKeys(unsigned char key) {
 	if (key == 27) {
         if(game_mode != USERSELECT && !level_test){
             game_leave(stats, lives, total_deaths);
+            game_mode = USERSELECT;
+        } else{
+            exit(0);
         }
-		exit(0);
     }
 
 
@@ -495,7 +498,9 @@ void numbers(void)
                     game_mode = POSTGAME;
                 }
             }       
+
 			char * portal = gm_portal(gm);
+			portal_disp = gm_portal_check(gm);
             if(portal != NULL){
                 game_mode = PREGAME;
                 gm_timer = 0;
@@ -519,14 +524,6 @@ void numbers(void)
                 strcat(res_buf, loadbuf);
                 gm_load_level_svg(gm, res_buf);
                 printf("OW lvl: %s\n", level);
-
-                /*
-                if(gm_load_level_svg(gm, res_buf) == 0 && level_test == 0){
-                    game_mode = WIN;
-                    s_add_snd(src_list, al_buf[al_win_buf], &snd_obj, 1, 0);
-                    game_finish_session(stats, total_deaths);
-                }
-                */
             }
             break;
 		case PREGAME:
@@ -720,27 +717,40 @@ static void drawGL ()
             len = rat_font_text_length(sfont, buf);
             rat_font_render_text(sfont,(width-len)/2,(height)/2 + top + 100, buf);
             break;
+
         case OVERWORLD:
             gm_render(gm);
             gm_message_render(gm, gScreen->w, gScreen->h);
             showhud();
 
-            sprintf(buf, "%d",save_count);	
+            if(portal_disp != NULL){
+               stats_render_lvl(stats, portal_disp, gScreen->w, gScreen->h);
+            }
+            sprintf(buf, "Total Saved: %d",save_count);	
 
-            top = rat_font_height(font);
-            len = rat_font_text_length(font, buf);
-            rat_font_render_text(sfont,width-len,height, buf);
+            top = rat_font_height(ssfont);
+            len = rat_font_text_length(ssfont, buf);
+            rat_font_render_text(ssfont,width-len,height, buf);
+
+            sprintf(buf, "Continues: %d", continues);	
+
+            top = rat_font_height(ssfont);
+            len = rat_font_text_length(ssfont, buf);
+            rat_font_render_text(ssfont,width-len, height - top , buf);
             break;
+
         case GAME:
             gm_render(gm);
             gm_message_render(gm, gScreen->w, gScreen->h);
             showhud();
             break;
+
         case POSTGAME:
             gm_render(gm);
             gm_message_render(gm, gScreen->w, gScreen->h);
             showhud();
             break;
+
         case GAMEOVER:
             gm_render(gm);
 
@@ -815,14 +825,14 @@ static void mainLoop ()
 		while ( SDL_PollEvent (&event) ) {
 			switch (event.type) {
 				case SDL_MOUSEMOTION:
-          gm_mouse(gm, event.button.x, windowHeight - event.button.y);
+                    gm_mouse(gm, event.button.x, windowHeight - event.button.y);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-          gm_mouse(gm, event.button.x, windowHeight - event.button.y);
-					break;
+                   gm_mouse(gm, event.button.x, windowHeight - event.button.y);
+				   break;
 				case SDL_KEYDOWN:
-          processNormalKeys(event.key.keysym.sym);
-          pressKey(event.key.keysym.sym);
+                    processNormalKeys(event.key.keysym.sym);
+                    pressKey(event.key.keysym.sym);
 					if (event.key.keysym.sym == 'f') {
 						if(nowfullscreen == 1){
 							windowWidth = 1280;
@@ -841,9 +851,9 @@ static void mainLoop ()
 					}
 					break;
 				case SDL_KEYUP:
-          releaseNormalKeys(event.key.keysym.sym);
-          releaseKey(event.key.keysym.sym);
-					break;
+                  releaseNormalKeys(event.key.keysym.sym);
+                  releaseKey(event.key.keysym.sym);
+				  break;
 				default:
 					break;
 			}

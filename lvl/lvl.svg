@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g>
+  <title>Layer 1</title>
+  <circle id="svg_1" r="8" cy="50" cx="49.75" stroke="#000000" fill="#e5e5e5"/>
+  <circle id="svg_90" r="2" cy="90" cx="75" stroke="none" fill="#999999"/>
+  <circle id="svg_6" r="2" cy="50" cx="50" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ff0000"/>
+  <text fill="#000000" stroke="#000000" stroke-width="0" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x="90.25" y="16" id="svg_2" font-size="12" font-family="serif" text-anchor="middle" xml:space="preserve">3</text>
+  <g id="svg_5">
+   <circle r="2" cy="77.375" cx="76.24998" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#00bf5f" id="svg_10"/>
+   <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="65.75" y1="77.25" x2="76" y2="77.25" id="svg_3"/>
+  </g>
+  <circle r="2" cy="24" cx="57.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_7"/>
+  <g id="svg_11">
+   <circle r="2" cy="35.25" cx="75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_12"/>
+   <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="75.25" y1="35.25" x2="81.574555" y2="35.25" id="svg_9"/>
+  </g>
+  <g id="svg_13">
+   <circle r="2" cy="19.75" cx="14.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_34"/>
+   <line fill="none" stroke="#000000" stroke-dasharray="null" stroke-linejoin="null" stroke-linecap="null" x1="17" y1="12.75" x2="14.75" y2="20" id="svg_8"/>
+  </g>
+  <circle r="2" cy="86.75" cx="14" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00" id="svg_14"/>
+  <g id="svg_16">
+   <circle id="svg_4" r="2" cy="56.5" cx="16" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#ffff00"/>
+   <line id="svg_15" y2="57" x2="16" y1="63" x1="26.25" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  </g>
+  <line id="svg_17" y2="35.5" x2="44.75" y1="1" x1="44" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>
+  <line id="svg_18" y2="35.25" x2="45" y1="23.5" x1="76.75" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" stroke="#000000" fill="none"/>
+ </g>
+</svg>

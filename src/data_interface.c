@@ -29,8 +29,9 @@ typedef struct user_list{
 
 typedef struct level_list{
     int id;
-    unsigned char * name;
     int level_id;
+    char * slevel_id;
+    unsigned char * name;
     char * date_string;
     double time;
     int num_saved;
@@ -703,6 +704,9 @@ void game_record_lvl_stats(data_record db, char * lvl, double time_lvl, int extr
     printf("Step result: %d\n", result);
     sqlite3_finalize(sql);
 
+    sqlite3_close(sdb);
+
+    /*
     sprintf(stmt, "SELECT name FROM user WHERE id = %d;", db->user_id);
     printf("%s\n", stmt);
     result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1, &sql, &extra);
@@ -714,9 +718,6 @@ void game_record_lvl_stats(data_record db, char * lvl, double time_lvl, int extr
     printf("Current Name: %s\n", tmp_name);
     sqlite3_finalize(sql);
 
-    sqlite3_close(sdb);
-
-    /*
     //This will push the stats to a server
     CURL *curl;
     CURLcode res;
@@ -862,68 +863,16 @@ int user_nkey_down(data_record db, unsigned char key){
 
 void prepare_level_scores(data_record db){
     printf("Caching level stats...\n");
-    level_list * node = db->level_l;
-    level_list * temp;
-
-    while(node != NULL){
-        temp = node;
-        node = node->next;
-        free(temp);
-    }
-
-    db->level_l = NULL;
 
     sqlite3 * sdb;
     sqlite3_stmt * sql;
     const char * extra;
-    char stmt[] = "SELECT name, "
-      "level_id, "
-      "time, "
-      "people_saved, "
-      "score, "
-      "date_time_start "
-      "FROM level_view ORDER BY level_id, people_saved DESC, time;";
+    char stmt[300];
     printf("%s\n", stmt);
     int result; 
+
     result = sqlite3_open(db->file_name, &sdb);
     printf("Open result: %d; ", result);
-    result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
-    printf("prepare result: %d\n", result);
-    
-    while((result = sqlite3_step(sql)) == SQLITE_ROW){
-        node = (level_list*)malloc(sizeof(level_list));
-        if(db->level_l == NULL){
-            db->level_l = node;
-        }
-        else {
-            level_list * findend = db->level_l;
-            level_list * prev = NULL;
-            while(findend != NULL){
-                prev = findend;
-                findend = findend->next;
-            }
-            prev->next = node;
-        }
-        node->next = NULL;
-
-		
-        //Fill up the structure with data
-        node->name = (char*)malloc(sizeof(char)*strlen(sqlite3_column_text(sql, 0)));
-        strcpy(node->name, sqlite3_column_text(sql, 0));
-        
-		time_t stamp = sqlite3_column_int(sql, 5);
-        const struct tm * timeptr = localtime(&stamp);
-		unsigned char nbuf[100];		
-        strftime(nbuf, 100, "%b %d, %Y", timeptr);
-        node->date_string = (char*)malloc(sizeof(char)*strlen(nbuf)+1);
-        strcpy(node->date_string, nbuf);
-
-        node->level_id = sqlite3_column_int(sql, 1);
-        node->time = sqlite3_column_double(sql, 2);
-        node->num_saved = sqlite3_column_int(sql, 3);
-    }
-
-    sqlite3_finalize(sql);
 
     sprintf(stmt, "SELECT COUNT(DISTINCT level_id) FROM level_stats;");
     printf("%s\n", stmt);
@@ -935,13 +884,83 @@ void prepare_level_scores(data_record db){
     printf("Max lvl: %d \n", db->max_level);
 
     sqlite3_finalize(sql);
+
+
+    level_list * node = db->level_l;
+    level_list * temp;
+
+    while(node != NULL){
+        temp = node;
+        node = node->next;
+        free(temp);
+    }
+
+    db->level_l = NULL;
+
+    int i;
+    for (i = 1; i <= db->max_level; i++) {
+        sprintf(stmt, "SELECT CAST(trim(level_id,'lvl') AS INTEGER) AS lvl_int, level_id, datetime, user.name, time, people_saved FROM level_stats LEFT OUTER JOIN user ON (user.id = level_stats.user_id) WHERE lvl_int = %d ORDER BY people_saved DESC LIMIT 10;", i);
+        result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
+        printf("prepare result: %d\n", result);
+        
+        while((result = sqlite3_step(sql)) == SQLITE_ROW){
+            node = (level_list*)malloc(sizeof(level_list));
+            if(db->level_l == NULL){
+                db->level_l = node;
+            }
+            else {
+                level_list * findend = db->level_l;
+                level_list * prev = NULL;
+                while(findend != NULL){
+                    prev = findend;
+                    findend = findend->next;
+                }
+                prev->next = node;
+            }
+            node->next = NULL;
+
+            
+            //Fill up the structure with data
+            node->name = (char*)malloc(sizeof(char)*strlen(sqlite3_column_text(sql, 3)));
+            strcpy(node->name, sqlite3_column_text(sql, 3));
+
+            node->slevel_id = (char*)malloc(sizeof(char)*strlen(sqlite3_column_text(sql, 1)));
+            strcpy(node->slevel_id, sqlite3_column_text(sql, 1));
+            
+            time_t stamp = sqlite3_column_int(sql, 2);
+            const struct tm * timeptr = localtime(&stamp);
+            unsigned char nbuf[100];		
+            strftime(nbuf, 100, "%b %d, %Y", timeptr);
+            node->date_string = (char*)malloc(sizeof(char)*strlen(nbuf)+1);
+            strcpy(node->date_string, nbuf);
+
+            node->level_id = sqlite3_column_int(sql, 0);
+            node->time = sqlite3_column_double(sql, 4);
+            node->num_saved = sqlite3_column_int(sql, 5);
+        }
+
+        sqlite3_finalize(sql);
+    }
+
     sqlite3_close(sdb);
+}
+
+void stats_render_lvl(data_record db, char * lvl, int width, int height){
+    char buf[7];
+    int lvl_num;
+	sscanf(lvl, "lvl%d", &lvl_num);
+    if(lvl_num <= db->max_level){
+        db->show_level = lvl_num;
+        glPushMatrix();
+        glTranslatef(0, -200, 0);
+        render_level_scores(db, width, height);
+        glPopMatrix();
+    }
 }
 
 void render_level_scores(data_record db, int width, int height)
 {
 	char buf[100];
-
 
     float c[4]; 
     c[0] = .1;

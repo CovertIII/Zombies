@@ -31,6 +31,8 @@ void gm_set_hero(game gm, object hero);
 
 char * gm_portal(game gm);
 
+char * gm_portal_check(game gm);
+
 void gm_reshape(game gm, int width, int height);
 
 vector2 gm_dim(game gm);
