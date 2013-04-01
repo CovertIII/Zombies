@@ -347,7 +347,7 @@ void reset(int width, int height){
         gm_load_bk(gm, bk);
 	}else{
 		strcpy(res_buf, res_path);
-        sprintf(level, "/lvl/lvl%d.png", gm_lvl);
+        sprintf(level, "/lvl/%s.png", level);
         strcat(res_buf, level);
         gm_load_bk(gm, res_buf);	
 	}
@@ -682,6 +682,7 @@ static void drawGL ()
     int width = height*ratio;
 
     switch(game_mode){
+
         case USERSELECT:
 			gm_render(gm);
             if(stats_render(stats, gScreen->w, gScreen->h)==0){
@@ -693,6 +694,7 @@ static void drawGL ()
 	            rat_font_render_text(sfont,(width-len)/2,(height) - 4, buf);
 						}
             break;
+
         case PREGAME:
             gm_render(gm);
             gm_message_render(gm, gScreen->w, gScreen->h);
@@ -779,6 +781,7 @@ static void drawGL ()
             rat_font_render_text(ssfont,(width-len)/2,(height+top)/2 - 100, buf);
             showhud();
             break;
+
         case WIN:
             gm_render(gm);
 
@@ -855,7 +858,7 @@ static void mainLoop ()
                   releaseKey(event.key.keysym.sym);
 				  break;
 				default:
-					break;
+				  break;
 			}
 		}
 

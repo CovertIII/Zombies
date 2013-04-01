@@ -504,10 +504,6 @@ int stats_render(data_record db, int width, int height){
             render_user_list(db, width, height);
 			return 0;
             break;
-        case 1:
-            render_game_list(db, width, height);
-            return 1;
-            break;
         case 2:
             render_level_scores(db, width, height);
 			return 2;
@@ -705,6 +701,7 @@ void game_record_lvl_stats(data_record db, char * lvl, double time_lvl, int extr
     sqlite3_finalize(sql);
 
     sqlite3_close(sdb);
+    prepare_level_scores(db);
 
     /*
     sprintf(stmt, "SELECT name FROM user WHERE id = %d;", db->user_id);
@@ -793,20 +790,18 @@ void user_skey_down(data_record db, int key){
                 db->disp = 2;
                 db->show_level = db->max_level;
             }
-            else if(db->disp == 1){db->disp--;}
             else if(db->disp == 2){
                 db->show_level--;
                 if(db->show_level < 1){
-                    db->disp = 1;
+                    db->disp = 0;
                 }
             }
 			break;
 		case SDLK_RIGHT : 
-            if(db->disp == 1){
+            if(db->disp == 0){
                 db->disp = 2;
                 db->show_level = 1;
             }
-            else if(db->disp == 0){db->disp++;}
             else if(db->disp == 2){
                 db->show_level++;
                 if(db->show_level > db->max_level){
@@ -899,7 +894,7 @@ void prepare_level_scores(data_record db){
 
     int i;
     for (i = 1; i <= db->max_level; i++) {
-        sprintf(stmt, "SELECT CAST(trim(level_id,'lvl') AS INTEGER) AS lvl_int, level_id, datetime, user.name, time, people_saved FROM level_stats LEFT OUTER JOIN user ON (user.id = level_stats.user_id) WHERE lvl_int = %d ORDER BY people_saved DESC LIMIT 10;", i);
+        sprintf(stmt, "SELECT CAST(trim(level_id,'lvl') AS INTEGER) AS lvl_int, level_id, datetime, user.name, time, people_saved FROM level_stats LEFT OUTER JOIN user ON (user.id = level_stats.user_id) WHERE lvl_int = %d ORDER BY people_saved DESC, time LIMIT 10;", i);
         result = sqlite3_prepare_v2(sdb, stmt, sizeof(stmt) + 1 , &sql, &extra);
         printf("prepare result: %d\n", result);
         

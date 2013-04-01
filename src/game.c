@@ -207,11 +207,6 @@ game gm_init(char * res_path){
   strcpy(gm->res_path, res_path);
   printf("game.c - path mem: %ld\n", strlen(res_path)*sizeof(char)+sizeof(char)*50);
 	
-  gm->font = rat_init();
-  strcpy(gm->res_buf, gm->res_path);
-  strcat(gm->res_buf, "/imgs/FreeUniversal.ttf");
-  rat_load_font(gm->font, gm->res_buf, 28);
-	
   gm->viewratio = VIEWRATIO;
   gm->zoom = 0;
   gm->timer = 0;
@@ -331,6 +326,11 @@ int gm_init_textures(game gm){
     strcpy(gm->res_buf, gm->res_path);
     strcat(gm->res_buf, "/imgs/spikeball.png");
     load_texture(gm->res_buf, &gm->h_tex[gl_spike_ball]);
+
+    gm->font = rat_init();
+    strcpy(gm->res_buf, gm->res_path);
+    strcat(gm->res_buf, "/imgs/FreeUniversal.ttf");
+    rat_load_font(gm->font, gm->res_buf, 28);
 }	
 
 void gm_init_sounds(game gm){
@@ -1214,15 +1214,16 @@ void gm_message_render(game gm, int width, int height){
 	sprintf(buf, "Saved %d of %d",add, gm->save_count);	
     float len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,20,height-4, buf);
+	*/
 
     float len;
 	sprintf(buf, "%.1lf", gm->timer);	
     len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 - 50,height-4, buf);
-    */
+    
 
 	sprintf(buf, "%.1lf", gm->hero.nrg);	
-    float len = rat_font_text_length(gm->font, buf);
+    len = rat_font_text_length(gm->font, buf);
     rat_font_render_text(gm->font,width/2 + 50,height-4, buf);
 
 	
